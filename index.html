@@ -1,10 +1,291 @@
 <!DOCTYPE html>
-<html>
-<head><title>张方程的个人主页</title></head>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="张方程（简方JF）的个人主页 — 白天写代码，晚上开直播，网站自己手搓。">
+<title>张方程 · 简方JF 的个人主页</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23002FA7'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-weight='bold' font-size='30' fill='%23fff' text-anchor='middle'%3EJF%3C/text%3E%3C/svg%3E">
+<style>
+/* ==========================================================
+   张方程 × 简方JF · 个人主页
+   全站手写，无框架。风格：海报粗野主义。
+   ========================================================== */
+:root{
+  --blue:#002FA7;   /* 克莱因蓝 */
+  --red:#FF2D00;    /* 信号红，只用一点点 */
+  --paper:#EFEDE6;
+  --ink:#0A0A0A;
+  --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:"Courier New",ui-monospace,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);color:var(--ink);
+  font:16px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+::selection{background:var(--red);color:#fff}
+
+/* ---------- 顶栏 ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--ink);color:var(--paper);
+  padding:10px clamp(16px,4vw,48px);
+}
+.brand{font-weight:900;font-size:17px;letter-spacing:-.01em}
+.brand span{color:var(--red)}
+nav{display:flex;gap:clamp(10px,3vw,28px);font-family:var(--mono);font-size:13px;font-weight:700}
+nav a{text-decoration:none;padding:2px 6px;border:2px solid transparent}
+nav a:hover{background:var(--red);color:#fff}
+
+/* ---------- 首屏 ---------- */
+.hero{
+  background:var(--blue);color:#fff;
+  padding:clamp(48px,9vw,110px) clamp(16px,4vw,48px) 0;
+  position:relative;overflow:hidden;
+}
+.hero h1{
+  font-size:clamp(88px,23vw,300px);
+  font-weight:900;line-height:.86;letter-spacing:-.04em;
+  margin-left:-.03em;
+}
+.hero-sub{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 26px;
+  margin-top:clamp(18px,3vw,34px);
+}
+.alias{
+  background:var(--red);color:#fff;font-weight:900;
+  font-size:clamp(24px,5vw,54px);letter-spacing:-.02em;
+  padding:.05em .25em .12em;
+}
+.hero-sub p{
+  font-size:clamp(15px,2.2vw,22px);font-weight:700;line-height:1.45;
+}
+/* 首屏底部数据条 */
+.hero-data{
+  display:flex;flex-wrap:wrap;gap:0;
+  margin:clamp(30px,5vw,60px) calc(-1 * clamp(16px,4vw,48px)) 0;
+  border-top:3px solid #fff;
+}
+.hero-data div{
+  flex:1 1 180px;
+  padding:12px clamp(16px,4vw,48px) 16px;
+  border-right:3px solid #fff;
+  font-family:var(--mono);
+}
+.hero-data div:last-child{border-right:0}
+.hero-data dt{font-size:11px;font-weight:700;letter-spacing:.12em;opacity:.7}
+.hero-data dd{font-size:16px;font-weight:700;margin-top:2px}
+/* 侧边竖排标签 */
+.vtag{
+  position:absolute;top:clamp(48px,9vw,110px);right:clamp(10px,2.5vw,28px);
+  writing-mode:vertical-rl;
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.3em;
+  color:#fff;opacity:.55;user-select:none;
+}
+
+/* ---------- 黑色跑马带 ---------- */
+.band{background:var(--ink);color:var(--paper);overflow:hidden;border-block:3px solid var(--ink)}
+.band .run{display:flex;width:max-content;animation:run 28s linear infinite}
+.band span{
+  font-weight:900;font-size:clamp(15px,2vw,20px);letter-spacing:.02em;
+  white-space:nowrap;padding:10px 0 10px 28px;
+}
+.band i{color:var(--red);font-style:normal;padding-left:28px}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ---------- 通用区块 ---------- */
+section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px)}
+.sec-head{display:flex;align-items:center;gap:clamp(12px,2vw,24px);margin-bottom:clamp(24px,4vw,48px)}
+.sec-num{
+  background:var(--blue);color:#fff;
+  font-weight:900;font-size:clamp(26px,4vw,48px);line-height:1;
+  padding:.18em .28em .22em;
+}
+.sec-head h2{font-size:clamp(30px,6vw,72px);font-weight:900;letter-spacing:-.03em;line-height:1}
+.sec-head .en{margin-left:auto;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
+
+/* ---------- 关于 ---------- */
+.about{display:grid;grid-template-columns:7fr 5fr;gap:clamp(24px,4vw,56px);align-items:start}
+.about .say{font-size:clamp(19px,2.8vw,30px);font-weight:800;line-height:1.5;letter-spacing:-.01em}
+.about .say b{background:var(--blue);color:#fff;padding:0 .12em}
+/* 档案表 */
+.facts{border:3px solid var(--ink);background:#fff}
+.facts div{display:grid;grid-template-columns:5.5em 1fr;border-bottom:3px solid var(--ink)}
+.facts div:last-child{border-bottom:0}
+.facts dt{
+  background:var(--ink);color:var(--paper);
+  font-weight:900;font-size:14px;letter-spacing:.1em;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 6px;
+}
+.facts dd{padding:10px 14px;font-weight:700;font-size:15px;word-break:break-all}
+.facts dd a{color:var(--blue);text-decoration:none;border-bottom:2px solid var(--blue)}
+.facts dd a:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ---------- 链接巨行 ---------- */
+.rows{border-top:3px solid var(--ink)}
+.row{
+  display:flex;align-items:center;gap:clamp(12px,3vw,36px);
+  padding:clamp(18px,3.5vw,36px) clamp(6px,1.5vw,20px);
+  border-bottom:3px solid var(--ink);
+  text-decoration:none;
+  transition:none; /* 硬切，不许柔 */
+}
+.row .t{font-size:clamp(34px,7vw,84px);font-weight:900;letter-spacing:-.03em;line-height:1}
+.row .d{
+  margin-left:auto;text-align:right;
+  font-family:var(--mono);font-size:clamp(12px,1.6vw,15px);font-weight:700;
+  line-height:1.5;max-width:16em;
+}
+.row .go{font-size:clamp(28px,5vw,60px);font-weight:900;flex:none}
+.row:hover{background:var(--blue);color:#fff}
+.row:nth-child(2):hover{background:var(--red)}
+.row:nth-child(3):hover{background:var(--ink)}
+
+/* ---------- 联系 ---------- */
+.contact{background:var(--blue);color:#fff;text-align:center;padding-block:clamp(56px,9vw,120px)}
+.contact .label{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.3em;margin-bottom:clamp(16px,3vw,30px)}
+.mail{
+  display:inline-block;word-break:break-all;
+  font-weight:900;font-size:clamp(26px,6.5vw,84px);letter-spacing:-.03em;
+  color:#fff;text-decoration:none;line-height:1.1;
+  border-bottom:.08em solid var(--red);
+}
+.mail:hover{background:var(--red)}
+.contact .tiny{margin-top:clamp(16px,3vw,28px);font-weight:700;font-size:14px}
+
+/* ---------- 页脚 ---------- */
+footer{
+  background:var(--paper);
+  padding:clamp(24px,4vw,44px) clamp(16px,4vw,48px);
+  display:flex;flex-wrap:wrap;gap:10px 30px;align-items:baseline;
+  font-family:var(--mono);font-size:12px;font-weight:700;
+}
+footer .big{font-family:var(--sans);font-weight:900;font-size:clamp(18px,3vw,28px);letter-spacing:-.02em}
+footer .secret{margin-left:auto;color:#999}
+footer .secret:hover{color:var(--red)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:760px){
+  .about{grid-template-columns:1fr}
+  .vtag{display:none}
+  .row{flex-wrap:wrap}
+  .row .d{margin-left:0;text-align:left;width:100%;order:3}
+  .hero-data div{flex-basis:50%;border-right:0;border-bottom:3px solid #fff}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important}
+}
+</style>
+</head>
 <body>
-    <h1>Hello, 我是张方程！</h1>
-    <h2>嘘，别告诉rcl</h2>
-    <p>欢迎来到我的个人网站。</p>
-    <p>我的邮箱：nya@zhangfangcheng.cn</p>
+
+<header>
+  <div class="brand">张方程<span>×</span>简方JF</div>
+  <nav>
+    <a href="#about">关于</a>
+    <a href="#links">链接</a>
+    <a href="#contact">联系</a>
+  </nav>
+</header>
+
+<!-- 首屏：一整块克莱因蓝砸脸上 -->
+<section class="hero" style="padding-bottom:0">
+  <div class="vtag">SELF-MADE WEBSITE</div>
+  <h1>张方程</h1>
+  <div class="hero-sub">
+    <span class="alias">aka 简方JF</span>
+    <p>白天写代码，晚上开直播。<br>这个网站是自己手搓的。</p>
+  </div>
+  <dl class="hero-data">
+    <div><dt>网名</dt><dd>简方JF</dd></div>
+    <div><dt>域名</dt><dd>zhangfangcheng.cn</dd></div>
+    <div><dt>现在时刻</dt><dd id="clock">--:--:--</dd></div>
+  </dl>
+</section>
+
+<!-- 黑色关键词跑马带 -->
+<div class="band" aria-hidden="true">
+  <div class="run" id="run">
+    <span>写代码</span><i>■</i><span>开直播</span><i>■</i><span>手搓网站</span><i>■</i><span>摸鱼</span><i>■</i><span>折腾</span><i>■</i><span>好奇心</span><i>■</i>
+  </div>
+</div>
+
+<!-- 关于 -->
+<section id="about">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>关于</h2>
+    <span class="en">ABOUT</span>
+  </div>
+  <div class="about">
+    <p class="say">你好，我是张方程，网上叫<b>简方JF</b>。写代码和开直播是正经事，做网站是业余爱好。本站没套模板、没用建站工具，一行一行敲出来的。邮箱基本都会回。</p>
+    <dl class="facts">
+      <div><dt>网名</dt><dd>简方JF</dd></div>
+      <div><dt>真名</dt><dd>张方程</dd></div>
+      <div><dt>域名</dt><dd>www.zhangfangcheng.cn</dd></div>
+      <div><dt>邮箱</dt><dd><a href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a></dd></div>
+      <div><dt>状态</dt><dd>常年潜水，偶尔冒泡</dd></div>
+      <div><dt>座右铭</dt><dd>摸鱼归摸鱼，代码还是要写的</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 链接 -->
+<section id="links" style="padding-bottom:0">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>链接</h2>
+    <span class="en">LINKS</span>
+  </div>
+  <div class="rows">
+    <a class="row" href="live.html">
+      <span class="t">直播间</span>
+      <span class="d">摸鱼 / 唠嗑 / 写代码</span>
+      <span class="go">→</span>
+    </a>
+    <a class="row" href="mailto:nya@zhangfangcheng.cn">
+      <span class="t">邮箱</span>
+      <span class="d">nya@zhangfangcheng.cn<br>正事请走这里</span>
+      <span class="go">→</span>
+    </a>
+    <a class="row" href="#top">
+      <span class="t">本站</span>
+      <span class="d">你正在看</span>
+      <span class="go">↑</span>
+    </a>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section id="contact" class="contact">
+  <p class="label">有事请砸我邮箱</p>
+  <a class="mail" href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a>
+  <p class="tiny">邮件、合作、唠嗑，一概欢迎</p>
+</section>
+
+<footer>
+  <span class="big">张方程 × 简方JF</span>
+  <span>© <span id="yr">2026</span> 手写 HTML &amp; CSS · 无框架 ·</span>
+  <span class="secret">嘘，别告诉 rcl。</span>
+</footer>
+
+<script>
+// 时钟
+(function(){
+  var el=document.getElementById('clock');
+  function p(n){return n<10?'0'+n:n}
+  function tick(){var d=new Date();el.textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+  setInterval(tick,1000);tick();
+  document.getElementById('yr').textContent=new Date().getFullYear();
+})();
+// 跑马带复制一份接上，无缝循环
+(function(){var r=document.getElementById('run');r.innerHTML+=r.innerHTML;})();
+</script>
 </body>
 </html>
