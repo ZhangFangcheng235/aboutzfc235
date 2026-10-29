@@ -49,9 +49,10 @@ nav a:hover{background:var(--red);color:#fff}
   position:relative;overflow:hidden;
 }
 .hero h1{
-  font-size:clamp(88px,23vw,300px);
-  font-weight:900;line-height:.86;letter-spacing:-.04em;
-  margin-left:-.03em;
+  /* 英文/数字比中文宽，用 vw 缩放并收紧字距，避免长名溢出 */
+  font-size:clamp(52px,15vw,210px);
+  font-weight:900;line-height:.86;letter-spacing:-.045em;
+  margin-left:-.03em;word-break:break-word;
 }
 .hero-sub{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 26px;
@@ -148,7 +149,7 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px)}
 .sup-tag{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
 .sup-card:hover .sup-tag{color:var(--red)}
 .sup-name{font-weight:900;font-size:clamp(26px,4vw,42px);letter-spacing:-.02em;line-height:1.1;margin:10px 0 14px;word-break:break-all}
-.sup-sign{border-top:3px solid currentColor;padding-top:10px;font-weight:700;font-size:16px}
+.sup-sign{border-top:3px solid currentColor;padding-top:10px;font-weight:700;font-size:16px;word-break:break-word}
 .sup-sign span{
   display:block;font-family:var(--mono);font-size:11px;
   font-weight:700;letter-spacing:.2em;opacity:.6;margin-bottom:2px;
@@ -206,7 +207,7 @@ footer .secret:hover{color:var(--red)}
 <!-- 首屏：一整块克莱因蓝砸脸上 -->
 <section class="hero" style="padding-bottom:0">
   <div class="vtag">SELF-MADE WEBSITE</div>
-  <h1>Fangcheng</h1>
+  <h1>Fangcheng235</h1>
   <div class="hero-sub">
     <span class="alias">aka 简方JF</span>
     <p>懒</p>
@@ -273,31 +274,25 @@ footer .secret:hover{color:var(--red)}
   </div>
   <div class="supporters">
     <div class="sup-card">
-      <span class="sup-tag">支持者 Z1</span>
+      <span class="sup-tag">支持者 J1</span>
       <div class="sup-name">JGhuihui</div>
       <div class="sup-sign"><span>签名</span><b>wow</b></div>
     </div>
-  </div>
-    <div class="supporters">
     <div class="sup-card">
       <span class="sup-tag">特别 T1</span>
       <div class="sup-name">rcl</div>
       <div class="sup-sign"><span>签名</span><b>喵~</b></div>
     </div>
-        <div class="supporters">
     <div class="sup-card">
       <span class="sup-tag">支持者 Z2</span>
       <div class="sup-name">zhangsen</div>
       <div class="sup-sign"><span>签名</span><b>由zhangsen强力驱动</b></div>
     </div>
-    <div class="supporters">
     <div class="sup-card">
       <span class="sup-tag">站长 K0</span>
       <div class="sup-name">FC235</div>
       <div class="sup-sign"><span>签名</span><b>山岚雾内望岚山，悠悠湖水月儿弯</b></div>
     </div>
-  </div>
-  </div>
   </div>
 </section>
 
