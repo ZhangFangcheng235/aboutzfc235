@@ -424,51 +424,88 @@ async function boot(){
   void screen_.offsetWidth;
   screen_.classList.add('pwr-on');
   blip(1200,.05,'sine',.03);
-  await sleep(1000);
+  await sleep(1600);
   screen_.classList.remove('pwr-on');
 
+  print('ZFC BIOS v2.35   (C) 2026 Fangcheng Technologies','dim');
+  print('按任意键 / 点击屏幕 可跳过自检','warn');
+  await sleep(900);
+
   var post=[
-    'ZFC BIOS v2.35   (C) 2026 Fangcheng Technologies',
-    'Main Processor   : CYBER-CORE 80486DX  133MHz',
-    {html:'Memory Test     : <span id="mem">000000</span>KB',cls:''},
-    'Detecting IDE Primary Master  ... ZFC-SSD 235MB',
-    'Detecting IDE Primary Slave   ... None',
-    'Detecting USB Bus             ... 2 device(s)',
-    'Initialising PHOSPHOR VGA     ... <span class="ok">OK</span>',
-    'Initialising NEON AUDIO       ... <span class="ok">OK</span>'
+    'Main Processor    : CYBER-CORE 80486DX  133MHz',
+    'BIOS ROM Checksum : 0x235F ... <span class="ok">OK</span>',
+    'CPU Cache Test    : L1 8KB <span class="ok">OK</span>  L2 256KB <span class="ok">OK</span>',
+    'Detecting IDE Primary Master   ... ZFC-SSD 235MB',
+    'Detecting IDE Primary Slave    ... None',
+    'Detecting IDE Secondary Master ... ATAPI CD-ROM',
+    'Detecting USB Bus              ... 2 device(s)',
+    'Keyboard Controller            ... <span class="ok">OK</span>',
+    'Initialising PHOSPHOR VGA      ... <span class="ok">OK</span>',
+    'Initialising NEON AUDIO        ... <span class="ok">OK</span>',
+    'Boot Order : C: > A: > CD-ROM'
   ];
   for(var j=0;j<post.length;j++){
     var item=post[j];
     print(typeof item==='string'?esc(item):item.html, 'dim');
-    await sleep(65+Math.random()*85);
+    await sleep(skipReq?0:(240+Math.random()*230));
   }
+  await sleep(skipReq?0:400);
 
-  // 内存计数
-  var memEl=document.getElementById('mem');
-  if(memEl){
-    for(var m=0;m<=65536;m+=4096){
-      memEl.textContent=('000000'+m).slice(-6);
-      blip(2000,.006,'square',.004);
-      await sleep(24);
-    }
-    memEl.textContent='065536';
+  // 内存计数（慢速逐格 + 蜂鸣）
+  var memLine=print('Memory Test       : <span class="mem">000000</span>KB','dim');
+  var memEl=memLine.querySelector('.mem');
+  for(var m=0;m<=65536;m+=1024){
+    if(skipReq) m=65536;
+    memEl.textContent=('000000'+m).slice(-6);
+    if(m%8192===0) blip(1800,.012,'square',.005);
+    await sleep(skipReq?0:44);
   }
-  print('Memory Test     : 065536KB <span class="ok">OK</span>','dim');
-  await sleep(280);
+  memEl.innerHTML='065536KB <span class="ok">OK</span>';
+  await sleep(skipReq?0:500);
 
-  // 加载进度条
-  var barLine=print('Loading ZFC-DOS  [<span class="bar"></span>]','dim');
-  var barEl=barLine.querySelector('.bar'), CELLS=26;
+  // 扫描引导介质
+  var scan=print('Scanning bootable media','dim');
+  for(var d=0;d<3;d++){
+    if(skipReq) break;
+    scan.textContent='Scanning bootable media'+'...'.repeat(d+1);
+    blip(900,.015,'square',.004);
+    await sleep(560);
+  }
+  print('Boot from C:\\ found — ZFC-DOS 7.0','mag');
+  await sleep(skipReq?0:700);
+
+  // 加载进度条 ×2
+  var barLine=print('Loading ZFC-DOS   [<span class="bar"></span>]','dim');
+  var barEl=barLine.querySelector('.bar'), CELLS=30;
   for(var s=0;s<=CELLS;s++){
     if(skipReq) s=CELLS;
     barEl.innerHTML='<span class="ok">'+'█'.repeat(s)+'</span>'+'░'.repeat(CELLS-s);
     blip(1400,.008,'square',.005);
-    await sleep(skipReq?0:38);
+    await sleep(skipReq?0:115);
   }
-  await sleep(350);
+  await sleep(skipReq?0:450);
+  var bar2=print('Loading modules   [<span class="bar"></span>]','dim');
+  var b2=bar2.querySelector('.bar'), C2=22;
+  for(var t=0;t<=C2;t++){
+    if(skipReq) t=C2;
+    b2.innerHTML='<span class="ok">'+'▓'.repeat(t)+'</span>'+'░'.repeat(C2-t);
+    blip(1100,.008,'square',.004);
+    await sleep(skipReq?0:88);
+  }
+  await sleep(skipReq?0:500);
+
+  // 签名校验
+  var sig=print('Verifying digital signature','dim');
+  for(var v=0;v<3;v++){
+    if(skipReq) break;
+    sig.textContent='Verifying digital signature'+'...'.repeat(v+1);
+    await sleep(450);
+  }
+  print('Signature OK — welcome back, Master JF.','mag');
+  await sleep(skipReq?0:800);
 
   print('System bootstrap complete. Handing over to ZFC-DOS...','dim');
-  await sleep(500);
+  await sleep(skipReq?0:700);
   out.innerHTML='';
 
   // 大字横幅
@@ -476,16 +513,18 @@ async function boot(){
   b.className='banner in'; b.textContent=BANNER;
   out.appendChild(b); out.scrollTop=out.scrollHeight;
   blip(880,.12,'sine',.03);
-  await sleep(1100);
+  await sleep(skipReq?0:1500);
 
   await typeLines([
     {html:'ZFC-DOS [Version 7.0.235]  ·  Cyber Terminal Edition',cls:'acc'},
     {html:'(C) Fangcheng Technologies. 保留所有权利。',cls:'dim'},
     {html:'系统就绪。输入 <span class="hot">HELP</span> 查看命令，或按 <span class="hot">F1</span>。',cls:'dim'},
     {html:'提示：试试 <span class="hot">HACK</span>、<span class="hot">MATRIX</span>、<span class="hot">BANNER</span>。',cls:'dim'}
-  ],90);
+  ],170);
 
   setStatus('就绪');
+  skipReq=false;
+  inEl.disabled=false;            /* ★ 修复：初始开机后输入框被永久禁用导致无法打字 */
   booting=false; busy=false;
   cmdline.classList.add('on');
   focusIn();
@@ -876,6 +915,9 @@ document.addEventListener('keydown',function(e){
   if(e.key==='F5'){ e.preventDefault(); run('home'); return; }
   if(document.activeElement!==inEl&&e.key.length===1&&!e.metaKey&&!e.ctrlKey&&!e.altKey){
     focusIn();
+    /* 捕获焦点切换时敲下的第一个字符，避免丢失 */
+    inEl.value+=e.key; syncEcho(); sTick();
+    e.preventDefault();
   }
 });
 
