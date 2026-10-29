@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="张方程（简方JF）的个人主页 — 白天写代码，晚上开直播，网站自己手搓。">
-<title>张方程 · 简方JF 的个人主页</title>
+<title>Zhangfangcheng的个人主页</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23002FA7'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-weight='bold' font-size='30' fill='%23fff' text-anchor='middle'%3EJF%3C/text%3E%3C/svg%3E">
 <style>
 /* ==========================================================
@@ -88,16 +88,6 @@ nav a:hover{background:var(--red);color:#fff}
   color:#fff;opacity:.55;user-select:none;
 }
 
-/* ---------- 黑色跑马带 ---------- */
-.band{background:var(--ink);color:var(--paper);overflow:hidden;border-block:3px solid var(--ink)}
-.band .run{display:flex;width:max-content;animation:run 28s linear infinite}
-.band span{
-  font-weight:900;font-size:clamp(15px,2vw,20px);letter-spacing:.02em;
-  white-space:nowrap;padding:10px 0 10px 28px;
-}
-.band i{color:var(--red);font-style:normal;padding-left:28px}
-@keyframes run{to{transform:translateX(-50%)}}
-
 /* ---------- 通用区块 ---------- */
 section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px)}
 .sec-head{display:flex;align-items:center;gap:clamp(12px,2vw,24px);margin-bottom:clamp(24px,4vw,48px)}
@@ -147,6 +137,24 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px)}
 .row:nth-child(2):hover{background:var(--red)}
 .row:nth-child(3):hover{background:var(--ink)}
 
+/* ---------- 技术支持 ---------- */
+.supporters{display:flex;flex-wrap:wrap;gap:clamp(14px,2.5vw,28px)}
+.sup-card{
+  flex:1 1 240px;max-width:340px;
+  background:#fff;border:3px solid var(--ink);
+  padding:clamp(18px,3vw,30px);
+}
+.sup-card:hover{background:var(--blue);color:#fff}
+.sup-tag{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
+.sup-card:hover .sup-tag{color:var(--red)}
+.sup-name{font-weight:900;font-size:clamp(26px,4vw,42px);letter-spacing:-.02em;line-height:1.1;margin:10px 0 14px;word-break:break-all}
+.sup-sign{border-top:3px solid currentColor;padding-top:10px;font-weight:700;font-size:16px}
+.sup-sign span{
+  display:block;font-family:var(--mono);font-size:11px;
+  font-weight:700;letter-spacing:.2em;opacity:.6;margin-bottom:2px;
+}
+.sup-sign b{color:var(--red)}
+
 /* ---------- 联系 ---------- */
 .contact{background:var(--blue);color:#fff;text-align:center;padding-block:clamp(56px,9vw,120px)}
 .contact .label{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.3em;margin-bottom:clamp(16px,3vw,30px)}
@@ -186,10 +194,11 @@ footer .secret:hover{color:var(--red)}
 <body>
 
 <header>
-  <div class="brand">张方程<span>×</span>简方JF</div>
+  <div class="brand">Fangcheng<span>×</span>简方JF</div>
   <nav>
     <a href="#about">关于</a>
     <a href="#links">链接</a>
+    <a href="#support">支持</a>
     <a href="#contact">联系</a>
   </nav>
 </header>
@@ -197,10 +206,10 @@ footer .secret:hover{color:var(--red)}
 <!-- 首屏：一整块克莱因蓝砸脸上 -->
 <section class="hero" style="padding-bottom:0">
   <div class="vtag">SELF-MADE WEBSITE</div>
-  <h1>张方程</h1>
+  <h1>Fangcheng235</h1>
   <div class="hero-sub">
     <span class="alias">aka 简方JF</span>
-    <p>白天写代码，晚上开直播。<br>这个网站是自己手搓的。</p>
+    <p>懒</p>
   </div>
   <dl class="hero-data">
     <div><dt>网名</dt><dd>简方JF</dd></div>
@@ -208,13 +217,6 @@ footer .secret:hover{color:var(--red)}
     <div><dt>现在时刻</dt><dd id="clock">--:--:--</dd></div>
   </dl>
 </section>
-
-<!-- 黑色关键词跑马带 -->
-<div class="band" aria-hidden="true">
-  <div class="run" id="run">
-    <span>写代码</span><i>■</i><span>开直播</span><i>■</i><span>手搓网站</span><i>■</i><span>摸鱼</span><i>■</i><span>折腾</span><i>■</i><span>好奇心</span><i>■</i>
-  </div>
-</div>
 
 <!-- 关于 -->
 <section id="about">
@@ -227,11 +229,11 @@ footer .secret:hover{color:var(--red)}
     <p class="say">你好，我是张方程，网上叫<b>简方JF</b>。写代码和开直播是正经事，做网站是业余爱好。本站没套模板、没用建站工具，一行一行敲出来的。邮箱基本都会回。</p>
     <dl class="facts">
       <div><dt>网名</dt><dd>简方JF</dd></div>
-      <div><dt>真名</dt><dd>张方程</dd></div>
+      <div><dt>真名</dt><dd>Zhangfangcheng</dd></div>
       <div><dt>域名</dt><dd>www.zhangfangcheng.cn</dd></div>
       <div><dt>邮箱</dt><dd><a href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a></dd></div>
-      <div><dt>状态</dt><dd>常年潜水，偶尔冒泡</dd></div>
-      <div><dt>座右铭</dt><dd>摸鱼归摸鱼，代码还是要写的</dd></div>
+      <div><dt>状态</dt><dd>空集</dd></div>
+      <div><dt>座右铭</dt><dd>懒</dd></div>
     </dl>
   </div>
 </section>
@@ -259,6 +261,22 @@ footer .secret:hover{color:var(--red)}
       <span class="d">你正在看</span>
       <span class="go">↑</span>
     </a>
+  </div>
+</section>
+
+<!-- 技术支持 -->
+<section id="support">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>技术支持</h2>
+    <span class="en">SUPPORT</span>
+  </div>
+  <div class="supporters">
+    <div class="sup-card">
+      <span class="sup-tag">支持者 01</span>
+      <div class="sup-name">JGhuihui</div>
+      <div class="sup-sign"><span>签名</span><b>wow</b></div>
+    </div>
   </div>
 </section>
 
