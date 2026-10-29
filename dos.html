@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ZFC-DOS 赛博终端模拟器 — 开机自检、CRT 特效、可交互命令。">
+<title>DOS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2304080b'/%3E%3Ctext x='32' y='44' font-family='monospace' font-weight='bold' font-size='26' fill='%233df3ff' text-anchor='middle'%3EDOS%3C/text%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   ZFC-DOS · 赛博终端模拟器
+   全部手写，无依赖。按 F1 或输入 HELP 查看命令。
+   ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bezel1:#2b2e34; --bezel2:#141619;
+  --room:#07090d;
+}
+html,body{height:100%}
+body{
+  background:var(--room);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% 40%, rgba(61,243,255,.05), transparent 60%),
+    linear-gradient(rgba(61,243,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,243,255,.035) 1px, transparent 1px);
+  background-size:100% 100%, 42px 42px, 42px 42px;
+  font-family:"Cascadia Mono",Consolas,"Courier New",ui-monospace,monospace;
+  display:flex;align-items:center;justify-content:center;
+  padding:18px;overflow:hidden;
+}
+
+/* ---------- 机箱 ---------- */
+.crt{width:min(1180px,96vw)}
+.bezel{
+  position:relative;
+  background:linear-gradient(165deg,var(--bezel1),var(--bezel2) 60%,#0c0d10);
+  border-radius:20px;padding:16px 16px 10px;
+  box-shadow:0 40px 90px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.07), inset 0 -2px 6px rgba(0,0,0,.6);
+}
+.screw{
+  position:absolute;width:13px;height:13px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #6a6f78, #2c2f35 70%);
+  box-shadow:inset 0 0 2px #000;
+}
+.screw::after{
+  content:"";position:absolute;left:2px;right:2px;top:50%;height:2px;
+  background:#17181c;transform:rotate(38deg) translateY(-50%);
+}
+.s1{top:9px;left:10px}.s2{top:9px;right:10px}.s3{bottom:9px;left:10px}.s4{bottom:9px;right:10px}
+.bezel-label{
+  text-align:center;font-size:10px;letter-spacing:.42em;color:#5c626d;
+  padding-top:9px;user-select:none;
+}
+.bezel-label b{color:#8a919d}
+
+/* ---------- 屏幕 ---------- */
+.screen{
+  --acc:#3df3ff; --glowc:rgba(61,243,255,.5); --acc2:#ff45e0;
+  --bg:#04080b; --fg:#d2f3f7; --dim:#55757c; --err:#ff5a6a; --warn:#ffd447;
+  position:relative;height:min(78vh,780px);min-height:440px;
+  background:var(--bg);border-radius:10px;overflow:hidden;
+  box-shadow:inset 0 0 90px rgba(0,0,0,.9), inset 0 0 18px rgba(0,0,0,.8);
+  transform-origin:center;
+}
+.screen[data-theme="green"] {--acc:#4dff88;--glowc:rgba(77,255,136,.5);--acc2:#e0ff4d;--fg:#d9ffe6;--dim:#4f7a5e}
+.screen[data-theme="magenta"]{--acc:#ff4df2;--glowc:rgba(255,77,242,.5);--acc2:#4df3ff;--fg:#ffe6fd;--dim:#7c557a}
+.screen[data-theme="amber"]  {--acc:#ffb347;--glowc:rgba(255,179,71,.5);--acc2:#ffe680;--fg:#ffeed6;--dim:#8a744f}
+
+/* 矩阵雨画布（在文字之下） */
+#fx{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.8}
+
+/* 内容层 */
+.glass{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column}
+
+/* HUD */
+.hud{
+  flex:none;display:flex;align-items:center;gap:14px;
+  font-size:11px;letter-spacing:.14em;color:var(--acc);
+  text-shadow:0 0 6px var(--glowc);
+  padding:8px 14px;user-select:none;white-space:nowrap;
+}
+.hud.top{border-bottom:1px solid color-mix(in srgb,var(--acc) 30%,transparent);background:color-mix(in srgb,var(--acc) 5%,transparent)}
+.hud.bot{border-top:1px solid color-mix(in srgb,var(--acc) 30%,transparent);background:color-mix(in srgb,var(--acc) 5%,transparent);overflow-x:auto;scrollbar-width:none}
+.hud.bot::-webkit-scrollbar{display:none}
+.hud .brand{font-weight:700;letter-spacing:.3em}
+.hud .led{
+  width:7px;height:7px;border-radius:50%;background:var(--acc);
+  box-shadow:0 0 8px var(--acc);animation:blink 1.6s steps(1) infinite;flex:none;
+}
+.hud .sp{margin-left:auto}
+.hud .fk{color:var(--dim);text-shadow:none}
+.hud .fk b{color:var(--acc);font-weight:400}
+.hud .st{color:var(--acc2);text-shadow:0 0 6px var(--acc2)}
+
+/* 输出区 */
+.out{
+  flex:1;overflow-y:auto;padding:14px 18px 8px;
+  font-size:14.5px;line-height:1.55;color:var(--fg);
+  text-shadow:0 0 5px color-mix(in srgb,var(--acc) 35%,transparent);
+  scrollbar-width:thin;scrollbar-color:var(--acc) transparent;
+}
+.out::-webkit-scrollbar{width:8px}
+.out::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--acc) 45%,transparent);border-radius:4px}
+.out::-webkit-scrollbar-track{background:transparent}
+.ln{white-space:pre-wrap;word-break:break-word;min-height:1.55em}
+.ln.acc{color:var(--acc);text-shadow:0 0 8px var(--glowc)}
+.ln.mag{color:var(--acc2);text-shadow:0 0 8px var(--acc2)}
+.ln.dim{color:var(--dim);text-shadow:none}
+.ln.err{color:var(--err);text-shadow:0 0 8px rgba(255,90,106,.55);font-weight:700}
+.ln.warn{color:var(--warn);text-shadow:0 0 8px rgba(255,212,71,.5)}
+.ln .ok{color:var(--acc)}
+.ln .hot{color:var(--acc2);font-weight:700}
+.banner{
+  font-size:clamp(7px,1.35vw,15px);line-height:1.08;letter-spacing:.06em;
+  background:linear-gradient(92deg,var(--acc) 15%,var(--acc2) 85%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 14px var(--glowc));
+  margin:6px 0 14px;user-select:none;
+}
+.banner.in{animation:bannerFlick .7s steps(2) both}
+
+/* 命令行 */
+.cmdline{
+  flex:none;position:relative;display:flex;align-items:center;gap:10px;
+  padding:10px 18px 12px;font-size:14.5px;
+  border-top:1px solid color-mix(in srgb,var(--acc) 22%,transparent);
+  visibility:hidden;
+}
+.cmdline.on{visibility:visible;animation:hudIn .45s ease both}
+.prompt{color:var(--acc);font-weight:700;text-shadow:0 0 8px var(--glowc);flex:none;user-select:none}
+.echo{white-space:pre-wrap;word-break:break-all;color:var(--fg);text-shadow:0 0 5px var(--glowc)}
+.cur{color:var(--acc);text-shadow:0 0 8px var(--acc);animation:blink .95s steps(1) infinite;flex:none}
+#in{
+  position:absolute;inset:0;width:100%;height:100%;
+  opacity:0;border:0;outline:0;background:transparent;
+  font:inherit;caret-color:transparent;cursor:text;
+}
+.cmdline:focus-within .cur{animation-duration:.6s}
+
+/* CRT 特效层 */
+.fx{position:absolute;inset:0;z-index:10;pointer-events:none}
+.fx.scan{
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.32) 0 1px, transparent 1px 3px);
+}
+.fx.band{
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--acc) 7%,transparent),transparent);
+  height:36%;top:-40%;animation:bandMove 7.5s linear infinite;
+}
+.fx.vig{box-shadow:inset 0 0 130px rgba(0,0,0,.85), inset 0 0 40px rgba(0,0,0,.55)}
+.fx.noise{
+  opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:noiseShift .4s steps(3) infinite;
+}
+.glass,#fx{animation:flick 6.5s steps(1) infinite}
+
+/* 关机动效 */
+@keyframes powerOn{
+  0%{transform:scale(.7,.004);filter:brightness(8);opacity:0}
+  18%{transform:scale(1,.004);filter:brightness(8);opacity:1}
+  45%{transform:scale(1,1);filter:brightness(3)}
+  70%{filter:brightness(1.4)}
+  100%{transform:none;filter:none}
+}
+@keyframes powerOff{
+  0%{transform:none;filter:brightness(1)}
+  35%{transform:scale(1,1);filter:brightness(4)}
+  55%{transform:scale(1,.006);filter:brightness(10)}
+  75%{transform:scale(.55,.004);filter:brightness(12)}
+  100%{transform:scale(.05,0);filter:brightness(0);opacity:0}
+}
+.screen.pwr-on{animation:powerOn .95s ease-out both}
+.screen.pwr-off{animation:powerOff .8s ease-in both}
+.flash{position:absolute;inset:0;z-index:30;background:#fff;opacity:0;pointer-events:none}
+.screen.pwr-on .flash{animation:flashIn .3s ease-out}
+@keyframes flashIn{0%{opacity:0}25%{opacity:.95}100%{opacity:0}}
+.screen.glitch{animation:glitchX .12s steps(2)}
+@keyframes glitchX{0%{transform:translateX(0)}33%{transform:translateX(-4px) skewX(.6deg)}66%{transform:translateX(4px) skewX(-.6deg)}100%{transform:translateX(0)}}
+
+/* 关机提示（在屏幕外层，不受折叠影响） */
+.offmsg{
+  position:absolute;left:16px;right:16px;top:16px;bottom:34px;z-index:40;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  border-radius:10px;background:#000;text-align:center;
+}
+.offmsg.on{display:flex}
+.offmsg .lost{
+  color:#ff4df2;font-size:clamp(18px,3vw,30px);font-weight:700;letter-spacing:.5em;
+  text-shadow:0 0 18px rgba(255,77,242,.7);animation:blink 1.4s steps(1) infinite;
+}
+.offmsg .hint{color:#3f5b60;font-size:12px;letter-spacing:.3em}
+
+/* 动画集 */
+@keyframes blink{50%{opacity:0}}
+@keyframes bandMove{to{top:130%}}
+@keyframes flick{0%,100%{opacity:1}93%{opacity:1}94%{opacity:.96}95%{opacity:1}97%{opacity:.98}}
+@keyframes noiseShift{0%{background-position:0 0}33%{background-position:-40px 30px}66%{background-position:30px -20px}100%{background-position:0 0}}
+@keyframes bannerFlick{0%{opacity:0}12%{opacity:1}16%{opacity:.15}24%{opacity:1}30%{opacity:.35}38%{opacity:1}52%{opacity:.6}60%{opacity:1}}
+@keyframes hudIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 移动端 */
+@media (max-width:700px){
+  body{padding:0}
+  .bezel{border-radius:0;padding:8px 8px 6px}
+  .screen{height:calc(100vh - 60px);min-height:380px}
+  .out{font-size:13px;padding:10px 12px 6px}
+  .cmdline{padding:8px 12px 10px;font-size:13px}
+  .hud{font-size:10px;gap:10px;padding:7px 10px}
+  .hud .hide-s{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .fx.band,.fx.noise,.glass,#fx,.hud .led{animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="crt">
+  <div class="bezel">
+    <span class="screw s1"></span><span class="screw s2"></span>
+    <span class="screw s3"></span><span class="screw s4"></span>
+
+    <div class="screen" id="screen" data-theme="cyan">
+      <canvas id="fx"></canvas>
+      <div class="flash"></div>
+
+      <div class="glass" id="glass">
+        <!-- 顶部 HUD -->
+        <div class="hud top">
+          <span class="brand">▟ZFC BIOS</span>
+          <span class="hide-s">DOS TERMINAL v7.0</span>
+          <span class="led"></span>
+          <span class="st" id="st">POST...</span>
+          <span class="sp"></span>
+          <span id="ping">PING --ms</span>
+          <span id="clock">--:--:--</span>
+        </div>
+
+        <!-- 输出区 -->
+        <div class="out" id="out" role="log" aria-live="polite"></div>
+
+        <!-- 命令行 -->
+        <div class="cmdline" id="cmdline">
+          <span class="prompt" id="prompt">C:\ZFC&gt;</span>
+          <span class="echo" id="echo"></span><span class="cur">█</span>
+          <input id="in" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="命令输入">
+        </div>
+
+        <!-- 底部状态栏 -->
+        <div class="hud bot">
+          <span class="fk"><b>F1</b> 帮助</span>
+          <span class="fk"><b>F2</b> 目录</span>
+          <span class="fk"><b>F3</b> 清屏</span>
+          <span class="fk"><b>F4</b> 矩阵</span>
+          <span class="fk hide-s"><b>F5</b> 主页</span>
+          <span class="sp"></span>
+          <span class="hide-s" id="soundSt">SND:ON</span>
+          <span>CAPS OFF</span>
+        </div>
+      </div>
+
+      <!-- CRT 特效 -->
+      <div class="fx scan"></div>
+      <div class="fx band"></div>
+      <div class="fx noise"></div>
+      <div class="fx vig"></div>
+    </div>
+
+    <!-- 关机画面 -->
+    <div class="offmsg" id="offmsg">
+      <div class="lost">SIGNAL LOST</div>
+      <div class="hint">按任意键 / 点击屏幕 重新启动</div>
+    </div>
+
+    <div class="bezel-label"><b>ZFC-TECH</b> · MODEL DOS-235 · CYBER TERMINAL EDITION</div>
+  </div>
+</div>
+
+<noscript><p style="color:#3df3ff;text-align:center;font-family:monospace">需要启用 JavaScript 才能使用本终端。</p></noscript>
+
+<script>
+(function(){
+"use strict";
+
+/* ==================== 元素 ==================== */
+var screen_=document.getElementById('screen'),
+    out=document.getElementById('out'),
+    cmdline=document.getElementById('cmdline'),
+    inEl=document.getElementById('in'),
+    echo=document.getElementById('echo'),
+    st=document.getElementById('st'),
+    offmsg=document.getElementById('offmsg'),
+    clockEl=document.getElementById('clock'),
+    pingEl=document.getElementById('ping'),
+    soundSt=document.getElementById('soundSt'),
+    cv=document.getElementById('fx'), ctx=cv.getContext('2d');
+
+var busy=false, booting=false, powering=false, off=false,
+    skipReq=false, soundOn=true, cmdHistory=[], histIdx=-1;
+
+/* ==================== 工具 ==================== */
+function sleep(ms){
+  if(skipReq) ms=0;
+  return new Promise(function(res){
+    if(ms<=0){res();return;}
+    var t=setTimeout(res,ms);
+    if(skipReq){clearTimeout(t);res();}
+  });
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function print(html,cls){
+  var d=document.createElement('div');
+  d.className='ln'+(cls?' '+cls:'');
+  d.innerHTML=html;
+  out.appendChild(d);
+  out.scrollTop=out.scrollHeight;
+  return d;
+}
+function typeLines(lines,ms){
+  ms=ms||22;
+  var p=Promise.resolve();
+  lines.forEach(function(l){
+    p=p.then(function(){ print(l.html!==undefined?l.html:esc(l),l.cls); return sleep(ms); });
+  });
+  return p;
+}
+function setStatus(t){ st.textContent=t; }
+function pad(s,n){ s=String(s); while(s.length<n) s+=' '; return s; }
+
+/* ==================== 音效（WebAudio，首次交互后解锁） ==================== */
+var AC=null;
+function ac(){
+  if(!AC){
+    try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; }
+  }
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+function blip(freq,dur,type,gain){
+  if(!soundOn) return;
+  var a=ac(); if(!a||a.state!=='running') return;
+  try{
+    var o=a.createOscillator(), g=a.createGain();
+    o.type=type||'square'; o.frequency.value=freq;
+    g.gain.value=gain||.02;
+    o.connect(g); g.connect(a.destination);
+    var t=a.currentTime;
+    g.gain.setValueAtTime(g.gain.value,t);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.start(t); o.stop(t+dur+.03);
+  }catch(e){}
+}
+function sTick(){ blip(1500,.012,'square',.008); }
+function sErr(){ blip(150,.2,'sawtooth',.04); }
+function sOk(){ blip(660,.07,'square',.025); setTimeout(function(){blip(990,.09,'square',.025);},70); }
+document.addEventListener('pointerdown',function(){ac();},{passive:true});
+
+/* ==================== 矩阵雨 ==================== */
+var matrixOn=false, drops=[], cw=0, ch=0, raf=null;
+var GLYPHS='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFZFC';
+function cvResize(){
+  var r=cv.getBoundingClientRect();
+  cw=cv.width=Math.max(1,Math.floor(r.width));
+  ch=cv.height=Math.max(1,Math.floor(r.height));
+}
+function matrixFrame(){
+  if(!matrixOn) return;
+  ctx.fillStyle='rgba(4,8,11,.09)';
+  ctx.fillRect(0,0,cw,ch);
+  ctx.font='15px monospace';
+  for(var i=0;i<drops.length;i++){
+    var y=drops[i]*16;
+    if(y>0){
+      var ch2=GLYPHS[(Math.random()*GLYPHS.length)|0];
+      ctx.fillStyle=Math.random()<.12?'#ff45e0':(getComputedStyle(screen_).getPropertyValue('--acc').trim()||'#3df3ff');
+      ctx.fillText(ch2,i*16,y);
+    }
+    if(y>ch && Math.random()>.972) drops[i]=Math.random()*-20;
+    drops[i]++;
+  }
+  raf=requestAnimationFrame(matrixFrame);
+}
+function matrixToggle(force){
+  var want=(force===undefined)?!matrixOn:!!force;
+  if(want===matrixOn) return;
+  matrixOn=want;
+  if(matrixOn){
+    cvResize();
+    drops=[]; for(var i=0;i<Math.ceil(cw/16);i++) drops[i]=Math.random()*-40;
+    ctx.clearRect(0,0,cw,ch);
+    raf=requestAnimationFrame(matrixFrame);
+    print('矩阵雨引擎 <span class="ok">ONLINE</span> —— 覆盖层已启动。','acc');
+  }else{
+    if(raf) cancelAnimationFrame(raf); raf=null;
+    ctx.clearRect(0,0,cw,ch);
+    print('矩阵雨引擎 <span class="dim">OFFLINE</span>。','dim');
+  }
+}
+window.addEventListener('resize',function(){ if(matrixOn){ cvResize(); } });
+
+/* ==================== 开机序列 ==================== */
+var BANNER=[
+'██████╗  ██████╗    ██████╗ ',
+'██╔══██╗██╔═══██╗   ██╔══██╗',
+'██║  ██║██║   ██║   ██████╔╝',
+'██║  ██║██║   ██║   ██╔══██╗',
+'██████╔╝╚██████╔╝   ██║  ██║',
+'╚═════╝  ╚═════╝    ╚═╝  ╚═╝'
+].join('\n');
+
+function skipBoot(){ if(booting) skipReq=true; }
+
+async function boot(){
+  booting=true; powering=false; skipReq=false;
+  off=false; offmsg.classList.remove('on');
+  inEl.disabled=true;
+  cmdline.classList.remove('on');
+  out.innerHTML='';
+  setStatus('POST...');
+
+  // 通电：CRT 亮屏
+  screen_.classList.remove('pwr-off','pwr-on');
+  void screen_.offsetWidth;
+  screen_.classList.add('pwr-on');
+  blip(1200,.05,'sine',.03);
+  await sleep(1000);
+  screen_.classList.remove('pwr-on');
+
+  var post=[
+    'ZFC BIOS v2.35   (C) 2026 Fangcheng Technologies',
+    'Main Processor   : CYBER-CORE 80486DX  133MHz',
+    {html:'Memory Test     : <span id="mem">000000</span>KB',cls:''},
+    'Detecting IDE Primary Master  ... ZFC-SSD 235MB',
+    'Detecting IDE Primary Slave   ... None',
+    'Detecting USB Bus             ... 2 device(s)',
+    'Initialising PHOSPHOR VGA     ... <span class="ok">OK</span>',
+    'Initialising NEON AUDIO       ... <span class="ok">OK</span>'
+  ];
+  for(var j=0;j<post.length;j++){
+    var item=post[j];
+    print(typeof item==='string'?esc(item):item.html, 'dim');
+    await sleep(65+Math.random()*85);
+  }
+
+  // 内存计数
+  var memEl=document.getElementById('mem');
+  if(memEl){
+    for(var m=0;m<=65536;m+=4096){
+      memEl.textContent=('000000'+m).slice(-6);
+      blip(2000,.006,'square',.004);
+      await sleep(24);
+    }
+    memEl.textContent='065536';
+  }
+  print('Memory Test     : 065536KB <span class="ok">OK</span>','dim');
+  await sleep(280);
+
+  // 加载进度条
+  var barLine=print('Loading ZFC-DOS  [<span class="bar"></span>]','dim');
+  var barEl=barLine.querySelector('.bar'), CELLS=26;
+  for(var s=0;s<=CELLS;s++){
+    if(skipReq) s=CELLS;
+    barEl.innerHTML='<span class="ok">'+'█'.repeat(s)+'</span>'+'░'.repeat(CELLS-s);
+    blip(1400,.008,'square',.005);
+    await sleep(skipReq?0:38);
+  }
+  await sleep(350);
+
+  print('System bootstrap complete. Handing over to ZFC-DOS...','dim');
+  await sleep(500);
+  out.innerHTML='';
+
+  // 大字横幅
+  var b=document.createElement('pre');
+  b.className='banner in'; b.textContent=BANNER;
+  out.appendChild(b); out.scrollTop=out.scrollHeight;
+  blip(880,.12,'sine',.03);
+  await sleep(1100);
+
+  await typeLines([
+    {html:'ZFC-DOS [Version 7.0.235]  ·  Cyber Terminal Edition',cls:'acc'},
+    {html:'(C) Fangcheng Technologies. 保留所有权利。',cls:'dim'},
+    {html:'系统就绪。输入 <span class="hot">HELP</span> 查看命令，或按 <span class="hot">F1</span>。',cls:'dim'},
+    {html:'提示：试试 <span class="hot">HACK</span>、<span class="hot">MATRIX</span>、<span class="hot">BANNER</span>。',cls:'dim'}
+  ],90);
+
+  setStatus('就绪');
+  booting=false; busy=false;
+  cmdline.classList.add('on');
+  focusIn();
+}
+
+/* ==================== 关机 / 重启 ==================== */
+async function shutdown(){
+  if(powering||off) return;
+  powering=true; busy=true; setStatus('关机中...');
+  await typeLines([
+    {html:'正在保存系统状态...',cls:'warn'},
+    {html:'正在关闭网络接口 eth0 ... <span class="ok">DONE</span>',cls:'dim'},
+    {html:'正在卸载文件系统 C:\ZFC ... <span class="ok">DONE</span>',cls:'dim'},
+    {html:'电源已切断。再见，Master JF。',cls:'mag'}
+  ],240);
+  await sleep(450);
+  screen_.classList.add('pwr-off');
+  blip(900,.3,'sine',.04);
+  setTimeout(function(){ blip(180,.35,'sine',.03); },240);
+  await sleep(820);
+  off=true; powering=false;
+  inEl.disabled=true;
+  offmsg.classList.add('on');
+  setStatus('OFFLINE');
+  setStatus('SIGNAL LOST');
+}
+function powerOn(){
+  if(!off) return;
+  off=false;
+  offmsg.classList.remove('on');
+  inEl.disabled=false;
+  boot();
+}
+
+/* ==================== 命令实现 ==================== */
+var CMD={};
+
+CMD.help={desc:'显示命令列表',exec:async function(){
+  print('','dim');
+  print('<span class="acc">可用命令：</span>','acc');
+  var names=Object.keys(CMD).sort();
+  for(var i=0;i<names.length;i++){
+    var k=names[i];
+    print('  <span class="ok">'+pad(k.toUpperCase(),11)+'</span>'+esc(CMD[k].desc),'dim');
+    await sleep(14);
+  }
+  print('','dim');
+  print('  <span class="ok">别名</span>        ? = HELP · LS = DIR · CLEAR = CLS · MI = SYSINFO','dim');
+  print('  <span class="ok">快捷键</span>      F1帮助 F2目录 F3清屏 F4矩阵 F5主页 ↑↓历史 Tab补全','dim');
+}};
+CMD['?']=CMD.help;
+
+CMD.dir={desc:'列出当前目录文件',exec:async function(){
+  var lines=[
+    '卷标是 ZFC-DOS',
+    '目录 C:\\ZFC',
+    '',
+    '2026-10-29  18:22    &lt;DIR&gt;          .',
+    '2026-10-29  18:22    &lt;DIR&gt;          ..',
+    '2026-10-29  18:30             12,847  index.html      主页',
+    '2026-10-29  18:31              3,921  live.html       直播间',
+    '2026-10-29  18:44             18,204  dos.html        本终端',
+    '2026-10-28  22:10                146  README.md',
+    '2026-10-28  22:10                 21  CNAME',
+    '',
+    '               5 个文件        35,139 字节',
+    '               2 个目录     524,288,000 字节可用'
+  ];
+  await typeLines(lines.map(function(l){return {html:l,cls:''};}),16);
+}};
+CMD.ls=CMD.dir;
+
+CMD.cls={desc:'清空屏幕',exec:async function(){ out.innerHTML=''; }};
+CMD.clear=CMD.cls;
+
+CMD.type={desc:'TYPE <文件> 查看文件内容',exec:async function(a){
+  if(!a[0]){ print('用法: TYPE &lt;文件名&gt;','warn'); return; }
+  var f=a[0].toLowerCase();
+  var canned={
+    'readme.md':'# aboutzfc235\n\n张方程的个人网站。手写 HTML，无框架。',
+    'cname':'www.zhangfangcheng.cn',
+    'index.html':'&lt;!DOCTYPE html&gt;\n&lt;html lang="zh-CN"&gt;\n&lt;head&gt;\n  &lt;title&gt;张方程 · 简方JF 的个人主页&lt;/title&gt;\n  ...',
+    'live.html':'&lt;iframe src="https://a09d93fca8aea2bdb.app.workbuddy.host/embed"&gt;\n  直播间嵌入页\n&lt;/iframe&gt;',
+    'dos.html':'&lt;!-- 你正在看的就是这个文件，想看源码请右键 → 查看页面源代码 --&gt;'
+  };
+  var content=canned[f];
+  if(!content){
+    // 尝试真实抓取（HTTP 环境下生效）
+    try{
+      var r=await fetch(a[0]);
+      if(r.ok){
+        var t=await r.text();
+        content=t.split('\n').slice(0,18).join('\n')+'\n... (截断显示前 18 行)';
+      }
+    }catch(e){}
+  }
+  if(!content){ print('找不到文件 '+esc(a[0]),'err'); sErr(); return; }
+  await typeLines(content.split('\n').map(function(l){return {html:esc(l)};}),14);
+}};
+
+CMD.ver={desc:'显示系统版本',exec:async function(){
+  await typeLines([
+    'ZFC-DOS [Version 7.0.235]',
+    '(C) Fangcheng Technologies 2026-2029. All rights reserved.'
+  ],60);
+}};
+
+CMD.date={desc:'显示当前日期',exec:async function(){
+  var d=new Date();
+  print('当前日期: '+d.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'}),'acc');
+}};
+CMD.time={desc:'显示当前时间',exec:async function(){
+  print('当前时间: '+new Date().toLocaleTimeString('zh-CN'),'acc');
+}};
+CMD.whoami={desc:'显示当前用户',exec:async function(){
+  await typeLines([
+    'ZFC\\FANGCHENG',
+    {html:'权限等级: <span class="hot">摸鱼级 (MAX)</span>',cls:'dim'}
+  ],80);
+}};
+CMD.sysinfo={desc:'显示系统信息',exec:sysinfo};
+CMD.mi=CMD.sysinfo;
+
+async function sysinfo(){
+  var up=Math.floor(performance.now()/1000);
+  var upStr=('0'+Math.floor(up/60)).slice(-2)+':'+('0'+(up%60)).slice(-2);
+  var lines=[
+    '主机名  : ZFC-CYBER-01',
+    '处理器  : CYBER-CORE 80486DX @ 133MHz',
+    '内存    : 64MB (65536KB)',
+    '显卡    : PHOSPHOR VGA · 支持 256 色',
+    '系统    : ZFC-DOS 7.0 [Build 20261029]',
+    '主题    : '+screen_.getAttribute('data-theme').toUpperCase(),
+    '运行时长: '+upStr,
+    '浏览器  : '+esc(navigator.userAgent),
+    {html:'网络    : <span class="ok">ONLINE</span> · 丢包 0% · 加密通道已建立',cls:''}
+  ];
+  print('┌─ SYSTEM INFORMATION ─────────────────┐','acc');
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    print('│ '+ (typeof l==='string'?esc(l):l.html), typeof l==='string'?'':l.cls);
+    await sleep(26);
+  }
+  print('└──────────────────────────────────────┘','acc');
+}
+
+CMD.banner={desc:'显示 DOS 大字横幅',exec:async function(){
+  var b=document.createElement('pre');
+  b.className='banner in'; b.textContent=BANNER;
+  out.appendChild(b); out.scrollTop=out.scrollHeight;
+  blip(880,.1,'sine',.025);
+  await sleep(500);
+}};
+
+CMD.matrix={desc:'MATRIX [on|off] 矩阵雨开关',exec:async function(a){
+  if(a[0]==='on') matrixToggle(true);
+  else if(a[0]==='off') matrixToggle(false);
+  else matrixToggle();
+}};
+
+CMD.hack={desc:'启动渗透协议（高能）',exec:async function(){
+  print('┌─ INITIATING INTRUSION PROTOCOL ──────┐','mag');
+  await sleep(300);
+  var steps=[
+    ['加载渗透模块 payload.zfc ...','ok'],
+    ['扫描目标端口 1-65535 ... 发现 3 个开放端口','dim'],
+    ['绕过防火墙 FW-9000 ... 指纹伪造成功','dim'],
+    ['注入 NEON-ROOTKIT ... 权限提升中','dim'],
+    ['解密主密钥 [AES-256] ... ','progress'],
+    ['穿越暗网中继 NODE-235 ... 延迟 12ms','dim'],
+    ['伪造管理员生物特征 ... 匹配度 99.7%','dim']
+  ];
+  for(var i=0;i<steps.length;i++){
+    print('  <span class="ok">▸</span> '+esc(steps[i][0]),'dim');
+    await sleep(320+Math.random()*380);
+  }
+  // 进度条式解密
+  var pl=print('  <span class="ok">▸</span> 解密主密钥 [AES-256] ... [<span class="pg">░░░░░░░░░░░░░░░░░░░░</span>]','dim');
+  var pg=pl.querySelector('.pg');
+  for(var p=0;p<=20;p++){
+    pg.innerHTML='<span class="ok">'+'▓'.repeat(p)+'</span>'+'░'.repeat(20-p);
+    blip(1600,.008,'square',.006);
+    await sleep(70);
+  }
+  await sleep(400);
+  print('  <span class="hot">ACCESS GRANTED</span>','mag');
+  blip(520,.12,'square',.035);
+  await sleep(140);
+  blip(780,.12,'square',.035);
+  await sleep(140);
+  blip(1040,.22,'square',.04);
+  await sleep(420);
+  await typeLines([
+    {html:'欢迎回来，Master JF。核心权限已移交。',cls:'mag'},
+    {html:'本次会话已被记录。当然，记录也会被删掉。',cls:'dim'}
+  ],150);
+  print('└──────────────────────────────────────┘','mag');
+  sOk();
+}};
+
+CMD.ping={desc:'PING [主机] 测试网络',exec:async function(a){
+  var host=a[0]||'www.zhangfangcheng.cn';
+  print('正在 Ping '+esc(host)+' [127.0.0.1] 具有 32 字节的数据:','');
+  var times=[],loss=0;
+  for(var i=1;i<=4;i++){
+    await sleep(380+Math.random()*300);
+    if(Math.random()<.08){ loss++; print('请求超时。','err'); continue; }
+    var t=(8+Math.random()*38).toFixed(0);
+    times.push(+t);
+    print('来自 127.0.0.1 的回复: 字节=32 时间='+t+'ms TTL=64','');
+  }
+  var ok=4-loss;
+  await sleep(300);
+  print(''+host+' 的 Ping 统计信息:','dim');
+  print('    数据包: 已发送 = 4，已接收 = '+ok+'，丢失 = '+loss+' ('+(loss*25)+'% 丢失)，','dim');
+  if(times.length){
+    var min=Math.min.apply(null,times),max=Math.max.apply(null,times),
+        avg=Math.round(times.reduce(function(x,y){return x+y;},0)/times.length);
+    print('往返路程的最小时间 = '+min+'ms，最大时间 = '+max+'ms，平均时间 = '+avg+'ms','dim');
+  }
+}};
+
+CMD.echo={desc:'ECHO <文本> 回显文字',exec:async function(a){
+  print(esc(a.join(' ')),'');
+}};
+CMD.history={desc:'显示输入历史',exec:async function(){
+  if(!cmdHistory.length){ print('（暂无历史记录）','dim'); return; }
+  cmdHistory.slice(-12).forEach(function(h,i){
+    print('  <span class="dim">'+pad(String(i+1),3)+'</span>'+esc(h));
+  });
+}};
+CMD.fortune={desc:'抽取一句站长箴言',exec:async function(){
+  var q=[
+    '代码写得再好，也要记得睡觉。',
+    '摸鱼归摸鱼，代码还是要写的。',
+    '好奇心是免费的，尽情使用。',
+    '深夜的直播间，总有人在。',
+    '最好的东西往往是免费的：阳光、好代码，和一句「在的」。',
+    '嘘，别告诉 rcl。'
+  ];
+  print('「'+esc(q[(Math.random()*q.length)|0])+'」','mag');
+}};
+
+CMD.theme={desc:'THEME cyan|green|magenta|amber 换色',exec:async function(a){
+  var t=(a[0]||'').toLowerCase();
+  var valid=['cyan','green','magenta','amber'];
+  if(valid.indexOf(t)<0){
+    print('用法: THEME cyan|green|magenta|amber','warn');
+    print('当前主题: '+screen_.getAttribute('data-theme'),'dim');
+    return;
+  }
+  screen_.setAttribute('data-theme',t);
+  print('主题已切换 → <span class="hot">'+t.toUpperCase()+'</span>','acc');
+  sOk();
+}};
+CMD.sound={desc:'sound on|off 音效开关',exec:async function(a){
+  var t=(a[0]||'').toLowerCase();
+  if(t==='on') soundOn=true;
+  else if(t==='off') soundOn=false;
+  else soundOn=!soundOn;
+  soundSt.textContent='SND:'+(soundOn?'ON':'OFF');
+  print('音效已'+(soundOn?'开启':'关闭'),'acc');
+  if(soundOn) sOk();
+}};
+
+CMD.sudo={desc:'尝试获取 root 权限',exec:async function(){
+  print('[sudo] password for fangcheng:','dim');
+  await sleep(600);
+  print('对不起，Master JF，我不能这样做。','err');
+  print('提示：管理员账号是 JGhuihui，去找他要密码。','dim');
+  sErr();
+}};
+CMD.cd={desc:'切换目录（其实切不动）',exec:async function(a){
+  if(!a[0]){ print('C:\\ZFC','acc'); return; }
+  print('目录切换失败：本机只有 C: 一个卷。','err'); sErr();
+}};
+CMD.mkdir={desc:'MKDIR <名> 创建目录',exec:async function(a){
+  print('拒绝访问：磁盘空间已满（其实是站长懒得写）。','err'); sErr();
+}};
+CMD.format={desc:'FORMAT 危险操作演示',exec:function(){
+  print('！！ 危险操作已被硬件拦截 ！！','err');
+  print('系统盘岂能说格式就格式，你这个狠人。','warn'); sErr();
+}};
+CMD.del={desc:'DEL 危险操作演示',exec:function(){
+  print('！！ 危险操作已被硬件拦截 ！！','err');
+  print('删库跑路请提前订票。','warn'); sErr();
+}};
+CMD.tree={desc:'显示目录树',exec:async function(){
+  await typeLines([
+    'C:\\ZFC',
+    '├── index.html      主页（粗野主义海报风）',
+    '├── live.html       直播间',
+    '├── dos.html        本终端（你在这）',
+    '├── README.md',
+    '└── CNAME           www.zhangfangcheng.cn'
+  ],40);
+}};
+CMD.about={desc:'关于本站',exec:async function(){
+  print('┌─ ABOUT ──────────────────────────────┐','acc');
+  await typeLines([
+    '  本站是 张方程（简方JF）的个人主页。',
+    '  手写 HTML / CSS / JS，无框架无依赖，',
+    '  由一个不想用建站工具的人类维护。',
+    {html:'  有问题请发信: <span class="ok">nya@zhangfangcheng.cn</span>',cls:''}
+  ],70);
+  print('└──────────────────────────────────────┘','acc');
+}};
+CMD.live={desc:'打开直播间',exec:function(){ print('正在跳转直播间...','acc'); window.open('live.html','_blank'); }};
+CMD.home={desc:'返回个人主页',exec:function(){ print('正在返回主页...','acc'); location.href='index.html'; }};
+CMD.mail={desc:'给站长写信',exec:function(){ location.href='mailto:nya@zhangfangcheng.cn'; }};
+CMD.reboot={desc:'重启系统',exec:async function(){ await sleep(350); boot(); }};
+CMD.shutdown={desc:'关闭系统',exec:shutdown};
+CMD.exit=CMD.shutdown;
+
+/* ==================== 命令执行 ==================== */
+async function run(raw){
+  if(busy||booting||powering||off) return;
+  var line=raw.trim();
+  print('<span class="acc">C:\\ZFC&gt;</span> '+esc(raw),'');
+  if(!line) return;
+  if(cmdHistory[cmdHistory.length-1]!==line) cmdHistory.push(line);
+  histIdx=cmdHistory.length;
+
+  var parts=line.split(/\s+/), name=parts[0].toLowerCase(), args=parts.slice(1);
+  var c=CMD[name];
+  if(name==='?') c=CMD.help;
+  if(!c){
+    print('Bad command or file name: '+esc(parts[0]),'err');
+    print('输入 <span class="hot">HELP</span> 查看可用命令。','dim');
+    sErr(); return;
+  }
+  busy=true; setStatus('执行中');
+  try{ await c.exec(args,line); }
+  catch(e){ print('SYSTEM ERROR: '+esc(e&&e.message||e),'err'); }
+  busy=false;
+  if(!off&&!powering) setStatus('就绪');
+  focusIn();
+}
+
+function focusIn(){ try{ inEl.focus({preventScroll:true}); }catch(e){ inEl.focus(); } }
+
+/* ==================== 输入交互 ==================== */
+function syncEcho(){ echo.textContent=inEl.value; }
+
+inEl.addEventListener('input',function(){ syncEcho(); sTick(); });
+
+inEl.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){
+    var v=inEl.value;
+    inEl.value=''; syncEcho();
+    run(v);
+    e.preventDefault();
+  }else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(cmdHistory.length){
+      histIdx=Math.max(0,histIdx-1);
+      inEl.value=cmdHistory[histIdx]||''; syncEcho();
+    }
+  }else if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(cmdHistory.length){
+      histIdx=Math.min(cmdHistory.length,histIdx+1);
+      inEl.value=cmdHistory[histIdx]||''; syncEcho();
+    }
+  }else if(e.key==='Tab'){
+    e.preventDefault();
+    var v2=inEl.value.trim().toLowerCase();
+    if(!v2) return;
+    var hits=Object.keys(CMD).filter(function(k){return k.indexOf(v2)===0;});
+    if(hits.length===1){ inEl.value=hits[0]+' '; syncEcho(); }
+    else if(hits.length>1){ print(hits.join('  '),'dim'); }
+  }
+});
+
+/* 全局：点击聚焦 / 开关机动画跳过 / F 键 */
+document.addEventListener('click',function(e){
+  if(off){ powerOn(); return; }
+  if(booting){ skipBoot(); }
+  if(!e.target.closest('#in')) focusIn();
+});
+document.addEventListener('keydown',function(e){
+  if(off){ e.preventDefault(); powerOn(); return; }
+  if(booting){ if(!e.metaKey&&!e.ctrlKey) skipBoot(); }
+  if(e.key==='F1'){ e.preventDefault(); run('help'); return; }
+  if(e.key==='F2'){ e.preventDefault(); run('dir'); return; }
+  if(e.key==='F3'){ e.preventDefault(); run('cls'); return; }
+  if(e.key==='F4'){ e.preventDefault(); run('matrix'); return; }
+  if(e.key==='F5'){ e.preventDefault(); run('home'); return; }
+  if(document.activeElement!==inEl&&e.key.length===1&&!e.metaKey&&!e.ctrlKey&&!e.altKey){
+    focusIn();
+  }
+});
+
+/* ==================== HUD 时钟 / 心跳 ==================== */
+setInterval(function(){
+  clockEl.textContent=new Date().toLocaleTimeString('zh-CN',{hour12:false});
+},1000);
+clockEl.textContent=new Date().toLocaleTimeString('zh-CN',{hour12:false});
+
+setInterval(function(){
+  if(off||booting){ pingEl.textContent='PING --ms'; return; }
+  pingEl.textContent='PING '+(7+Math.floor(Math.random()*38))+'ms';
+},3200);
+
+/* 随机故障闪烁 */
+setInterval(function(){
+  if(off||booting||powering||document.hidden) return;
+  if(Math.random()<.55){
+    screen_.classList.add('glitch');
+    setTimeout(function(){ screen_.classList.remove('glitch'); },130);
+  }
+},7000);
+
+/* ==================== 启动 ==================== */
+boot();
+})();
+</script>
+</body>
+</html>
