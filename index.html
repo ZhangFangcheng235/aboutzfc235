@@ -162,6 +162,8 @@ h1{
 .hero-data div:last-child{border-right:0}
 .hero-data dt{font-size:10px;letter-spacing:.28em;color:var(--dim)}
 .hero-data dd{font-size:14px;font-weight:700;margin-top:3px;color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.5)}
+.hero-data dd.cd{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.hero-data dd.cd::after{content:" 秒";font-size:11px;color:var(--dim);font-weight:400;text-shadow:none}
 /* 福字金印（替代落日/月亮位） */
 .fustamp{
   position:absolute;top:9%;right:9%;
@@ -287,63 +289,90 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .sup .role{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.22em}
 .sup .sig{margin-top:4px;font-weight:700}
 
-/* ---------- 1) VS2026 风（FC235）· 动态 ---------- */
+/* ---------- 1) VS2026 风（FC235）· 真实 IDE 质感 · 动态 ---------- */
 .vs2026{
-  background:#1a1622;border:1px solid #5b4a7a;border-radius:10px;
+  --vs-bg:#1e1e1f; --vs-chrome:#2d2d31; --vs-panel:#252526;
+  background:var(--vs-bg);border:1px solid #3f3f46;border-radius:8px;overflow:hidden;
   display:flex;flex-direction:column;cursor:pointer;
-  font-family:Consolas,"Cascadia Mono","Courier New",monospace;color:#e8e0ff;
-  box-shadow:0 0 46px rgba(155,90,255,.28);
+  min-height:clamp(215px,25vw,290px);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace;color:#d4d4d4;
+  box-shadow:0 18px 50px -18px rgba(0,0,0,.75);
+  transition:box-shadow .4s;
 }
+.vs2026:hover{box-shadow:0 22px 60px -18px rgba(155,79,150,.5)}
+/* 标题栏 */
 .vs2026 .tbar{
-  display:flex;align-items:center;gap:10px;
-  background:linear-gradient(90deg,#5b2d8e,#8b52c4 55%,#b57ae8);
-  padding:7px 12px;font-size:12px;font-weight:700;color:#fff;letter-spacing:.04em;
+  flex:none;display:flex;align-items:center;gap:14px;
+  background:var(--vs-chrome);padding:6px 10px;font-size:12px;color:#dcdcdc;
+  border-bottom:1px solid #3f3f46;
 }
-.vs2026 .tbar .app{background:rgba(0,0,0,.25);padding:2px 8px;border-radius:3px}
-.vs2026 .winbtn{margin-left:auto;display:flex;gap:14px;opacity:.9}
+.vs2026 .vslogo{
+  width:18px;height:18px;border-radius:3px;flex:none;
+  background:linear-gradient(150deg,#9b4f96,#68217a);
+  color:#fff;font:900 12px/18px "Arial Black",sans-serif;text-align:center;
+  box-shadow:0 0 8px rgba(155,79,150,.5);
+}
+.vs2026 .menu{letter-spacing:.02em;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vs2026 .winbtn{margin-left:auto;display:flex;gap:16px;font-size:12px;opacity:.75;flex:none}
 .vs2026 .winbtn i{font-style:normal}
-.vs2026 .winbtn .cl{color:#ffd0e8}
-.vs2026 .body{
-  display:flex;flex:1;min-height:0;align-items:center;
-  gap:clamp(16px,3vw,32px);padding:clamp(16px,3vw,26px) clamp(20px,4vw,34px);
+.vs2026 .winbtn .cl{color:#d16d83}
+/* 主体：编辑器 + 资源管理器 */
+.vs2026 .ide{flex:1;display:flex;min-height:0}
+.vs2026 .editor{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--vs-bg)}
+.vs2026 .tabs{flex:none;display:flex;background:var(--vs-chrome);border-bottom:1px solid #3f3f46}
+.vs2026 .tab{
+  display:flex;align-items:center;gap:7px;padding:7px 16px;font-size:12px;color:#9d9d9d;
+  border-right:1px solid #3f3f46;cursor:default;transition:color .2s;
 }
-.vs2026 .big{
-  font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;font-weight:900;
-  font-size:clamp(52px,11vw,120px);line-height:.9;letter-spacing:-.03em;
-  background:linear-gradient(180deg,#ffffff,#e3c8ff 45%,#a56bff);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:bigGlow 2.8s ease-in-out infinite alternate;
+.vs2026 .tab.on{background:var(--vs-bg);color:#fff;box-shadow:inset 0 2px 0 #ab4bab}
+.vs2026 .tab:hover{color:#ddd}
+.ic-cs{width:10px;height:10px;border-radius:2px;background:linear-gradient(140deg,#a179dc,#5b2d8e);display:inline-block;flex:none}
+.vs2026 .code-area{flex:1;display:flex;min-height:0;overflow:hidden}
+.vs2026 .gutter{
+  flex:none;padding:12px 10px 12px 0;min-width:42px;text-align:right;
+  color:#5f6672;font-size:13px;line-height:1.75;user-select:none;
 }
-@keyframes bigGlow{
-  from{filter:drop-shadow(0 0 8px rgba(180,110,255,.7)) drop-shadow(0 0 26px rgba(155,90,255,.5))}
-  to{filter:drop-shadow(0 0 15px rgba(214,158,255,1)) drop-shadow(0 0 48px rgba(155,90,255,.95))}
-}
-.vs2026 .meta{display:flex;flex-direction:column;gap:8px;min-width:0}
-.vs2026 .role{color:#c6a4ff;text-shadow:0 0 12px rgba(180,110,255,.8)}
-.vs2026 .sig{color:#efe3ff;font-size:clamp(15px,2vw,19px)}
-.vs2026 .sig b{
-  color:#ffd166;font-weight:900;
-  text-shadow:0 0 10px rgba(255,209,102,.9),0 0 30px rgba(255,209,102,.55);
-}
-.vs2026 .k{color:#ff7bd0}.vs2026 .s{color:#8fe8ff}.vs2026 .c{color:#9a86c9}
-.vs2026 .code{font-size:clamp(11px,1.5vw,14px);line-height:1.6;opacity:.95;white-space:nowrap;min-height:1.6em}
+.vs2026 .code{flex:1;margin:0;padding:12px 18px 12px 14px;overflow:hidden;font-size:13px;line-height:1.75;white-space:pre}
+.vs2026 .k{color:#569cd6}.vs2026 .t{color:#4ec9b0}.vs2026 .c{color:#57a64a;font-style:italic}
+.vs2026 .id{color:#9cdcfe}.vs2026 .s{color:#ce9178}
 .vs2026 .caret{
-  display:inline-block;width:.55em;height:1em;background:#ff7bd0;
-  vertical-align:-.14em;margin-left:2px;
-  box-shadow:0 0 10px rgba(255,123,208,.85);
-  animation:blinkC .8s steps(1) infinite;
+  display:inline-block;width:2px;height:1.1em;background:#aeafad;
+  vertical-align:-.18em;margin-left:1px;
+  box-shadow:0 0 6px rgba(174,175,173,.6);
+  animation:blinkC 1s steps(1) infinite;
 }
 @keyframes blinkC{50%{opacity:0}}
+/* 解决方案资源管理器 */
+.vs2026 .explorer{
+  flex:none;width:clamp(150px,22%,230px);background:var(--vs-panel);
+  border-left:1px solid #3f3f46;font-size:12px;color:#cfcfcf;
+}
+.vs2026 .exp-h{
+  padding:7px 12px;font-size:11.5px;color:#dcdcdc;background:var(--vs-chrome);
+  border-bottom:1px solid #3f3f46;
+}
+.vs2026 .tree{list-style:none;padding:8px 6px;margin:0}
+.vs2026 .tree li{padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .2s}
+.vs2026 .tree li:hover{background:#323236}
+.vs2026 .tree .lv0{color:#dcdcdc}
+.vs2026 .tree .lv1{padding-left:18px;background:rgba(155,79,150,.2);color:#fff}
+.vs2026 .tree .lv2{padding-left:40px;color:#9cdcfe}
+/* 状态栏 */
 .vs2026 .status{
-  background:linear-gradient(90deg,#7a35c9,#a25ce0);color:#fff;
-  font-size:12px;font-weight:700;padding:5px 12px;
-  display:flex;gap:16px;flex-wrap:wrap;align-items:center;letter-spacing:.03em;
+  flex:none;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:linear-gradient(90deg,#68217a,#7d2f92);color:#fff;
+  font-size:11.5px;padding:5px 12px;letter-spacing:.02em;
 }
 .vs2026 .prog{display:inline-flex;align-items:center;gap:6px}
-.vs2026 .prog i{display:inline-block;width:72px;height:8px;border:1px solid rgba(255,255,255,.55);position:relative;background:rgba(0,0,0,.2)}
-.vs2026 .prog i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:0;background:#fff;box-shadow:0 0 8px #fff;animation:build 2.4s linear infinite}
-@keyframes build{0%{width:0}100%{width:98%}}
-.vs2026 .hint{opacity:.7;font-weight:400}
+.vs2026 .prog i{width:70px;height:7px;border:1px solid rgba(255,255,255,.45);position:relative;background:rgba(0,0,0,.25)}
+.vs2026 .prog i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:0;background:#fff;box-shadow:0 0 8px #fff;animation:build 3.2s linear infinite}
+@keyframes build{0%{width:0}85%{width:98%}100%{width:98%}}
+/* 移动端：隐藏资源管理器 */
+@media (max-width:760px){
+  .vs2026 .explorer{display:none}
+  .vs2026 .menu{display:none}
+  .vs2026 .code,.vs2026 .gutter{font-size:11px}
+}
 
 /* ---------- 2) IC 像素闯关游戏（rcl） ---------- */
 .pixelic{
@@ -468,59 +497,89 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .pixelic .bar.mp span{background:repeating-linear-gradient(90deg,#ffd166 0 10px,#d19b2e 10px 12px)}
 .pixelic .bar b{position:absolute;right:6px;top:0;font:700 11px/12px var(--mono);color:#c9d2df;text-shadow:1px 1px 0 #000}
 
-/* ---------- 3) 液态玻璃风（JGhuihui） ---------- */
+/* ---------- 3) 液态玻璃风（JGhuihui）· 四层折射玻璃 ---------- */
 .liquid{
-  border-radius:clamp(22px,4vw,42px);
+  --mx:50%;--my:18%;
+  position:relative;overflow:hidden;border-radius:26px;
   padding:clamp(20px,3.4vw,34px) clamp(24px,4vw,44px);
   display:flex;flex-direction:column;justify-content:center;gap:6px;
   color:#f6efff;isolation:isolate;
-  background:linear-gradient(135deg,#3a1e6e 0%,#20113f 45%,#4a1f5e 100%);
-  box-shadow:inset 0 2px 1px rgba(255,255,255,.4), inset 0 -2px 2px rgba(0,0,0,.3);
-  overflow:hidden;
+  background:linear-gradient(150deg,#1b0f33 0%,#120a24 55%,#241038 100%);
 }
-.liquid::before{
-  content:"";position:absolute;inset:-40%;z-index:-1;
-  background:
-    radial-gradient(30% 40% at 20% 30%, rgba(255,61,240,.85), transparent 70%),
-    radial-gradient(28% 36% at 75% 25%, rgba(38,230,255,.8), transparent 70%),
-    radial-gradient(34% 44% at 60% 85%, rgba(255,209,102,.7), transparent 70%),
-    radial-gradient(26% 34% at 30% 80%, rgba(155,90,255,.85), transparent 70%);
-  filter:blur(34px) saturate(1.4);
-  animation:blob 14s ease-in-out infinite alternate;
+/* 流体色域：四团持续漂移的模糊色斑，被玻璃真实采样 */
+.liquid .lgblobs{position:absolute;inset:0;z-index:-2}
+.liquid .lgblobs i{position:absolute;border-radius:50%;filter:blur(46px);opacity:.6;will-change:transform}
+.lb1{width:46%;height:150%;left:-8%;top:-30%;background:radial-gradient(circle at 40% 40%,#ff3df0,transparent 68%);animation:lgd1 16s ease-in-out infinite}
+.lb2{width:40%;height:140%;right:-8%;top:-10%;background:radial-gradient(circle at 55% 45%,#26e6ff,transparent 68%);animation:lgd2 19s ease-in-out infinite;opacity:.5}
+.lb3{width:50%;height:160%;left:26%;bottom:-60%;background:radial-gradient(circle at 50% 50%,#8b5cf6,transparent 70%);animation:lgd3 22s ease-in-out infinite}
+.lb4{width:26%;height:100%;right:16%;bottom:-10%;background:radial-gradient(circle at 50% 50%,#ffd166,transparent 70%);animation:lgd1 14s ease-in-out infinite reverse;opacity:.45}
+@keyframes lgd1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(9%,7%) scale(1.12)}66%{transform:translate(-5%,11%) scale(.94)}}
+@keyframes lgd2{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-12%,14%) scale(.88)}}
+@keyframes lgd3{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(10%,-9%) scale(1.15)}75%{transform:translate(-8%,-5%) scale(.96)}}
+/* 噪点：去掉塑料感 */
+.liquid .lggrain{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-@keyframes blob{
-  0%{transform:translate(0,0) rotate(0deg) scale(1)}
-  100%{transform:translate(6%,-4%) rotate(8deg) scale(1.15)}
-}
+/* 玻璃本体：背景采样 + 鼠标折射光斑 + 厚度内阴影 */
 .liquid .glass{
-  position:relative;border-radius:inherit;
+  position:relative;z-index:1;border-radius:22px;
   padding:clamp(18px,3vw,28px) clamp(22px,3.6vw,36px);
-  background:linear-gradient(160deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
-  backdrop-filter:blur(22px) saturate(1.6) brightness(1.12);
-  -webkit-backdrop-filter:blur(22px) saturate(1.6) brightness(1.12);
-  border:1px solid rgba(255,255,255,.35);
+  background:
+    radial-gradient(320px circle at var(--mx) var(--my),rgba(230,220,255,.16),transparent 46%),
+    linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 46%,rgba(200,150,255,.07));
+  backdrop-filter:blur(30px) saturate(215%) brightness(1.13) contrast(1.06);
+  -webkit-backdrop-filter:blur(30px) saturate(215%) brightness(1.13) contrast(1.06);
+  border:1px solid rgba(220,200,255,.18);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.7),
-    inset 0 -1px 0 rgba(255,255,255,.25),
-    inset 0 0 40px rgba(255,255,255,.08),
-    0 18px 50px rgba(0,0,0,.4);
+    0 1px 0 rgba(255,255,255,.24) inset,
+    0 -1px 0 rgba(255,255,255,.1) inset,
+    1px 0 0 rgba(255,255,255,.07) inset,
+    -1px 0 0 rgba(255,255,255,.07) inset,
+    0 -26px 46px -34px rgba(240,225,255,.6) inset,
+    0 20px 42px -28px rgba(0,0,0,.6) inset,
+    0 32px 72px -30px rgba(10,0,30,.92),
+    0 2px 8px rgba(0,0,0,.32);
   overflow:hidden;
 }
+/* 折射棱镜环：锥形高光绕行 */
 .liquid .glass::before{
-  content:"";position:absolute;top:-60%;left:-20%;width:60%;height:220%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
-  transform:rotate(18deg);animation:sheen 7s ease-in-out infinite;pointer-events:none;
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  padding:1.6px;
+  background:conic-gradient(from var(--a,0deg),
+    transparent 0deg,rgba(255,255,255,.55) 18deg,rgba(230,180,255,.3) 42deg,transparent 74deg,
+    transparent 168deg,rgba(180,200,255,.42) 196deg,rgba(255,255,255,.28) 224deg,transparent 258deg,
+    transparent 336deg,rgba(255,255,255,.3) 354deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:lgSheen 8s linear infinite;
 }
-@keyframes sheen{0%,100%{left:-30%}50%{left:90%}}
+/* 上弧光 + 底部厚度聚光 */
+.liquid .glass::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(130% 96% at 50% -4%,rgba(240,228,255,.2),transparent 66%),
+    linear-gradient(0deg,rgba(230,210,255,.11),transparent 15%);
+}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes lgSheen{to{--a:360deg}}
+/* 镜面反射斑：缓慢掠过玻璃表面 */
+.liquid .glass .spec{
+  position:absolute;width:44%;height:58%;left:-14%;top:-18%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,245,255,.4),rgba(240,220,255,.1) 58%,transparent 76%);
+  filter:blur(7px);animation:lgSpec 8s ease-in-out infinite;
+}
+@keyframes lgSpec{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(150%,120%) rotate(12deg)}}
 .liquid .role{color:rgba(255,255,255,.8);text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .liquid .who{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45),0 0 30px rgba(255,255,255,.35)}
 .liquid .sig{color:rgba(255,255,255,.92);text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .liquid .sig b{color:#fff;font-weight:900;text-shadow:0 0 14px rgba(255,255,255,.8)}
 .liquid .pill{
-  align-self:flex-start;margin-top:12px;position:relative;
-  border:1px solid rgba(255,255,255,.6);border-radius:999px;
-  background:rgba(255,255,255,.22);backdrop-filter:blur(8px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 4px 14px rgba(0,0,0,.3);
+  align-self:flex-start;margin-top:12px;position:relative;z-index:2;
+  border:1px solid rgba(255,255,255,.55);border-radius:999px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(10px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 4px 14px rgba(0,0,0,.3);
   padding:6px 16px;font:700 11px var(--mono);letter-spacing:.16em;color:#fff;
 }
 
@@ -682,6 +741,8 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
     <div><dt>网名</dt><dd>简方JF</dd></div>
     <div><dt>域名</dt><dd>zhangfangcheng.cn</dd></div>
     <div><dt>现在时刻</dt><dd id="clock">--:--:--</dd></div>
+    <div><dt>距元旦 2027.01.01</dt><dd class="cd" id="cdNY">--</dd></div>
+    <div><dt>距春节 2027.02.06 · 丁未羊年</dt><dd class="cd" id="cdCNY">--</dd></div>
   </dl>
   <div class="pumpkins" aria-hidden="true">
     <span class="pk p1"></span>
@@ -763,28 +824,51 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   </div>
   <div class="sup-rows">
 
-    <!-- 1) FC235 —— VS2026 风 · 动态 -->
+    <!-- 1) FC235 —— VS2026 风 · 真实 IDE · 动态 -->
     <div class="sup vs2026" title="点击重放代码动画">
       <div class="tbar">
-        <span class="app">Visual Studio 2026</span>
-        <span>FC235 — 技术支持.csproj</span>
+        <span class="vslogo">V</span>
+        <span class="menu">文件(F)　编辑(E)　视图(V)　项目(P)　生成(B)　调试(D)　Git　工具(T)　帮助(H)</span>
+        <span>FC235 — 技术支持</span>
         <span class="winbtn"><i>_</i><i>□</i><i class="cl">✕</i></span>
       </div>
-      <div class="body">
-        <div class="big">FC235</div>
-        <div class="meta">
-          <div class="role">站长 / K0 · SENIOR ENGINEER</div>
-          <div class="sig">签名 ▸ <b>山岚雾内望岚山，悠悠湖水月儿弯</b></div>
-          <div class="code"><span class="c">// 编译通过 · 点击窗口可重放</span><br><span class="typer"></span><span class="caret"></span></div>
+      <div class="ide">
+        <div class="editor">
+          <div class="tabs">
+            <span class="tab on"><i class="ic-cs"></i>FC235.cs</span>
+            <span class="tab"><i class="ic-cs"></i>签名.cs</span>
+          </div>
+          <div class="code-area">
+            <div class="gutter">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+            <pre class="code"><span class="c">// 站长 / K0 · SENIOR ENGINEER</span>
+<span class="k">namespace</span> <span class="t">ZFC</span>.<span class="t">Support</span>
+{
+    <span class="k">public class</span> <span class="t">FC235</span> : <span class="t">站长</span>
+    {
+        <span class="c">// 编译通过 · 点击窗口可重放</span>
+        <span class="typer"></span><span class="caret"></span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="explorer">
+          <div class="exp-h">解决方案资源管理器</div>
+          <ul class="tree">
+            <li class="lv0">▾ 技术支持（解决方案）</li>
+            <li class="lv1">▾ ▣ FC235</li>
+            <li class="lv2">▪ 签名.cs</li>
+            <li class="lv2">▪ 座右铭.cs</li>
+            <li class="lv2">▪ 状态.cs</li>
+          </ul>
         </div>
       </div>
       <div class="status">
         <span>就绪</span>
-        <span id="vsPos">行 4，列 1</span>
-        <span class="prog"><i></i>BUILD</span>
-        <span>Codeium ✓</span>
+        <span id="vsPos">行 7，列 9</span>
+        <span class="prog"><i></i>生成</span>
+        <span>Git: main ✓</span>
         <span>UTF-8</span>
-        <span class="hint">点击窗口重放</span>
+        <span>C#</span>
       </div>
     </div>
 
@@ -816,9 +900,12 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
       </div>
     </div>
 
-    <!-- 3) JGhuihui —— 液态玻璃风 -->
+    <!-- 3) JGhuihui —— 液态玻璃风（四层折射玻璃） -->
     <div class="sup liquid">
+      <div class="lgblobs" aria-hidden="true"><i class="lb1"></i><i class="lb2"></i><i class="lb3"></i><i class="lb4"></i></div>
+      <div class="lggrain" aria-hidden="true"></div>
       <div class="glass">
+        <i class="spec" aria-hidden="true"></i>
         <div class="role">QIU 科技作者 / QIU TECH AUTHOR</div>
         <div class="who">JGhuihui</div>
         <div class="sig">签名 ▸ <b>wow</b></div>
@@ -871,6 +958,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
       menu=document.getElementById('bgmMenu');
   if(!au||!btn||!menu) return;
   au.volume=.42;
+  au.muted=true;   /* 静音预播：浏览器允许静音自动播放，首次交互立刻出声 */
   var tracks=[
     {src:'bgm.mp3'},      /* china_p —— 默认 */
     {src:'china_a.mp3'},
@@ -878,6 +966,10 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   ];
   var idx=0, want=true;
   au.src=tracks[0].src;
+  /* 首次任意交互：解除静音（真正的"自动播放"从这里开始出声） */
+  ['pointerdown','keydown','touchstart'].forEach(function(ev){
+    document.addEventListener(ev,function(){ au.muted=false; },{once:true});
+  });
   function paint(){
     btn.classList.toggle('on',!au.paused);
     btn.classList.toggle('off',au.paused);
@@ -888,6 +980,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   function play(i){
     idx=i; want=true;
     au.src=tracks[i].src;
+    au.muted=false;
     au.play().catch(paint);
     paint();
   }
@@ -905,7 +998,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
     var it=e.target.closest('[data-i]');
     if(it){ play(+it.getAttribute('data-i')); menu.classList.remove('open'); return; }
     if(e.target.closest('[data-act="toggle"]')){
-      if(au.paused){ want=true; au.play().catch(paint); }
+      if(au.paused){ want=true; au.muted=false; au.play().catch(paint); }
       else { want=false; au.pause(); }
       menu.classList.remove('open'); paint();
     }
@@ -921,7 +1014,35 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   function p(n){return n<10?'0'+n:n}
   function tick(){var d=new Date();el.textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
   setInterval(tick,1000);tick();
+})();
 
+// 倒计时：元旦 & 春节（单位：秒）
+(function(){
+  var nyEl=document.getElementById('cdNY'), cnyEl=document.getElementById('cdCNY');
+  if(!nyEl||!cnyEl) return;
+  var NY=new Date(2027,0,1,0,0,0).getTime();    /* 元旦 2027-01-01 00:00:00 */
+  var CNY=new Date(2027,1,6,0,0,0).getTime();   /* 春节 2027-02-06 00:00:00 · 正月初一 */
+  function fmt(s){ return (s<0?0:s).toLocaleString('en-US'); }
+  function tick(){
+    var now=Date.now();
+    nyEl.textContent=fmt(Math.floor((NY-now)/1000));
+    cnyEl.textContent=fmt(Math.floor((CNY-now)/1000));
+  }
+  setInterval(tick,1000);tick();
+})();
+
+// 液态玻璃：鼠标位置驱动折射光斑
+(function(){
+  var g=document.querySelector('.liquid .glass');
+  if(!g) return;
+  g.addEventListener('pointermove',function(e){
+    var r=g.getBoundingClientRect();
+    g.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    g.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+  });
+  g.addEventListener('pointerleave',function(){
+    g.style.setProperty('--mx','50%');g.style.setProperty('--my','18%');
+  });
 })();
 
 // FC235 代码打字机（滚动到视野内自动开始，点击窗口重放）
@@ -930,15 +1051,15 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   if(!win) return;
   var el=win.querySelector('.typer'),
       pos=document.getElementById('vsPos'),
-      full='public sealed class FC235 : 站长 { }',
-      done='<span class="k">public sealed class</span> <span style="color:#ffd166">FC235</span> : <span class="s">站长</span> { }';
+      full='public override string 签名 => "山岚雾内望岚山，悠悠湖水月儿弯";',
+      done='<span class="k">public override string</span> <span class="id">签名</span> =&gt; <span class="s">"山岚雾内望岚山，悠悠湖水月儿弯"</span>;';
   var timer=null, started=false;
   function play(){
     if(timer) clearInterval(timer);
     el.textContent=''; var i=0;
     timer=setInterval(function(){
       i++; el.textContent=full.slice(0,i);
-      if(pos) pos.textContent='行 4，列 '+(i+1);
+      if(pos) pos.textContent='行 7，列 '+(9+i);
       if(i>=full.length){ clearInterval(timer); timer=null; el.innerHTML=done; }
     },42);
   }
