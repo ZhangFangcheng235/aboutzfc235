@@ -5,244 +5,281 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="张方程（简方JF）的个人主页 — 白天写代码，晚上开直播，网站自己手搓。">
 <title>Zhangfangcheng的个人主页</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0616'/%3E%3Ccircle cx='32' cy='34' r='19' fill='%23ff7a1a'/%3E%3Cpolygon points='23,28 30,28 26.5,35' fill='%230d0616'/%3E%3Cpolygon points='34,28 41,28 37.5,35' fill='%230d0616'/%3E%3Cpath d='M23 41 L41 41 L37 45 L34 41.5 L30 45.5 L26 41.5 L23 45 Z' fill='%230d0616'/%3E%3Crect x='30' y='11' width='4' height='7' rx='1' fill='%234d7c0f'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23a31621'/%3E%3Ctext x='32' y='46' font-family='Songti SC,SimSun,serif' font-weight='bold' font-size='38' fill='%23f3d98b' text-anchor='middle'%3E%E7%A6%8F%3C/text%3E%3C/svg%3E">
 <style>
 /* ==========================================================
    Fangcheng × 简方JF · 个人主页
-   风格：万圣节之夜 —— 南瓜橙 / 幽紫 / 史莱姆绿 · 月亮蝙蝠南瓜灯
+   风格：国潮新春请柬 —— 中国红 / 鎏金 / 祥云 / 灯笼 / 福字
    ========================================================== */
 :root{
-  --bg:#0d0616;
-  --ink:#ffe9d6;
-  --orange:#ff7a1a;   /* 南瓜橙 */
-  --pumpkin:#ff9d3d;
-  --purple:#a855f7;   /* 幽紫 */
-  --slime:#9dff57;    /* 史莱姆绿 */
-  --blood:#ff4d3b;
-  --dim:#b79ed6;
-  --line:rgba(255,122,26,.26);
-  --card:rgba(30,10,48,.62);
-  --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  --bg:#160a0a;
+  --ink:#fff3dd;          /* 洒金宣纸色 */
+  --dim:#c99a8f;
+  --red:#c8161f;          /* 中国红 */
+  --red-deep:#8e0f1f;
+  --gold:#e3b23c;         /* 鎏金 */
+  --gold-lt:#f3d98b;
+  --jade:#3e9b7a;         /* 翡翠点缀 */
+  --line:rgba(227,178,60,.32);
+  --serif:"Songti SC",STSong,SimSun,Georgia,serif;
   --mono:"Courier New",ui-monospace,Consolas,monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   background:
-    radial-gradient(140% 60% at 50% -5%, #22103a 0%, var(--bg) 55%),
+    radial-gradient(120% 50% at 50% -5%, #3a1013 0%, var(--bg) 55%),
     var(--bg);
   color:var(--ink);
-  font:16px/1.65 var(--sans);
+  font:16px/1.8 var(--serif);
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
 a{color:inherit}
-::selection{background:var(--orange);color:#0d0616}
+::selection{background:var(--gold);color:#2a0a0a}
 
 /* ---------- 顶栏 ---------- */
 header{
   position:sticky;top:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;
-  padding:12px clamp(16px,4vw,48px);
-  background:linear-gradient(180deg,rgba(13,6,22,.95),rgba(13,6,22,.55));
+  padding:14px clamp(18px,4.5vw,56px);
+  background:linear-gradient(180deg,rgba(22,10,10,.92),rgba(22,10,10,.5));
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
-.brand{font-weight:900;font-size:17px;text-shadow:0 0 14px rgba(255,122,26,.9)}
-.brand span{color:var(--slime);text-shadow:0 0 12px rgba(157,255,87,.8)}
-nav{display:flex;gap:clamp(10px,3vw,28px);font-family:var(--mono);font-size:13px;font-weight:700}
-nav a{text-decoration:none;padding:3px 8px;border:1px solid transparent;color:var(--dim)}
-nav a:hover{color:#0d0616;background:var(--orange);border-color:var(--orange);box-shadow:0 0 20px rgba(255,122,26,.8)}
+.brand{font-weight:700;font-size:17px;letter-spacing:.08em;color:var(--gold-lt);text-shadow:0 0 14px rgba(227,178,60,.4)}
+.brand span{color:var(--red);margin:0 .3em;text-shadow:0 0 10px rgba(200,22,31,.9)}
+nav{display:flex;gap:clamp(12px,3vw,30px);font-size:14px;letter-spacing:.14em}
+nav a{text-decoration:none;padding:2px 4px;color:var(--dim);border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.6)}
 
-/* ---------- 首屏：万圣夜 ---------- */
+/* ---------- 首屏：新春请柬 ---------- */
 .hero{
-  position:relative;overflow:hidden;
-  padding:clamp(40px,8vw,96px) clamp(16px,4vw,48px) 0;
-  min-height:78vh;
-  display:flex;flex-direction:column;justify-content:center;
-  background:radial-gradient(110% 85% at 76% 8%, rgba(255,170,80,.13), transparent 52%),
-             radial-gradient(130% 95% at 50% -12%, #2a1147 0%, #170a2b 46%, var(--bg) 82%);
+  position:relative;overflow:hidden;text-align:center;
+  padding:clamp(64px,11vw,128px) clamp(20px,5vw,60px) clamp(44px,6vw,72px);
+  background:radial-gradient(100% 80% at 50% 0%, #451318 0%, #240c0e 52%, transparent 100%);
 }
-/* 蜘蛛网（左上角） */
-.web{
-  position:absolute;top:0;left:0;width:clamp(110px,15vw,190px);aspect-ratio:1;
-  opacity:.45;pointer-events:none;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c4a5ff' stroke-width='1'%3E%3Cpath d='M0 0 L100 100 M0 0 L100 0 M0 0 L0 100 M0 0 L72 100 M0 0 L100 72 M0 0 L42 100 M0 0 L100 42'/%3E%3Cpath d='M20 0 A20 20 0 0 0 0 20'/%3E%3Cpath d='M40 0 A40 40 0 0 0 0 40'/%3E%3Cpath d='M60 0 A60 60 0 0 0 0 60'/%3E%3Cpath d='M82 0 A82 82 0 0 0 0 82'/%3E%3C/svg%3E") top left/contain no-repeat;
+/* 顶部挂灯笼 */
+.lantern{
+  position:absolute;top:0;width:clamp(40px,5vw,64px);height:clamp(96px,12vw,150px);pointer-events:none;
+  transform-origin:top center;animation:sway 5.5s ease-in-out infinite;
 }
-/* 月亮 */
-.moon{
-  position:absolute;top:5%;right:10%;
-  width:clamp(130px,22vw,250px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+.lantern::before{ /* 挂绳 */
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:2px;height:clamp(26px,4vw,48px);background:linear-gradient(var(--gold),rgba(227,178,60,.4));
+}
+.lantern .body{
+  position:absolute;top:clamp(26px,4vw,48px);left:0;right:0;
+  aspect-ratio:1/.92;border-radius:50%/46%;
   background:
-    radial-gradient(circle at 30% 26%, rgba(0,0,0,.07) 0 11%, transparent 12%),
-    radial-gradient(circle at 63% 55%, rgba(0,0,0,.08) 0 8%, transparent 9%),
-    radial-gradient(circle at 44% 75%, rgba(0,0,0,.06) 0 6%, transparent 7%),
-    radial-gradient(circle at 38% 32%, #fff7df, #ffe6a8 55%, #f0bf60 100%);
-  box-shadow:0 0 50px 12px rgba(255,224,150,.28), 0 0 130px 50px rgba(255,160,60,.15);
-  animation:moonGlow 5s ease-in-out infinite alternate;
+    repeating-linear-gradient(90deg, transparent 0 18%, rgba(90,8,10,.45) 18% 21%),
+    radial-gradient(circle at 38% 32%, #ff5a4d, var(--red) 55%, #7e0d18);
+  box-shadow:
+    inset -4px -6px 12px rgba(80,5,8,.5),
+    0 0 34px 8px rgba(226,60,40,.4),
+    0 0 90px 30px rgba(226,60,40,.16);
+  animation:lanternGlow 3.4s ease-in-out infinite alternate;
 }
-@keyframes moonGlow{
-  to{box-shadow:0 0 62px 16px rgba(255,224,150,.42), 0 0 170px 70px rgba(255,160,60,.22)}
+.lantern .body::before,.lantern .body::after{ /* 金盖 */
+  content:"";position:absolute;left:18%;right:18%;height:14%;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  border-radius:4px;box-shadow:0 0 8px rgba(227,178,60,.6);
 }
-/* 蝙蝠群 */
-.bats{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.bat{
-  position:absolute;display:block;width:30px;height:12px;
-  animation:batFly 17s linear infinite;
+.lantern .body::before{top:-7%}
+.lantern .body::after{bottom:-7%}
+.lantern .tassel{ /* 流苏 */
+  position:absolute;left:50%;bottom:calc(-1 * clamp(20px,2.6vw,32px));transform:translateX(-50%);
+  width:26%;height:clamp(20px,2.6vw,32px);
+  background:linear-gradient(180deg,var(--gold),#a8791f);
+  clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
 }
-.bat::before,.bat::after{
-  content:"";position:absolute;top:1px;width:15px;height:10px;background:#1c0e30;
-  filter:drop-shadow(0 0 3px rgba(255,122,26,.3));
+.lantern .glow{ /* 灯光 */
+  position:absolute;inset:-40%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,120,70,.28),transparent 65%);
+  pointer-events:none;
 }
-.bat::before{left:0;transform-origin:100% 50%;clip-path:polygon(0 0,100% 25%,100% 100%,62% 62%,22% 92%);animation:flap .32s steps(2) infinite}
-.bat::after{right:0;transform-origin:0% 50%;clip-path:polygon(100% 0,0 25%,0 100%,38% 62%,78% 92%);animation:flap .32s steps(2) infinite .16s}
-@keyframes flap{50%{transform:translateY(-2px) scaleY(.5)}}
-@keyframes batFly{
-  0%{transform:translate(-12vw,0)}
-  25%{transform:translate(22vw,-20px)}
-  50%{transform:translate(50vw,10px)}
-  75%{transform:translate(78vw,-16px)}
-  100%{transform:translate(112vw,6px)}
-}
-.bat.x1{top:12%;animation-duration:15s}
-.bat.x2{top:22%;transform:scale(.7);animation-duration:21s;animation-delay:-8s}
-.bat.x3{top:8%;transform:scale(1.25);animation-duration:12s;animation-delay:-4s}
-/* 南瓜灯（地面） */
-.pumpkins{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none}
-.pk{
-  position:absolute;bottom:2px;width:46px;height:38px;border-radius:50%;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 8px, rgba(120,40,0,.22) 8px 10px),
-    radial-gradient(circle at 36% 30%, #ffb066, #ff7a1a 55%, #cf4d04);
-  box-shadow:inset -4px -6px 10px rgba(120,40,0,.35), 0 6px 16px rgba(0,0,0,.55);
-}
-.pk::before{
-  content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-8deg);
-  width:7px;height:11px;background:#4d7c0f;border-radius:3px 3px 0 0;
-}
-.pk::after{
-  content:"";position:absolute;inset:0;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 34'%3E%3Cpath d='M8 10 L15 10 11 17Z' fill='%23ffd166'/%3E%3Cpath d='M25 10 L32 10 29 17Z' fill='%23ffd166'/%3E%3Cpath d='M8 22 L32 22 L28 27 L24 23 L20 28 L16 23 L12 27Z' fill='%23ffd166'/%3E%3C/svg%3E") center/72% no-repeat;
-  animation:flick 2.6s steps(2) infinite;
-}
-@keyframes flick{50%{opacity:.5}}
-.pk.p1{left:4%;width:36px;height:30px;animation-delay:.4s}
-.pk.p2{left:12%;width:58px;height:48px}
-.pk.p3{right:6%;width:42px;height:35px;animation-delay:1.1s}
-/* 雾 */
-.fog{
-  position:absolute;left:-25%;right:-25%;bottom:-34px;height:160px;pointer-events:none;
-  background:
-    radial-gradient(45% 90% at 18% 100%, rgba(196,165,255,.22), transparent 70%),
-    radial-gradient(40% 80% at 45% 100%, rgba(255,180,120,.14), transparent 70%),
-    radial-gradient(50% 100% at 75% 100%, rgba(196,165,255,.18), transparent 70%),
-    radial-gradient(40% 90% at 96% 100%, rgba(255,140,80,.12), transparent 70%);
-  filter:blur(16px);
-  animation:fogDrift 15s ease-in-out infinite alternate;
-}
-@keyframes fogDrift{to{transform:translateX(7%)}}
+.lantern.l1{left:7%;animation-delay:0s}
+.lantern.l2{right:7%;animation-delay:-2.6s;transform:scale(.8)}
+@keyframes sway{0%,100%{transform:rotate(2.4deg)}50%{transform:rotate(-2.4deg)}}
+@keyframes lanternGlow{to{box-shadow:inset -4px -6px 12px rgba(80,5,8,.5),0 0 46px 12px rgba(236,80,50,.55),0 0 120px 40px rgba(236,80,50,.22)}}
+.lantern.l2{animation-name:sway2}
+@keyframes sway2{0%,100%{transform:scale(.8) rotate(2.4deg)}50%{transform:scale(.8) rotate(-2.4deg)}}
 
-.hero-inner{position:relative;z-index:2}
-.vtag{
-  position:absolute;top:clamp(40px,8vw,96px);right:clamp(10px,2.5vw,28px);z-index:3;
-  writing-mode:vertical-rl;font-family:var(--mono);font-size:12px;font-weight:700;
-  letter-spacing:.35em;color:var(--pumpkin);opacity:.85;text-shadow:0 0 12px rgba(255,122,26,.9);
-  user-select:none;
+/* 漂浮祥云 */
+.clouds{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.yun{
+  position:absolute;display:block;width:90px;height:34px;opacity:.5;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44' fill='none' stroke='%23e3b23c' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M14 34c-8 0-12-6-9-12 2-5 8-7 13-5 1-8 8-13 16-11 6 1 10 5 11 10 6-4 15-3 19 3 2-6 8-9 14-7 7 2 10 9 6 15 6 1 10 6 8 12'/%3E%3Cpath d='M28 41h58'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation:yunDrift 40s linear infinite;
+}
+.yun.y1{top:16%;animation-duration:46s}
+.yun.y2{top:30%;transform:scale(.65);animation-duration:60s;animation-delay:-20s;opacity:.35}
+.yun.y3{top:9%;transform:scale(1.15);animation-duration:36s;animation-delay:-10s;opacity:.4}
+@keyframes yunDrift{
+  0%{transform:translateX(-14vw)}
+  50%{transform:translateX(52vw)}
+  100%{transform:translateX(116vw)}
+}
+.yun.y2{animation-name:yunDrift2}
+@keyframes yunDrift2{
+  0%{transform:translateX(-14vw) scale(.65)}
+  50%{transform:translateX(52vw) scale(.65)}
+  100%{transform:translateX(116vw) scale(.65)}
+}
+.yun.y3{animation-name:yunDrift3}
+@keyframes yunDrift3{
+  0%{transform:translateX(-14vw) scale(1.15)}
+  50%{transform:translateX(52vw) scale(1.15)}
+  100%{transform:translateX(116vw) scale(1.15)}
+}
+
+/* 请柬内容 */
+.inv-label{
+  font:700 12px/1.8 var(--mono);letter-spacing:.44em;color:var(--gold);
+  text-shadow:0 0 14px rgba(227,178,60,.55);
 }
 h1{
-  font-size:clamp(40px,11vw,150px);
-  font-weight:900;line-height:.88;letter-spacing:-.045em;margin-left:-.03em;
-  overflow-wrap:normal;word-break:keep-all;
-  color:#ffb054;
-  text-shadow:
-    0 0 8px #ff7a1a,
-    0 0 30px #ff7a1a,
-    0 0 72px rgba(255,110,20,.6),
-    0 0 120px rgba(255,110,20,.35);
+  margin:20px 0 8px;
+  font:700 clamp(40px,7.5vw,96px)/1.12 var(--serif);
+  letter-spacing:.04em;
+  background:linear-gradient(180deg,#fff7e0,var(--gold-lt) 45%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(227,178,60,.45)) drop-shadow(0 3px 1px rgba(90,10,10,.6));
 }
-.hero-sub{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 26px;margin-top:clamp(16px,3vw,32px)}
-.alias{
-  font-weight:900;font-size:clamp(22px,4.6vw,52px);letter-spacing:-.01em;
-  color:var(--slime);
-  text-shadow:0 0 16px rgba(157,255,87,.9),0 0 46px rgba(157,255,87,.45);
+.inv-alias{
+  font-weight:700;font-size:clamp(16px,2.4vw,23px);color:var(--jade);
+  text-shadow:0 0 16px rgba(62,155,122,.5);letter-spacing:.06em;
 }
-.hero-sub p{font-size:clamp(15px,2.2vw,22px);font-weight:700;color:var(--dim)}
-.hero-data{
-  display:flex;flex-wrap:wrap;margin:clamp(28px,5vw,56px) calc(-1 * clamp(16px,4vw,48px)) 0;
-  border-top:1px solid var(--line);
-  background:rgba(16,7,28,.55);position:relative;z-index:2;
-}
-.hero-data div{
-  flex:1 1 180px;padding:14px clamp(16px,4vw,48px) 18px;
-  border-right:1px solid var(--line);font-family:var(--mono);
-}
+.inv-alias i{font-style:normal;color:var(--gold);margin:0 .5em;text-shadow:0 0 8px rgba(227,178,60,.6)}
+/* 回纹分隔 */
+.orn{display:flex;align-items:center;gap:16px;justify-content:center;max-width:560px;margin:clamp(24px,4vw,38px) auto 0}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(227,178,60,.6),transparent)}
+.orn span{color:var(--gold);font-size:16px;letter-spacing:.4em;text-shadow:0 0 12px rgba(227,178,60,.7);animation:twinkle 3.2s ease-in-out infinite;padding-left:.4em}
+@keyframes twinkle{50%{opacity:.45}}
+/* 数据条 */
+.hero-data{display:flex;justify-content:center;flex-wrap:wrap;margin-top:clamp(22px,3.5vw,34px);font-family:var(--mono)}
+.hero-data div{padding:4px 26px;border-right:1px solid var(--line)}
 .hero-data div:last-child{border-right:0}
-.hero-data dt{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--dim)}
-.hero-data dd{font-size:16px;font-weight:700;margin-top:3px;color:var(--pumpkin);text-shadow:0 0 12px rgba(255,157,61,.7)}
+.hero-data dt{font-size:10px;letter-spacing:.28em;color:var(--dim)}
+.hero-data dd{font-size:14px;font-weight:700;margin-top:3px;color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.5)}
+/* 福字金印（替代落日/月亮位） */
+.fustamp{
+  position:absolute;top:9%;right:9%;
+  width:clamp(76px,11vw,130px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  border:3px double var(--gold);
+  box-shadow:0 0 30px rgba(227,178,60,.35), inset 0 0 20px rgba(227,178,60,.18);
+  background:radial-gradient(circle at 38% 30%, rgba(200,22,31,.55), rgba(110,12,20,.75));
+  animation:stampGlow 4s ease-in-out infinite alternate;
+}
+.fustamp::before{
+  content:"福";position:absolute;inset:8px;border:1px solid rgba(227,178,60,.5);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font:700 clamp(30px,5vw,54px)/1 var(--serif);color:var(--gold-lt);
+  text-shadow:0 0 18px rgba(243,217,139,.8);
+}
+@keyframes stampGlow{to{box-shadow:0 0 46px rgba(227,178,60,.5), inset 0 0 26px rgba(227,178,60,.26)}}
+.fustamp .ring{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  animation:stampSpin 26s linear infinite;
+}
+.fustamp .ring text{
+  fill:rgba(243,217,139,.85);font:700 6.4px "Courier New",monospace;letter-spacing:.12em;
+}
+@keyframes stampSpin{to{transform:rotate(360deg)}}
+/* 地面小灯笼 + 暖雾 */
+.pumpkins{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none}
+.pk{
+  position:absolute;bottom:2px;width:30px;height:26px;border-radius:50%/46%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 20%, rgba(90,8,10,.4) 20% 25%),
+    radial-gradient(circle at 38% 32%, #ff5a4d, var(--red) 58%, #7e0d18);
+  box-shadow:0 0 22px 6px rgba(226,60,40,.35), 0 4px 10px rgba(0,0,0,.5);
+}
+.pk::before{content:"";position:absolute;top:-5px;left:20%;right:20%;height:5px;background:var(--gold);border-radius:2px}
+.pk::after{content:"";position:absolute;bottom:-7px;left:20%;right:20%;height:7px;background:linear-gradient(180deg,var(--gold),#a8791f);clip-path:polygon(15% 0,85% 0,100% 100%,0 100%)}
+.pk.p1{left:9%;animation:flick 3.4s ease-in-out infinite}
+.pk.p3{right:9%;animation:flick 3.4s ease-in-out infinite -1.7s}
+@keyframes flick{50%{box-shadow:0 0 30px 9px rgba(236,80,40,.5), 0 4px 10px rgba(0,0,0,.5)}}
+.fog{
+  position:absolute;left:-25%;right:-25%;bottom:-30px;height:120px;pointer-events:none;
+  background:
+    radial-gradient(45% 90% at 18% 100%, rgba(200,60,40,.12), transparent 70%),
+    radial-gradient(40% 80% at 45% 100%, rgba(227,178,60,.09), transparent 70%),
+    radial-gradient(50% 100% at 75% 100%, rgba(200,60,40,.1), transparent 70%),
+    radial-gradient(40% 90% at 96% 100%, rgba(227,178,60,.07), transparent 70%);
+  filter:blur(16px);
+  animation:fogDrift 17s ease-in-out infinite alternate;
+}
+@keyframes fogDrift{to{transform:translateX(6%)}}
 
 /* ---------- 通用区块 ---------- */
-section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
-.sec-head{display:flex;align-items:center;gap:clamp(12px,2vw,24px);margin-bottom:clamp(24px,4vw,48px)}
-.sec-num{
-  font-weight:900;font-size:clamp(26px,4vw,50px);line-height:1;font-family:var(--mono);
-  color:var(--orange);text-shadow:0 0 16px rgba(255,122,26,.8);
-  border:2px solid var(--orange);padding:.1em .2em;border-radius:6px;
-  box-shadow:0 0 18px rgba(255,122,26,.35), inset 0 0 12px rgba(255,122,26,.2);
+section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:clamp(20px,3vw,34px)}
+.sec-num{font:700 clamp(14px,1.8vw,19px) var(--serif);color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.5)}
+.sec-head h2{font:700 clamp(24px,3.6vw,40px)/1.2 var(--serif);letter-spacing:.18em}
+.sec-head h2::before{ /* 小灯笼图标 */
+  content:"";display:inline-block;width:13px;height:15px;margin-right:12px;
+  vertical-align:-1px;border-radius:50%/44%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 28%, rgba(90,8,10,.5) 28% 36%),
+    radial-gradient(circle at 38% 30%, #ff5a4d, var(--red) 60%, #7e0d18);
+  box-shadow:0 0 12px rgba(226,60,40,.7);
+  position:relative;
 }
-.sec-head h2{
-  font-size:clamp(30px,6vw,74px);font-weight:900;letter-spacing:-.03em;line-height:1;
-  color:#fff;
-  text-shadow:0 0 18px rgba(255,122,26,.85),0 0 46px rgba(168,85,247,.5);
+.sec-head .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(227,178,60,.5),transparent);align-self:center}
+.sec-head .en{font:11px var(--mono);letter-spacing:.32em;color:var(--dim)}
+
+/* 请柬卡片（鎏金角饰） */
+.panel{
+  position:relative;border:1px solid var(--line);border-radius:4px;
+  background:
+    linear-gradient(var(--gold),var(--gold)) left 0 top 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 top 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 top 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 top 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 bottom 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 bottom 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/2px 16px no-repeat,
+    linear-gradient(180deg,rgba(46,14,16,.62),rgba(26,9,10,.62));
+  padding:clamp(22px,3.8vw,44px);
 }
-.sec-head .en{margin-left:auto;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.28em;color:var(--slime);text-shadow:0 0 10px rgba(157,255,87,.6)}
 
 /* ---------- 关于 ---------- */
-.about{display:grid;grid-template-columns:7fr 5fr;gap:clamp(24px,4vw,56px);align-items:start}
-.about .say{font-size:clamp(19px,2.8vw,30px);font-weight:800;line-height:1.5;letter-spacing:-.01em}
-.about .say b{color:var(--pumpkin);text-shadow:0 0 16px rgba(255,157,61,.7)}
-.facts{
-  border:1px solid var(--line);border-radius:14px;overflow:hidden;
-  background:var(--card);backdrop-filter:blur(8px);
-  box-shadow:0 0 44px rgba(255,122,26,.12),inset 0 0 0 1px rgba(255,255,255,.04);
-}
-.facts div{display:grid;grid-template-columns:5.5em 1fr;border-bottom:1px solid var(--line)}
+.about{display:grid;grid-template-columns:7fr 5fr;gap:clamp(26px,4.5vw,60px);align-items:start}
+.about .say{font-size:clamp(16px,2.2vw,21px);line-height:2}
+.about .say b{color:var(--gold-lt);text-shadow:0 0 14px rgba(227,178,60,.5)}
+.facts div{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:11px 2px;border-bottom:1px dashed rgba(227,178,60,.26)}
 .facts div:last-child{border-bottom:0}
-.facts dt{
-  background:rgba(168,85,247,.16);color:var(--purple);
-  font-weight:900;font-size:13px;letter-spacing:.1em;
-  display:flex;align-items:center;justify-content:center;padding:10px 6px;
-  text-shadow:0 0 10px rgba(168,85,247,.7);
-}
-.facts dd{padding:10px 14px;font-weight:700;font-size:15px;word-break:break-all}
-.facts dd a{color:var(--slime);text-decoration:none;border-bottom:1px solid var(--slime)}
-.facts dd a:hover{color:#0d0616;background:var(--slime)}
+.facts dt{font-weight:700;font-size:13px;letter-spacing:.26em;color:var(--gold);white-space:nowrap}
+.facts dd{font-size:14.5px;font-weight:600;text-align:right;word-break:break-all}
+.facts dd a{color:var(--jade);text-decoration:none;border-bottom:1px dotted rgba(62,155,122,.6)}
+.facts dd a:hover{color:var(--gold-lt);border-color:var(--gold)}
 
-/* ---------- 链接巨行 ---------- */
-.rows{border-top:1px solid var(--line)}
+/* ---------- 链接：菜单式 ---------- */
+.rows{border-top:1px solid rgba(227,178,60,.22)}
 .row{
-  display:flex;align-items:center;gap:clamp(12px,3vw,36px);
-  padding:clamp(18px,3.5vw,36px) clamp(6px,1.5vw,20px);
-  border-bottom:1px solid var(--line);text-decoration:none;
-  transition:background .01s,color .01s;
+  display:flex;align-items:baseline;gap:clamp(12px,2.5vw,26px);
+  padding:clamp(15px,2.4vw,22px) clamp(4px,1.2vw,14px);
+  border-bottom:1px dashed rgba(227,178,60,.26);
+  text-decoration:none;transition:background .25s;
 }
+.row:hover{background:linear-gradient(90deg,rgba(200,22,31,.16),transparent 70%)}
 .row .t{
-  font-size:clamp(34px,7vw,84px);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff;
-  text-shadow:0 0 14px rgba(255,122,26,.35);
+  font-size:clamp(21px,3vw,32px);font-weight:700;letter-spacing:.1em;
+  transition:color .25s,text-shadow .25s;
 }
-.row .d{
-  margin-left:auto;text-align:right;font-family:var(--mono);
-  font-size:clamp(12px,1.6vw,15px);font-weight:700;line-height:1.5;max-width:16em;color:var(--dim);
-}
-.row .go{font-size:clamp(28px,5vw,60px);font-weight:900;flex:none;color:var(--orange)}
-.row:hover{background:linear-gradient(90deg,rgba(255,122,26,.16),rgba(168,85,247,.12));box-shadow:inset 0 0 30px rgba(255,122,26,.14)}
-.row:hover .t{text-shadow:0 0 20px var(--orange),0 0 48px rgba(255,122,26,.6)}
-.row:nth-child(1):hover .t{color:var(--pumpkin);text-shadow:0 0 20px var(--pumpkin)}
-.row:nth-child(2):hover .t{color:var(--blood);text-shadow:0 0 20px var(--blood)}
-.row:nth-child(3):hover .t{color:var(--slime);text-shadow:0 0 20px var(--slime)}
-.row:nth-child(4):hover .t{color:var(--purple);text-shadow:0 0 20px var(--purple)}
+.row:hover .t{color:var(--gold-lt);text-shadow:0 0 18px rgba(227,178,60,.6)}
+.row .leader{flex:1;border-bottom:1px dotted rgba(227,178,60,.4);transform:translateY(-7px);min-width:24px}
+.row .d{font-family:var(--mono);font-size:clamp(11px,1.3vw,13px);line-height:1.7;color:var(--dim);text-align:right}
+.row .go{font-size:18px;color:var(--red);transition:transform .25s,text-shadow .25s;text-shadow:0 0 10px rgba(200,22,31,.6)}
+.row:hover .go{transform:translateX(6px);text-shadow:0 0 16px rgba(227,178,60,.9)}
+.row:nth-child(2):hover .t{color:var(--jade);text-shadow:0 0 18px rgba(62,155,122,.6)}
+.row:nth-child(3):hover .t{color:#e06a4d;text-shadow:0 0 18px rgba(224,106,77,.7)}
 
 /* =========================================================
-   技术支持 —— 每人一整行，各占一套独立主题 UI
+   技术支持 —— 每人一整行，各占一套独立主题 UI（保持不变）
    ========================================================= */
 .sup-rows{display:flex;flex-direction:column;gap:clamp(18px,3vw,30px)}
 .sup{position:relative;width:100%;min-height:clamp(150px,18vw,190px);overflow:hidden}
@@ -271,7 +308,7 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
   gap:clamp(16px,3vw,32px);padding:clamp(16px,3vw,26px) clamp(20px,4vw,34px);
 }
 .vs2026 .big{
-  font-family:"Arial Black",var(--sans);font-weight:900;
+  font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;font-weight:900;
   font-size:clamp(52px,11vw,120px);line-height:.9;letter-spacing:-.03em;
   background:linear-gradient(180deg,#ffffff,#e3c8ff 45%,#a56bff);
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -285,7 +322,7 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
 .vs2026 .role{color:#c6a4ff;text-shadow:0 0 12px rgba(180,110,255,.8)}
 .vs2026 .sig{color:#efe3ff;font-size:clamp(15px,2vw,19px)}
 .vs2026 .sig b{
-  color:var(--amber2,#ffd166);font-weight:900;
+  color:#ffd166;font-weight:900;
   text-shadow:0 0 10px rgba(255,209,102,.9),0 0 30px rgba(255,209,102,.55);
 }
 .vs2026 .k{color:#ff7bd0}.vs2026 .s{color:#8fe8ff}.vs2026 .c{color:#9a86c9}
@@ -343,11 +380,12 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
 .pixelic .brick.b2{left:calc(22% + 26px)}
 .pixelic .brick.q{
   background:#ffd166;box-shadow:inset 0 0 0 2px #c98a1c,2px 2px 0 #000;
-  color:#7a4a00;font:900 15px/22px var(--sans);text-align:center;
+  color:#7a4a00;font:900 15px/22px "PingFang SC","Microsoft YaHei",sans-serif;text-align:center;
 }
-/* 关卡里的小南瓜灯 */
-.pixelic .stage .pk{width:26px;height:22px;bottom:10px;left:56%}
-.pixelic .stage .pk::before{top:-6px;width:4px;height:7px}
+/* 关卡里的小灯笼 */
+.pixelic .stage .pk{width:22px;height:19px;bottom:10px;left:56%;border-radius:50%/44%;box-shadow:0 0 14px 4px rgba(226,60,40,.4)}
+.pixelic .stage .pk::before{top:-4px;height:4px}
+.pixelic .stage .pk::after{bottom:-5px;height:5px}
 /* 猫咪主角（box-shadow 逐像素绘制） */
 .pixelic .cat{
   --p:3px;position:absolute;bottom:10px;left:6%;z-index:3;
@@ -418,7 +456,7 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
 .pixelic .coin.c1{left:38%}.pixelic .coin.c2{left:70%;animation-delay:.2s}.pixelic .coin.c3{left:80%;animation-delay:.4s}
 @keyframes coinSpin{50%{transform:scaleX(.35)}}
 .pixelic .who{
-  color:#e9fff1;font-family:"Arial Black",var(--sans);
+  color:#e9fff1;font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;
   font-size:clamp(30px,6vw,58px);
   text-shadow:3px 3px 0 #0a0, 6px 6px 0 #000, 0 0 22px rgba(63,240,122,.55);
 }
@@ -514,13 +552,13 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
 @keyframes scanY{to{top:130%}}
 .futur2092 .role{color:#00f0ff;text-shadow:0 0 12px rgba(0,240,255,.9)}
 .futur2092 .who{
-  color:#eafcff;font-family:"Arial Black",var(--sans);letter-spacing:.02em;
+  color:#eafcff;font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.02em;
   text-shadow:0 0 14px rgba(0,240,255,.95),0 0 44px rgba(140,60,255,.7);
 }
 .futur2092 .sig{color:#9be8ff;text-shadow:0 0 10px rgba(0,240,255,.7)}
 .futur2092 .year{
   position:absolute;right:clamp(10px,2.5vw,26px);top:50%;transform:translateY(-50%);
-  font:900 clamp(60px,12vw,130px)/1 var(--sans);
+  font:900 clamp(60px,12vw,130px)/1 "Arial Black","PingFang SC",sans-serif;
   color:transparent;-webkit-text-stroke:1.5px rgba(0,240,255,.4);
   pointer-events:none;user-select:none;
 }
@@ -530,40 +568,79 @@ section{padding:clamp(44px,7vw,90px) clamp(16px,4vw,48px);position:relative}
 }
 
 /* ---------- 联系 ---------- */
-.contact{
-  text-align:center;padding-block:clamp(56px,9vw,120px);
-  background:radial-gradient(90% 120% at 50% 120%, rgba(255,122,26,.14), transparent 70%);
-}
-.contact .label{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.34em;color:var(--slime);margin-bottom:clamp(16px,3vw,30px);text-shadow:0 0 12px rgba(157,255,87,.6)}
+.contact{text-align:center}
+.contact .label{font:700 12px var(--mono);letter-spacing:.4em;color:var(--gold);margin-bottom:clamp(18px,3vw,30px);text-shadow:0 0 12px rgba(227,178,60,.5)}
 .mail{
-  display:inline-block;word-break:break-all;text-decoration:none;
-  font-weight:900;font-size:clamp(26px,6.5vw,84px);letter-spacing:-.03em;line-height:1.1;
-  color:#ffb054;text-shadow:0 0 18px var(--orange),0 0 56px rgba(255,122,26,.55);
+  display:inline-block;text-decoration:none;
+  font-weight:700;font-size:clamp(20px,4.6vw,50px);letter-spacing:.02em;line-height:1.3;
+  color:var(--gold-lt);
+  border-bottom:1px solid rgba(227,178,60,.6);padding-bottom:8px;
+  text-shadow:0 0 20px rgba(227,178,60,.4);
+  transition:color .3s,text-shadow .3s,border-color .3s;
 }
-.mail:hover{color:var(--slime);text-shadow:0 0 18px var(--slime),0 0 60px rgba(157,255,87,.6)}
-.contact .tiny{margin-top:clamp(16px,3vw,28px);font-weight:700;font-size:14px;color:var(--dim)}
+.mail:hover{color:#ff6a55;border-color:#ff6a55;text-shadow:0 0 26px rgba(255,106,85,.8)}
+.contact .tiny{margin-top:clamp(16px,2.5vw,26px);font-size:14px;color:var(--dim);letter-spacing:.08em}
 
 /* ---------- 页脚 ---------- */
 footer{
-  padding:clamp(24px,4vw,44px) clamp(16px,4vw,48px);
-  display:flex;flex-wrap:wrap;gap:10px 30px;align-items:baseline;
+  padding:clamp(22px,3.5vw,40px) clamp(18px,4.5vw,60px);
+  display:flex;flex-wrap:wrap;gap:10px 30px;align-items:baseline;justify-content:center;
   border-top:1px solid var(--line);
-  font-family:var(--mono);font-size:12px;font-weight:700;color:var(--dim);
+  font-size:13px;letter-spacing:.1em;color:var(--dim);text-align:center;
 }
-footer .big{font-family:var(--sans);font-weight:900;font-size:clamp(18px,3vw,28px);letter-spacing:-.02em;color:#fff;text-shadow:0 0 14px rgba(255,122,26,.7)}
-footer .secret{margin-left:auto;color:#6b5a92}
-footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
+footer .big{font-weight:700;font-size:clamp(16px,2.4vw,22px);letter-spacing:.1em;color:var(--gold-lt);text-shadow:0 0 12px rgba(227,178,60,.4)}
+footer .secret{color:#8a5a55}
+footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
+
+/* ---------- 背景音乐按钮 + 选曲菜单 ---------- */
+.bgm-wrap{
+  position:fixed;right:20px;bottom:20px;z-index:60;
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+}
+.bgm-menu{
+  display:none;flex-direction:column;min-width:180px;
+  border:1px solid var(--gold);border-radius:8px;overflow:hidden;
+  background:rgba(30,9,11,.92);backdrop-filter:blur(8px);
+  box-shadow:0 10px 34px rgba(0,0,0,.55), 0 0 20px rgba(227,178,60,.15);
+}
+.bgm-menu.open{display:flex}
+.bgm-menu button{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding:9px 14px;background:none;border:0;
+  border-bottom:1px dashed rgba(227,178,60,.25);
+  color:var(--ink);font:13px var(--serif);letter-spacing:.1em;
+  cursor:pointer;text-align:left;transition:background .2s,color .2s;
+}
+.bgm-menu button:last-child{border-bottom:0}
+.bgm-menu button::before{content:"○";color:var(--dim);margin-right:8px}
+.bgm-menu button:hover{background:rgba(200,22,31,.35);color:var(--gold-lt)}
+.bgm-menu button.cur{color:var(--gold-lt)}
+.bgm-menu button.cur::before{content:"●";color:var(--gold);text-shadow:0 0 8px rgba(227,178,60,.8)}
+.bgm-menu em{font-style:normal;font-size:10px;color:var(--dim);letter-spacing:.2em;flex:none}
+.bgm-menu .tgl{color:var(--jade);justify-content:center;letter-spacing:.24em}
+.bgm-btn{
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--gold);background:rgba(46,14,16,.85);color:var(--gold-lt);
+  font-size:20px;cursor:pointer;backdrop-filter:blur(6px);
+  box-shadow:0 0 18px rgba(227,178,60,.3);
+  display:flex;align-items:center;justify-content:center;
+  transition:box-shadow .3s,transform .3s,color .3s;
+}
+.bgm-btn:hover{box-shadow:0 0 28px rgba(227,178,60,.6);transform:scale(1.08)}
+.bgm-btn.on{animation:notePulse 2s ease-in-out infinite}
+.bgm-btn.off{color:#8a5a55;border-color:var(--line)}
+@keyframes notePulse{50%{box-shadow:0 0 26px rgba(255,140,46,.7)}}
 
 /* ---------- 响应式 ---------- */
 @media (max-width:760px){
   .about{grid-template-columns:1fr}
-  .vtag{display:none}
+  .row .leader{display:none}
   .row{flex-wrap:wrap}
-  .row .d{margin-left:0;text-align:left;width:100%;order:3}
-  .hero-data div{flex-basis:50%;border-right:0;border-bottom:1px solid var(--line)}
-  .vs2026 .body{flex-direction:column;align-items:flex-start;gap:12px}
-  .vs2026 .code{white-space:normal}
-  .pk.p3{display:none}
+  .row .d{margin-left:0;text-align:left;width:100%;order:3;padding-left:2px}
+  .hero-data div{padding:4px 16px}
+  .lantern.l2{display:none}
+  .fustamp{right:5%;top:5%}
+  .pk.p3{right:4%}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important}
@@ -582,23 +659,25 @@ footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
   </nav>
 </header>
 
-<!-- 首屏：万圣夜 —— 月亮 / 蝙蝠 / 蜘蛛网 / 南瓜灯 / 雾 -->
+<!-- 首屏：新春请柬 -->
 <section class="hero">
-  <span class="web"></span>
-  <span class="moon"></span>
-  <div class="bats" aria-hidden="true">
-    <span class="bat x1"></span>
-    <span class="bat x2"></span>
-    <span class="bat x3"></span>
+  <div class="lantern l1" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
+  <div class="lantern l2" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
+  <div class="clouds" aria-hidden="true">
+    <span class="yun y1"></span>
+    <span class="yun y2"></span>
+    <span class="yun y3"></span>
   </div>
-  <div class="vtag">HALLOWEEN NIGHT</div>
-  <div class="hero-inner">
-    <h1>Fangcheng235</h1>
-    <div class="hero-sub">
-      <span class="alias">aka 简方JF</span>
-      <p>懒</p>
-    </div>
+  <div class="fustamp" aria-hidden="true">
+    <svg class="ring" viewBox="0 0 100 100">
+      <defs><path id="ringpath" d="M50,50 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
+      <text><textPath href="#ringpath" startOffset="0">2027 · 丁未羊年 · SPRING FESTIVAL · 2027 · 丁未羊年 ·&#160;</textPath></text>
+    </svg>
   </div>
+  <p class="inv-label">❖ SPRING FESTIVAL 2027 · 2027 新春之邀 · 丁未羊年 ❖</p>
+  <h1>Fangcheng235</h1>
+  <p class="inv-alias">aka 简方JF<i>◆</i>懒</p>
+  <div class="orn"><span>◆ ◆ ◆</span></div>
   <dl class="hero-data">
     <div><dt>网名</dt><dd>简方JF</dd></div>
     <div><dt>域名</dt><dd>zhangfangcheng.cn</dd></div>
@@ -606,7 +685,6 @@ footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
   </dl>
   <div class="pumpkins" aria-hidden="true">
     <span class="pk p1"></span>
-    <span class="pk p2"></span>
     <span class="pk p3"></span>
   </div>
   <div class="fog" aria-hidden="true"></div>
@@ -615,48 +693,60 @@ footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
 <!-- 关于 -->
 <section id="about">
   <div class="sec-head">
-    <span class="sec-num">01</span>
+    <span class="sec-num">壹</span>
     <h2>关于</h2>
+    <span class="rule"></span>
     <span class="en">ABOUT</span>
   </div>
   <div class="about">
     <p class="say">你好，我是张方程，网上叫<b>简方JF</b>。写代码和开直播是正经事，做网站是业余爱好。本站没套模板、没用建站工具，一行一行敲出来的。邮箱基本都会回。</p>
-    <dl class="facts">
+    <div class="facts panel">
       <div><dt>网名</dt><dd>简方JF</dd></div>
       <div><dt>真名</dt><dd>Zhangfangcheng</dd></div>
       <div><dt>域名</dt><dd>www.zhangfangcheng.cn</dd></div>
       <div><dt>邮箱</dt><dd><a href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a></dd></div>
       <div><dt>状态</dt><dd>空集</dd></div>
       <div><dt>座右铭</dt><dd>懒</dd></div>
-    </dl>
+    </div>
   </div>
 </section>
 
 <!-- 链接 -->
-<section id="links" style="padding-bottom:0">
+<section id="links">
   <div class="sec-head">
-    <span class="sec-num">02</span>
+    <span class="sec-num">貳</span>
     <h2>链接</h2>
+    <span class="rule"></span>
     <span class="en">LINKS</span>
   </div>
-  <div class="rows">
+  <div class="rows panel">
     <a class="row" href="live.html">
       <span class="t">直播间</span>
+      <span class="leader"></span>
       <span class="d">摸鱼 / 唠嗑 / 写代码</span>
-      <span class="go">→</span>
+      <span class="go">❖</span>
+    </a>
+    <a class="row" href="https://blog.zhangfangcheng.cn" target="_blank" rel="noopener">
+      <span class="t">文章集</span>
+      <span class="leader"></span>
+      <span class="d">blog.zhangfangcheng.cn · 长文与随笔</span>
+      <span class="go">❖</span>
     </a>
     <a class="row" href="mailto:nya@zhangfangcheng.cn">
       <span class="t">邮箱</span>
-      <span class="d">nya@zhangfangcheng.cn<br>正事请走这里</span>
-      <span class="go">→</span>
+      <span class="leader"></span>
+      <span class="d">nya@zhangfangcheng.cn · 正事请走这里</span>
+      <span class="go">❖</span>
     </a>
     <a class="row" href="dos.html">
       <span class="t">终端</span>
-      <span class="d">DOS 模拟器<br>输入 HELP 开始</span>
-      <span class="go">→</span>
+      <span class="leader"></span>
+      <span class="d">DOS 模拟器 · 输入 HELP 开始</span>
+      <span class="go">❖</span>
     </a>
     <a class="row" href="#top">
       <span class="t">本站</span>
+      <span class="leader"></span>
       <span class="d">你正在看</span>
       <span class="go">↑</span>
     </a>
@@ -666,8 +756,9 @@ footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
 <!-- 技术支持 -->
 <section id="support">
   <div class="sec-head">
-    <span class="sec-num">03</span>
+    <span class="sec-num">叁</span>
     <h2>技术支持</h2>
+    <span class="rule"></span>
     <span class="en">SUPPORT</span>
   </div>
   <div class="sup-rows">
@@ -749,25 +840,88 @@ footer .secret:hover{color:var(--orange);text-shadow:0 0 10px var(--orange)}
 
 <!-- 联系 -->
 <section id="contact" class="contact">
-  <p class="label">有事请砸我邮箱 · TRICK OR TREAT</p>
-  <a class="mail" href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a>
-  <p class="tiny">邮件、合作、唠嗑，一概欢迎</p>
+  <div class="panel">
+    <p class="label">❖ 有事请砸我邮箱 · 大吉大利 ❖</p>
+    <a class="mail" href="mailto:nya@zhangfangcheng.cn">nya@zhangfangcheng.cn</a>
+    <p class="tiny">邮件、合作、唠嗑，一概欢迎</p>
+  </div>
 </section>
 
 <footer>
   <span class="big">张方程 × 简方JF</span>
-  <span>© <span id="yr">2026</span> 手写 HTML &amp; CSS · 无框架 ·</span>
+  <span>© <span id="yr">2027</span> 手写 HTML &amp; CSS · 无框架 ·</span>
   <span class="secret">嘘，别告诉 rcl。</span>
 </footer>
 
+<audio id="bgm" loop preload="auto"></audio>
+<div class="bgm-wrap">
+  <div class="bgm-menu" id="bgmMenu">
+    <button class="tgl" data-act="toggle">▶ 播放 / 暂停</button>
+    <button data-i="0">China P<em>默认</em></button>
+    <button data-i="1">China A<em>备选</em></button>
+    <button data-i="2">China 2<em>备选</em></button>
+  </div>
+  <button id="bgmBtn" class="bgm-btn off" aria-label="背景音乐" title="背景音乐 · 点击选曲">♪</button>
+</div>
+
 <script>
+// 背景音乐：三曲可选，默认 China P；自动播放被拦截则首次交互启动
+(function(){
+  var au=document.getElementById('bgm'), btn=document.getElementById('bgmBtn'),
+      menu=document.getElementById('bgmMenu');
+  if(!au||!btn||!menu) return;
+  au.volume=.42;
+  var tracks=[
+    {src:'bgm.mp3'},      /* china_p —— 默认 */
+    {src:'china_a.mp3'},
+    {src:'china_2.mp3'}
+  ];
+  var idx=0, want=true;
+  au.src=tracks[0].src;
+  function paint(){
+    btn.classList.toggle('on',!au.paused);
+    btn.classList.toggle('off',au.paused);
+    menu.querySelectorAll('[data-i]').forEach(function(it){
+      it.classList.toggle('cur', +it.getAttribute('data-i')===idx);
+    });
+  }
+  function play(i){
+    idx=i; want=true;
+    au.src=tracks[i].src;
+    au.play().catch(paint);
+    paint();
+  }
+  function kick(){ if(want&&au.paused) au.play().catch(paint); }
+  document.addEventListener('pointerdown',function(e){
+    if(btn.contains(e.target)||menu.contains(e.target)) return;
+    kick(); menu.classList.remove('open');
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') menu.classList.remove('open');
+    kick();
+  });
+  btn.addEventListener('click',function(){ menu.classList.toggle('open'); paint(); });
+  menu.addEventListener('click',function(e){
+    var it=e.target.closest('[data-i]');
+    if(it){ play(+it.getAttribute('data-i')); menu.classList.remove('open'); return; }
+    if(e.target.closest('[data-act="toggle"]')){
+      if(au.paused){ want=true; au.play().catch(paint); }
+      else { want=false; au.pause(); }
+      menu.classList.remove('open'); paint();
+    }
+  });
+  au.addEventListener('play',paint);
+  au.addEventListener('pause',paint);
+  kick(); paint();
+})();
+
 // 时钟
 (function(){
   var el=document.getElementById('clock');
   function p(n){return n<10?'0'+n:n}
   function tick(){var d=new Date();el.textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
   setInterval(tick,1000);tick();
-  document.getElementById('yr').textContent=new Date().getFullYear();
+
 })();
 
 // FC235 代码打字机（滚动到视野内自动开始，点击窗口重放）
