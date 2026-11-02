@@ -12,15 +12,15 @@
    风格：国潮新春请柬 —— 中国红 / 鎏金 / 祥云 / 灯笼 / 福字
    ========================================================== */
 :root{
-  --bg:#160a0a;
+  --bg:#701019;
   --ink:#fff3dd;          /* 洒金宣纸色 */
-  --dim:#c99a8f;
-  --red:#c8161f;          /* 中国红 */
-  --red-deep:#8e0f1f;
+  --dim:#f2cdc4;
+  --red:#e03a3f;          /* 亮中国红 */
+  --red-deep:#7e0d16;
   --gold:#e3b23c;         /* 鎏金 */
   --gold-lt:#f3d98b;
-  --jade:#3e9b7a;         /* 翡翠点缀 */
-  --line:rgba(227,178,60,.32);
+  --jade:#7ee787;         /* 翡翠点缀 */
+  --line:rgba(243,217,139,.4);
   --serif:"Songti SC",STSong,SimSun,Georgia,serif;
   --mono:"Courier New",ui-monospace,Consolas,monospace;
 }
@@ -28,8 +28,8 @@
 html{scroll-behavior:smooth}
 body{
   background:
-    radial-gradient(120% 50% at 50% -5%, #3a1013 0%, var(--bg) 55%),
-    var(--bg);
+    radial-gradient(130% 55% at 50% -5%, #a02330 0%, #7c1521 55%),
+    #701019;
   color:var(--ink);
   font:16px/1.8 var(--serif);
   -webkit-font-smoothing:antialiased;
@@ -43,7 +43,7 @@ header{
   position:sticky;top:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;
   padding:14px clamp(18px,4.5vw,56px);
-  background:linear-gradient(180deg,rgba(22,10,10,.92),rgba(22,10,10,.5));
+  background:linear-gradient(180deg,rgba(126,13,22,.9),rgba(126,13,22,.5));
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
@@ -57,7 +57,7 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
 .hero{
   position:relative;overflow:hidden;text-align:center;
   padding:clamp(64px,11vw,128px) clamp(20px,5vw,60px) clamp(44px,6vw,72px);
-  background:radial-gradient(100% 80% at 50% 0%, #451318 0%, #240c0e 52%, transparent 100%);
+  background:radial-gradient(110% 85% at 50% 0%, #a82532 0%, #8a1a26 46%, transparent 100%);
 }
 /* 顶部挂灯笼 */
 .lantern{
@@ -133,11 +133,53 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
   100%{transform:translateX(116vw) scale(1.15)}
 }
 
-/* 请柬内容 */
+/* 请柬内容 —— 横批牌匾 */
 .inv-label{
-  font:700 12px/1.8 var(--mono);letter-spacing:.44em;color:var(--gold);
+  display:inline-block;
+  font:700 12px/1.8 var(--mono);letter-spacing:.4em;color:var(--gold-lt);
   text-shadow:0 0 14px rgba(227,178,60,.55);
+  border:1px double var(--gold);background:rgba(84,10,14,.55);
+  padding:6px 22px 6px 26px;margin-bottom:6px;
+  box-shadow:0 0 22px rgba(0,0,0,.25),0 0 26px rgba(227,178,60,.18);
 }
+/* 春联 */
+.duilian{
+  position:absolute;top:clamp(210px,26vw,300px);z-index:3;
+  writing-mode:vertical-rl;
+  font-weight:700;font-size:clamp(13px,1.6vw,18px);letter-spacing:.38em;
+  color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.6);
+  background:linear-gradient(180deg,#c8161f,#8e0f1f);
+  border:1px solid var(--gold);outline:1px solid rgba(227,178,60,.45);outline-offset:2px;
+  padding:16px 8px;border-radius:3px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 24px rgba(227,178,60,.15);
+  user-select:none;
+}
+.duilian.l{left:clamp(8px,2vw,26px)}
+.duilian.r{right:clamp(8px,2vw,26px)}
+/* 烟花 */
+.fws{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fw{
+  position:absolute;border-radius:50%;opacity:0;
+  background:repeating-conic-gradient(from 0deg, var(--c,#ffd75e) 0 1.6deg, transparent 1.6deg 14deg);
+  -webkit-mask:radial-gradient(circle, transparent 26%, #000 29%, #000 60%, transparent 65%);
+  mask:radial-gradient(circle, transparent 26%, #000 29%, #000 60%, transparent 65%);
+  animation:fwBoom 3.8s ease-out infinite;
+}
+.fw::after{
+  content:"";position:absolute;inset:42%;border-radius:50%;
+  background:#fff;filter:blur(2px);
+}
+@keyframes fwBoom{
+  0%{transform:scale(.15) rotate(0deg);opacity:0}
+  10%{opacity:1}
+  55%{transform:scale(1) rotate(26deg);opacity:.95}
+  100%{transform:scale(1.35) rotate(44deg);opacity:0}
+}
+.fw.f1{left:15%;top:12%;width:clamp(70px,9vw,120px);aspect-ratio:1;--c:#ffd75e;animation-delay:0s}
+.fw.f2{left:44%;top:6%;width:clamp(56px,7vw,92px);aspect-ratio:1;--c:#ff9d3d;animation-delay:-1.3s}
+.fw.f3{right:20%;top:15%;width:clamp(64px,8vw,106px);aspect-ratio:1;--c:#7ee787;animation-delay:-2.6s}
+.fw.f4{left:30%;top:22%;width:clamp(48px,6vw,80px);aspect-ratio:1;--c:#ff6b81;animation-delay:-3.1s;animation-duration:4.6s}
+.fw.f5{right:33%;top:26%;width:clamp(42px,5.5vw,70px);aspect-ratio:1;--c:#f3d98b;animation-delay:-2s;animation-duration:5.2s}
 h1{
   margin:20px 0 8px;
   font:700 clamp(40px,7.5vw,96px)/1.12 var(--serif);
@@ -148,7 +190,7 @@ h1{
 }
 .inv-alias{
   font-weight:700;font-size:clamp(16px,2.4vw,23px);color:var(--jade);
-  text-shadow:0 0 16px rgba(62,155,122,.5);letter-spacing:.06em;
+  text-shadow:0 0 16px rgba(126,231,135,.45);letter-spacing:.06em;
 }
 .inv-alias i{font-style:normal;color:var(--gold);margin:0 .5em;text-shadow:0 0 8px rgba(227,178,60,.6)}
 /* 回纹分隔 */
@@ -179,6 +221,7 @@ h1{
   display:flex;align-items:center;justify-content:center;
   font:700 clamp(30px,5vw,54px)/1 var(--serif);color:var(--gold-lt);
   text-shadow:0 0 18px rgba(243,217,139,.8);
+  transform:rotate(180deg);  /* 倒福 —— 福到了 */
 }
 @keyframes stampGlow{to{box-shadow:0 0 46px rgba(227,178,60,.5), inset 0 0 26px rgba(227,178,60,.26)}}
 .fustamp .ring{
@@ -244,7 +287,7 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
     linear-gradient(var(--gold),var(--gold)) left 0 bottom 0/2px 16px no-repeat,
     linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/16px 2px no-repeat,
     linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/2px 16px no-repeat,
-    linear-gradient(180deg,rgba(46,14,16,.62),rgba(26,9,10,.62));
+    linear-gradient(180deg,rgba(70,8,12,.72),rgba(42,5,8,.72));
   padding:clamp(22px,3.8vw,44px);
 }
 
@@ -256,7 +299,7 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .facts div:last-child{border-bottom:0}
 .facts dt{font-weight:700;font-size:13px;letter-spacing:.26em;color:var(--gold);white-space:nowrap}
 .facts dd{font-size:14.5px;font-weight:600;text-align:right;word-break:break-all}
-.facts dd a{color:var(--jade);text-decoration:none;border-bottom:1px dotted rgba(62,155,122,.6)}
+.facts dd a{color:var(--jade);text-decoration:none;border-bottom:1px dotted rgba(126,231,135,.55)}
 .facts dd a:hover{color:var(--gold-lt);border-color:var(--gold)}
 
 /* ---------- 链接：菜单式 ---------- */
@@ -267,7 +310,7 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
   border-bottom:1px dashed rgba(227,178,60,.26);
   text-decoration:none;transition:background .25s;
 }
-.row:hover{background:linear-gradient(90deg,rgba(200,22,31,.16),transparent 70%)}
+.row:hover{background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 70%)}
 .row .t{
   font-size:clamp(21px,3vw,32px);font-weight:700;letter-spacing:.1em;
   transition:color .25s,text-shadow .25s;
@@ -275,9 +318,9 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .row:hover .t{color:var(--gold-lt);text-shadow:0 0 18px rgba(227,178,60,.6)}
 .row .leader{flex:1;border-bottom:1px dotted rgba(227,178,60,.4);transform:translateY(-7px);min-width:24px}
 .row .d{font-family:var(--mono);font-size:clamp(11px,1.3vw,13px);line-height:1.7;color:var(--dim);text-align:right}
-.row .go{font-size:18px;color:var(--red);transition:transform .25s,text-shadow .25s;text-shadow:0 0 10px rgba(200,22,31,.6)}
+.row .go{font-size:18px;color:var(--gold);transition:transform .25s,text-shadow .25s;text-shadow:0 0 10px rgba(227,178,60,.5)}
 .row:hover .go{transform:translateX(6px);text-shadow:0 0 16px rgba(227,178,60,.9)}
-.row:nth-child(2):hover .t{color:var(--jade);text-shadow:0 0 18px rgba(62,155,122,.6)}
+.row:nth-child(2):hover .t{color:var(--jade);text-shadow:0 0 18px rgba(126,231,135,.5)}
 .row:nth-child(3):hover .t{color:#e06a4d;text-shadow:0 0 18px rgba(224,106,77,.7)}
 
 /* =========================================================
@@ -645,6 +688,7 @@ footer{
   padding:clamp(22px,3.5vw,40px) clamp(18px,4.5vw,60px);
   display:flex;flex-wrap:wrap;gap:10px 30px;align-items:baseline;justify-content:center;
   border-top:1px solid var(--line);
+  background:linear-gradient(rgba(0,0,0,.14),rgba(0,0,0,.26));
   font-size:13px;letter-spacing:.1em;color:var(--dim);text-align:center;
 }
 footer .big{font-weight:700;font-size:clamp(16px,2.4vw,22px);letter-spacing:.1em;color:var(--gold-lt);text-shadow:0 0 12px rgba(227,178,60,.4)}
@@ -679,7 +723,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
 .bgm-menu .tgl{color:var(--jade);justify-content:center;letter-spacing:.24em}
 .bgm-btn{
   width:46px;height:46px;border-radius:50%;
-  border:1px solid var(--gold);background:rgba(46,14,16,.85);color:var(--gold-lt);
+  border:1px solid var(--gold);background:rgba(84,10,14,.85);color:var(--gold-lt);
   font-size:20px;cursor:pointer;backdrop-filter:blur(6px);
   box-shadow:0 0 18px rgba(227,178,60,.3);
   display:flex;align-items:center;justify-content:center;
@@ -698,6 +742,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   .row .d{margin-left:0;text-align:left;width:100%;order:3;padding-left:2px}
   .hero-data div{padding:4px 16px}
   .lantern.l2{display:none}
+  .duilian{display:none}
   .fustamp{right:5%;top:5%}
   .pk.p3{right:4%}
 }
@@ -720,6 +765,15 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
 
 <!-- 首屏：新春请柬 -->
 <section class="hero">
+  <div class="fws" aria-hidden="true">
+    <span class="fw f1"></span>
+    <span class="fw f2"></span>
+    <span class="fw f3"></span>
+    <span class="fw f4"></span>
+    <span class="fw f5"></span>
+  </div>
+  <div class="duilian l" aria-hidden="true">梅花点点迎新春</div>
+  <div class="duilian r" aria-hidden="true">爆竹声声辞旧岁</div>
   <div class="lantern l1" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
   <div class="lantern l2" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
   <div class="clouds" aria-hidden="true">
