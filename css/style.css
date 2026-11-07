@@ -1,0 +1,1481 @@
+/* ==========================================================
+   Fangcheng × 简方JF · 个人主页
+   风格：国潮新春请柬 —— 中国红 / 鎏金 / 祥云 / 灯笼 / 福字
+   ========================================================== */
+:root{
+  --bg:#3a070d;
+  --ink:#ffedd0;          /* 洒金宣纸色 */
+  --dim:#e9bba9;
+  --red:#e03a3f;          /* 亮中国红 */
+  --red-deep:#7e0d16;
+  --gold:#e3b23c;         /* 鎏金 */
+  --gold-lt:#f3d98b;
+  --gold-dp:#a8791f;
+  --jade:#7ee787;         /* 翡翠点缀 */
+  --line:rgba(243,217,139,.32);
+  --serif:"Songti SC",STSong,SimSun,Georgia,serif;
+  --mono:"Courier New",ui-monospace,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(120% 50% at 50% -8%, #a02330 0%, #7c1521 46%, rgba(124,21,33,0) 100%),
+    radial-gradient(85% 55% at 108% 104%, rgba(163,36,51,.4), transparent 62%),
+    radial-gradient(70% 45% at -8% 92%, rgba(140,20,30,.5), transparent 60%),
+    linear-gradient(180deg,#6d101b 0%, #540a14 42%, #3a070d 100%);
+  color:var(--ink);
+  font:16px/1.8 var(--serif);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit}
+::selection{background:var(--gold);color:#2a0a0a}
+/* 洒金宣纸质感 —— 两层错位金点，若隐若现 */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(rgba(243,217,139,.11) 1px, transparent 1.4px),
+    radial-gradient(rgba(243,217,139,.08) 1px, transparent 1.4px);
+  background-size:150px 180px, 96px 118px;
+  background-position:0 0, 42px 64px;
+}
+
+/* ---------- 置顶区：导航 + 音乐台（融合为一条鎏金悬浮岛） ---------- */
+.topzone{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(30,4,7,.97),rgba(48,8,12,.94));
+  border-bottom:1px solid rgba(227,178,60,.35);
+  box-shadow:0 10px 34px rgba(0,0,0,.45);
+}
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px clamp(18px,4.5vw,56px) 9px;
+  background:none;
+  border-bottom:1px solid rgba(227,178,60,.14);
+}
+.brand{font-weight:700;font-size:17px;letter-spacing:.08em;color:var(--gold-lt);text-shadow:0 0 14px rgba(227,178,60,.4)}
+.brand span{color:var(--red);margin:0 .3em;text-shadow:0 0 10px rgba(200,22,31,.9)}
+nav{display:flex;gap:clamp(12px,3vw,30px);font-size:14px;letter-spacing:.14em}
+nav a{text-decoration:none;padding:2px 4px;color:var(--dim);border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.6)}
+
+/* ---------- 首屏：新春请柬 ---------- */
+.hero{
+  position:relative;overflow:hidden;text-align:center;
+  min-height:calc(100vh - 150px);
+  min-height:calc(100svh - 150px);
+  display:flex;align-items:center;
+  padding:clamp(56px,9vw,104px) clamp(20px,5vw,60px) clamp(44px,6vw,72px);
+  background:radial-gradient(110% 85% at 50% 0%, #a82532 0%, #8a1a26 46%, transparent 100%);
+}
+/* 顶部挂灯笼 */
+.lantern{
+  position:absolute;top:0;width:clamp(40px,5vw,64px);height:clamp(96px,12vw,150px);pointer-events:none;
+  transform-origin:top center;animation:sway 5.5s ease-in-out infinite;
+}
+.lantern::before{ /* 挂绳 */
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:2px;height:clamp(26px,4vw,48px);background:linear-gradient(var(--gold),rgba(227,178,60,.4));
+}
+.lantern .body{
+  position:absolute;top:clamp(26px,4vw,48px);left:0;right:0;
+  aspect-ratio:1/.92;border-radius:50%/46%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18%, rgba(90,8,10,.45) 18% 21%),
+    radial-gradient(circle at 38% 32%, #ff5a4d, var(--red) 55%, #7e0d18);
+  box-shadow:
+    inset -4px -6px 12px rgba(80,5,8,.5),
+    0 0 34px 8px rgba(226,60,40,.4),
+    0 0 90px 30px rgba(226,60,40,.16);
+}
+.lantern .body::before,.lantern .body::after{ /* 金盖 */
+  content:"";position:absolute;left:18%;right:18%;height:14%;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  border-radius:4px;box-shadow:0 0 8px rgba(227,178,60,.6);
+}
+.lantern .body::before{top:-7%}
+.lantern .body::after{bottom:-7%}
+.lantern .tassel{ /* 流苏 */
+  position:absolute;left:50%;bottom:calc(-1 * clamp(20px,2.6vw,32px));transform:translateX(-50%);
+  width:26%;height:clamp(20px,2.6vw,32px);
+  background:linear-gradient(180deg,var(--gold),#a8791f);
+  clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
+}
+.lantern .glow{ /* 灯光 —— 光晕呼吸走 opacity（合成器动画，不触发重绘） */
+  position:absolute;inset:-40%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,120,70,.42),transparent 65%);
+  pointer-events:none;
+  animation:glowBreath 3.4s ease-in-out infinite alternate;
+}
+@keyframes glowBreath{from{opacity:.55;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+.lantern.l1{left:7%;animation-delay:0s}
+.lantern.l2{right:7%;animation-delay:-2.6s;transform:scale(.8)}
+@keyframes sway{0%,100%{transform:rotate(2.4deg)}50%{transform:rotate(-2.4deg)}}
+.lantern.l2{animation-name:sway2}
+@keyframes sway2{0%,100%{transform:scale(.8) rotate(2.4deg)}50%{transform:scale(.8) rotate(-2.4deg)}}
+
+/* 漂浮祥云 */
+.clouds{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.yun{
+  position:absolute;display:block;width:90px;height:34px;opacity:.5;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44' fill='none' stroke='%23e3b23c' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M14 34c-8 0-12-6-9-12 2-5 8-7 13-5 1-8 8-13 16-11 6 1 10 5 11 10 6-4 15-3 19 3 2-6 8-9 14-7 7 2 10 9 6 15 6 1 10 6 8 12'/%3E%3Cpath d='M28 41h58'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation:yunDrift 40s linear infinite;
+}
+.yun.y1{top:16%;animation-duration:46s}
+.yun.y2{top:30%;transform:scale(.65);animation-duration:60s;animation-delay:-20s;opacity:.35}
+.yun.y3{top:9%;transform:scale(1.15);animation-duration:36s;animation-delay:-10s;opacity:.4}
+@keyframes yunDrift{
+  0%{transform:translateX(-14vw)}
+  50%{transform:translateX(52vw)}
+  100%{transform:translateX(116vw)}
+}
+.yun.y2{animation-name:yunDrift2}
+@keyframes yunDrift2{
+  0%{transform:translateX(-14vw) scale(.65)}
+  50%{transform:translateX(52vw) scale(.65)}
+  100%{transform:translateX(116vw) scale(.65)}
+}
+.yun.y3{animation-name:yunDrift3}
+@keyframes yunDrift3{
+  0%{transform:translateX(-14vw) scale(1.15)}
+  50%{transform:translateX(52vw) scale(1.15)}
+  100%{transform:translateX(116vw) scale(1.15)}
+}
+
+/* 请柬内容 —— 横批牌匾 */
+.inv-label{
+  display:inline-block;
+  font:700 12px/1.8 var(--mono);letter-spacing:.4em;color:var(--gold-lt);
+  text-shadow:0 0 14px rgba(227,178,60,.55);
+  border:1px double var(--gold);background:rgba(84,10,14,.55);
+  padding:6px 22px 6px 26px;margin-bottom:6px;
+  box-shadow:0 0 22px rgba(0,0,0,.25),0 0 26px rgba(227,178,60,.18);
+}
+/* 春联 —— 挂在右栏福印两侧，竖排 */
+.duilian{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  writing-mode:vertical-rl;
+  font-weight:700;font-size:clamp(13px,1.6vw,18px);letter-spacing:.38em;
+  color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.6);
+  background:linear-gradient(180deg,#c8161f,#8e0f1f);
+  border:1px solid var(--gold);outline:1px solid rgba(227,178,60,.45);outline-offset:2px;
+  padding:16px 8px;border-radius:3px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 24px rgba(227,178,60,.15);
+  user-select:none;
+}
+.duilian.l{left:0}
+.duilian.r{right:0}
+/* 烟花 */
+.fws{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fw{
+  position:absolute;border-radius:50%;opacity:0;
+  background:repeating-conic-gradient(from 0deg, var(--c,#ffd75e) 0 1.6deg, transparent 1.6deg 14deg);
+  -webkit-mask:radial-gradient(circle, transparent 26%, #000 29%, #000 60%, transparent 65%);
+  mask:radial-gradient(circle, transparent 26%, #000 29%, #000 60%, transparent 65%);
+  animation:fwBoom 3.8s ease-out infinite;
+}
+.fw::after{
+  content:"";position:absolute;inset:42%;border-radius:50%;
+  background:#fff;filter:blur(2px);
+}
+@keyframes fwBoom{
+  0%{transform:scale(.15) rotate(0deg);opacity:0}
+  10%{opacity:1}
+  55%{transform:scale(1) rotate(26deg);opacity:.95}
+  100%{transform:scale(1.35) rotate(44deg);opacity:0}
+}
+.fw.f1{left:15%;top:12%;width:clamp(70px,9vw,120px);aspect-ratio:1;--c:#ffd75e;animation-delay:0s}
+.fw.f2{left:44%;top:6%;width:clamp(56px,7vw,92px);aspect-ratio:1;--c:#ff9d3d;animation-delay:-1.3s}
+.fw.f3{right:20%;top:15%;width:clamp(64px,8vw,106px);aspect-ratio:1;--c:#7ee787;animation-delay:-2.6s}
+.fw.f4{left:30%;top:22%;width:clamp(48px,6vw,80px);aspect-ratio:1;--c:#ff6b81;animation-delay:-3.1s;animation-duration:4.6s}
+.fw.f5{right:33%;top:26%;width:clamp(42px,5.5vw,70px);aspect-ratio:1;--c:#f3d98b;animation-delay:-2s;animation-duration:5.2s}
+h1{
+  margin:20px 0 8px;
+  font:700 clamp(40px,7.5vw,96px)/1.12 var(--serif);
+  letter-spacing:.04em;
+  background:linear-gradient(180deg,#fff7e0,var(--gold-lt) 45%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(227,178,60,.45)) drop-shadow(0 3px 1px rgba(90,10,10,.6));
+}
+.inv-alias{
+  font-weight:700;font-size:clamp(16px,2.4vw,23px);color:var(--jade);
+  text-shadow:0 0 16px rgba(126,231,135,.45);letter-spacing:.06em;
+}
+.inv-alias i{font-style:normal;color:var(--gold);margin:0 .5em;text-shadow:0 0 8px rgba(227,178,60,.6)}
+/* 回纹分隔 */
+.orn{display:flex;align-items:center;gap:16px;justify-content:center;max-width:560px;margin:clamp(24px,4vw,38px) auto 0}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(227,178,60,.6),transparent)}
+.orn span{color:var(--gold);font-size:16px;letter-spacing:.4em;text-shadow:0 0 12px rgba(227,178,60,.7);animation:twinkle 3.2s ease-in-out infinite;padding-left:.4em}
+@keyframes twinkle{50%{opacity:.45}}
+/* 数据条 */
+.hero-data{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:clamp(22px,3.5vw,34px);font-family:var(--mono)}
+.hero-data div{
+  padding:9px 22px;border-radius:12px;
+  background:rgba(26,4,8,.34);
+  border:1px solid rgba(227,178,60,.24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.hero-data dt{font-size:10px;letter-spacing:.28em;color:var(--dim)}
+.hero-data dd{font-size:14px;font-weight:700;margin-top:3px;color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.5)}
+.hero-data dd.cd{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.hero-data dd.cd::after{content:" 秒";font-size:11px;color:var(--dim);font-weight:400;text-shadow:none}
+/* 福字金印 —— 右栏主视觉，放大为请柬印章（光晕呼吸用 ::after 透明度动画） */
+.fustamp{
+  position:relative;flex:none;
+  width:clamp(170px,21vw,260px);aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:3px double var(--gold);
+  box-shadow:0 0 30px rgba(227,178,60,.35), inset 0 0 20px rgba(227,178,60,.18);
+  background:radial-gradient(circle at 38% 30%, rgba(200,22,31,.55), rgba(110,12,20,.75));
+}
+.fustamp::after{
+  content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 48px 6px rgba(227,178,60,.5);
+  opacity:.4;animation:haloBreath 4s ease-in-out infinite alternate;
+}
+@keyframes haloBreath{to{opacity:1}}
+/* 书法福字 —— SVG 逐笔书写（序幕），完成态鎏金流光（首屏） */
+.fucallig{
+  position:absolute;inset:8px;border-radius:50%;
+  border:1px solid rgba(227,178,60,.5);
+  display:flex;align-items:center;justify-content:center;
+}
+.fusvg{width:76%;height:76%;overflow:visible}
+.fusvg path{
+  fill:none;stroke:#f6dfa0;stroke-width:7.5;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:0;   /* pathLength=1，配合逐笔书写 */
+  filter:drop-shadow(0 0 6px rgba(243,217,139,.55));
+}
+/* 序幕：一笔一笔写福，写完整字翻转 180° —— 福到了 */
+.prelude .fusvg path{animation:fuWrite .34s ease-out both}
+.prelude .fusvg path:nth-child(1){animation-delay:.3s}
+.prelude .fusvg path:nth-child(2){animation-delay:.62s}
+.prelude .fusvg path:nth-child(3){animation-delay:.94s}
+.prelude .fusvg path:nth-child(4){animation-delay:1.26s}
+.prelude .fusvg path:nth-child(5){animation-delay:1.58s}
+.prelude .fusvg path:nth-child(6){animation-delay:1.9s}
+.prelude .fusvg path:nth-child(7){animation-delay:2.22s}
+.prelude .fusvg path:nth-child(8){animation-delay:2.54s}
+.prelude .fusvg path:nth-child(9){animation-delay:2.86s}
+@keyframes fuWrite{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.prelude .fucallig{animation:fuFlip 1s cubic-bezier(.36,1.4,.5,1) 3.4s both}
+@keyframes fuFlip{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
+/* 首屏：完成态倒福 + 鎏金流光扫过 */
+.fustamp .fucallig{transform:rotate(180deg)}
+.fushine{position:absolute;inset:0;border-radius:50%;overflow:hidden;pointer-events:none}
+.fushine::before{
+  content:"";position:absolute;top:-30%;bottom:-30%;left:0;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,240,200,.38),transparent);
+  transform:translateX(-180%) skewX(-14deg);
+  animation:fuSheen 4.6s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes fuSheen{0%{transform:translateX(-180%) skewX(-14deg)}55%,100%{transform:translateX(400%) skewX(-14deg)}}
+@keyframes stampSpin{to{transform:rotate(360deg)}}
+.fustamp .ring{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  animation:stampSpin 26s linear infinite;
+}
+.fustamp .ring text{
+  fill:rgba(243,217,139,.85);font:700 9px "Courier New",monospace;letter-spacing:.12em;
+}
+@keyframes stampSpin{to{transform:rotate(360deg)}}
+/* 地面小灯笼 + 暖雾 */
+.pumpkins{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none}
+.pk{
+  position:absolute;bottom:2px;width:30px;height:26px;border-radius:50%/46%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 20%, rgba(90,8,10,.4) 20% 25%),
+    radial-gradient(circle at 38% 32%, #ff5a4d, var(--red) 58%, #7e0d18);
+  box-shadow:0 0 22px 6px rgba(226,60,40,.35), 0 4px 10px rgba(0,0,0,.5);
+}
+.pk::before{content:"";position:absolute;top:-5px;left:20%;right:20%;height:5px;background:var(--gold);border-radius:2px}
+.pk::after{content:"";position:absolute;bottom:-7px;left:20%;right:20%;height:7px;background:linear-gradient(180deg,var(--gold),#a8791f);clip-path:polygon(15% 0,85% 0,100% 100%,0 100%)}
+.pk.p1{left:9%;animation:flick 3.4s ease-in-out infinite}
+.pk.p3{right:9%;animation:flick 3.4s ease-in-out infinite -1.7s}
+@keyframes flick{50%{opacity:.7}}  /* 光晕呼吸改为整体透明度，避免逐帧重绘 box-shadow */
+.fog{
+  position:absolute;left:-25%;right:-25%;bottom:-30px;height:120px;pointer-events:none;
+  background:
+    radial-gradient(45% 90% at 18% 100%, rgba(200,60,40,.12), transparent 70%),
+    radial-gradient(40% 80% at 45% 100%, rgba(227,178,60,.09), transparent 70%),
+    radial-gradient(50% 100% at 75% 100%, rgba(200,60,40,.1), transparent 70%),
+    radial-gradient(40% 90% at 96% 100%, rgba(227,178,60,.07), transparent 70%);
+  filter:blur(16px);
+  animation:fogDrift 17s ease-in-out infinite alternate;
+}
+@keyframes fogDrift{to{transform:translateX(6%)}}
+
+/* ---------- 首屏布局：左文右印，双栏请柬 ---------- */
+.hero-grid{
+  position:relative;z-index:4;
+  display:grid;grid-template-columns:1.25fr .75fr;
+  gap:clamp(28px,5vw,72px);align-items:center;
+  max-width:1240px;margin:0 auto;
+  text-align:left;
+}
+.hero-left .inv-label{margin-bottom:14px}
+.hero-left h1{margin:14px 0 10px}
+.hero-left .orn{justify-content:flex-start;margin-left:0}
+.hero-left .orn::before{content:none}
+.hero-data{justify-content:flex-start;flex-wrap:wrap;margin-top:clamp(24px,3.5vw,34px)}
+.hero-data div{padding:6px 24px 6px 0;border-right:1px solid var(--line)}
+.hero-data div:last-child{border-right:0}
+.hero-right{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  min-height:clamp(260px,30vw,380px);
+}
+
+/* ---------- 内容布局：关于 × 链接，双栏并排 ---------- */
+.duo{
+  display:grid;grid-template-columns:11fr 10fr;
+  gap:0 clamp(26px,4.5vw,58px);
+  align-items:start;
+  max-width:1440px;margin:0 auto;
+  padding:0 clamp(16px,4.5vw,60px);
+}
+.duo section{padding:clamp(36px,5vw,64px) 0}
+.duo .about{grid-template-columns:1fr;gap:20px}
+
+/* ---------- 支持区：卡片高度基线 ---------- */
+.sup{min-height:clamp(190px,20vw,240px)}
+
+/* ---------- 通用区块 ---------- */
+section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
+/* 区块标题：居中对称构图，替代左对齐的生硬排布 */
+.sec-head{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  margin-bottom:clamp(26px,4vw,46px);text-align:center;
+}
+.sec-num{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font:700 clamp(15px,1.8vw,18px)/1 var(--serif);color:#5c0a12;
+  background:radial-gradient(circle at 38% 30%,var(--gold-lt),var(--gold));
+  box-shadow:0 0 22px rgba(227,178,60,.5), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.sec-head h2{font:700 clamp(26px,3.8vw,42px)/1.2 var(--serif);letter-spacing:.22em;text-indent:.22em;color:var(--gold-lt);text-shadow:0 2px 18px rgba(227,178,60,.35)}
+.sec-head h2::before{ /* 小灯笼图标 */
+  content:"";display:inline-block;width:13px;height:15px;margin-right:12px;
+  vertical-align:-1px;border-radius:50%/44%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 28%, rgba(90,8,10,.5) 28% 36%),
+    radial-gradient(circle at 38% 30%, #ff5a4d, var(--red) 60%, #7e0d18);
+  box-shadow:0 0 12px rgba(226,60,40,.7);
+  position:relative;
+}
+.sec-head .rule{width:min(320px,70vw);height:1px;background:linear-gradient(90deg,transparent,rgba(227,178,60,.65) 30%,rgba(227,178,60,.65) 70%,transparent);position:relative;align-self:center}
+.sec-head .rule::before,.sec-head .rule::after{ /* 两端菱形 */
+  content:"";position:absolute;top:50%;width:7px;height:7px;
+  transform:translateY(-50%) rotate(45deg);
+  background:var(--gold);box-shadow:0 0 8px rgba(227,178,60,.6);
+}
+.sec-head .rule::before{left:-2px}
+.sec-head .rule::after{right:-2px}
+/* 区块之间的柔光过渡 —— 让页面不再「一格一格」 */
+#support{background:linear-gradient(180deg,transparent 0%,rgba(126,13,22,.13) 26%,rgba(126,13,22,.13) 74%,transparent 100%)}
+.wufu{background:radial-gradient(72% 42% at 50% 12%,rgba(200,22,31,.16),transparent 72%)}
+.contact{background:radial-gradient(56% 46% at 50% 96%,rgba(227,178,60,.09),transparent 75%)}
+.sec-head .en{font:11px var(--mono);letter-spacing:.34em;color:var(--dim);opacity:.85}
+
+/* 请柬卡片（鎏金角饰） */
+.panel{
+  position:relative;border:1px solid var(--line);border-radius:4px;
+  background:
+    linear-gradient(var(--gold),var(--gold)) left 0 top 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 top 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 top 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 top 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 bottom 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) left 0 bottom 0/2px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/16px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) right 0 bottom 0/2px 16px no-repeat,
+    linear-gradient(180deg,rgba(70,8,12,.72),rgba(42,5,8,.72));
+  padding:clamp(22px,3.8vw,44px);
+}
+
+/* ---------- 关于 ---------- */
+.about{display:grid;grid-template-columns:7fr 5fr;gap:clamp(26px,4.5vw,60px);align-items:start}
+.about .say{font-size:clamp(16px,2.2vw,21px);line-height:2}
+.about .say b{color:var(--gold-lt);text-shadow:0 0 14px rgba(227,178,60,.5)}
+.facts div{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:11px 2px;border-bottom:1px dashed rgba(227,178,60,.26)}
+.facts div:last-child{border-bottom:0}
+.facts dt{font-weight:700;font-size:13px;letter-spacing:.26em;color:var(--gold);white-space:nowrap}
+.facts dd{font-size:14.5px;font-weight:600;text-align:right;word-break:break-all}
+.facts dd a{color:var(--jade);text-decoration:none;border-bottom:1px dotted rgba(126,231,135,.55)}
+.facts dd a:hover{color:var(--gold-lt);border-color:var(--gold)}
+
+/* ---------- 链接：菜单式 ---------- */
+.rows{border-top:1px solid rgba(227,178,60,.22)}
+.row{
+  display:flex;align-items:baseline;gap:clamp(12px,2.5vw,26px);
+  padding:clamp(15px,2.4vw,22px) clamp(4px,1.2vw,14px);
+  border-bottom:1px dashed rgba(227,178,60,.26);
+  text-decoration:none;transition:background .25s;
+}
+.row:hover{background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 70%)}
+.row .t{
+  font-size:clamp(21px,3vw,32px);font-weight:700;letter-spacing:.1em;
+  transition:color .25s,text-shadow .25s;
+}
+.row:hover .t{color:var(--gold-lt);text-shadow:0 0 18px rgba(227,178,60,.6)}
+.row .leader{flex:1;border-bottom:1px dotted rgba(227,178,60,.4);transform:translateY(-7px);min-width:24px}
+.row .d{font-family:var(--mono);font-size:clamp(11px,1.3vw,13px);line-height:1.7;color:var(--dim);text-align:right}
+.row .go{font-size:18px;color:var(--gold);transition:transform .25s,text-shadow .25s;text-shadow:0 0 10px rgba(227,178,60,.5)}
+.row:hover .go{transform:translateX(6px);text-shadow:0 0 16px rgba(227,178,60,.9)}
+.row:nth-child(2):hover .t{color:var(--jade);text-shadow:0 0 18px rgba(126,231,135,.5)}
+.row:nth-child(3):hover .t{color:#e06a4d;text-shadow:0 0 18px rgba(224,106,77,.7)}
+
+/* =========================================================
+   技术支持 —— 2×2 网格，每人一卡，各占一套独立主题 UI（保持不变）
+   ========================================================= */
+.sup-rows{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(16px,2.6vw,26px);
+  max-width:1440px;
+}
+.sup{position:relative;width:100%;min-height:clamp(150px,18vw,190px);overflow:hidden}
+.sup .who{font-weight:900;font-size:clamp(32px,6vw,66px);line-height:1;letter-spacing:-.02em}
+.sup .role{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.22em}
+.sup .sig{margin-top:4px;font-weight:700}
+
+/* ---------- 1) VS2026 风（FC235）· 真实 IDE 质感 · 动态 ---------- */
+.vs2026{
+  --vs-bg:#1e1e1f; --vs-chrome:#2d2d31; --vs-panel:#252526;
+  background:var(--vs-bg);border:1px solid #3f3f46;border-radius:8px;overflow:hidden;
+  display:flex;flex-direction:column;cursor:pointer;
+  min-height:clamp(215px,25vw,290px);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace;color:#d4d4d4;
+  box-shadow:0 18px 50px -18px rgba(0,0,0,.75);
+  transition:box-shadow .4s;
+}
+.vs2026:hover{box-shadow:0 22px 60px -18px rgba(155,79,150,.5)}
+/* 标题栏 */
+.vs2026 .tbar{
+  flex:none;display:flex;align-items:center;gap:14px;
+  background:var(--vs-chrome);padding:6px 10px;font-size:12px;color:#dcdcdc;
+  border-bottom:1px solid #3f3f46;
+}
+.vs2026 .vslogo{
+  width:18px;height:18px;border-radius:3px;flex:none;
+  background:linear-gradient(150deg,#9b4f96,#68217a);
+  color:#fff;font:900 12px/18px "Arial Black",sans-serif;text-align:center;
+  box-shadow:0 0 8px rgba(155,79,150,.5);
+}
+.vs2026 .menu{letter-spacing:.02em;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vs2026 .winbtn{margin-left:auto;display:flex;gap:16px;font-size:12px;opacity:.75;flex:none}
+.vs2026 .winbtn i{font-style:normal}
+.vs2026 .winbtn .cl{color:#d16d83}
+/* 主体：编辑器 + 资源管理器 */
+.vs2026 .ide{flex:1;display:flex;min-height:0}
+.vs2026 .editor{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--vs-bg)}
+.vs2026 .tabs{flex:none;display:flex;background:var(--vs-chrome);border-bottom:1px solid #3f3f46}
+.vs2026 .tab{
+  display:flex;align-items:center;gap:7px;padding:7px 16px;font-size:12px;color:#9d9d9d;
+  border-right:1px solid #3f3f46;cursor:default;transition:color .2s;
+}
+.vs2026 .tab.on{background:var(--vs-bg);color:#fff;box-shadow:inset 0 2px 0 #ab4bab}
+.vs2026 .tab:hover{color:#ddd}
+.ic-cs{width:10px;height:10px;border-radius:2px;background:linear-gradient(140deg,#a179dc,#5b2d8e);display:inline-block;flex:none}
+.vs2026 .code-area{flex:1;display:flex;min-height:0;overflow:hidden}
+.vs2026 .gutter{
+  flex:none;padding:12px 10px 12px 0;min-width:42px;text-align:right;
+  color:#5f6672;font-size:13px;line-height:1.75;user-select:none;
+}
+.vs2026 .code{flex:1;margin:0;padding:12px 18px 12px 14px;overflow:hidden;font-size:13px;line-height:1.75;white-space:pre}
+.vs2026 .k{color:#569cd6}.vs2026 .t{color:#4ec9b0}.vs2026 .c{color:#57a64a;font-style:italic}
+.vs2026 .id{color:#9cdcfe}.vs2026 .s{color:#ce9178}
+.vs2026 .caret{
+  display:inline-block;width:2px;height:1.1em;background:#aeafad;
+  vertical-align:-.18em;margin-left:1px;
+  box-shadow:0 0 6px rgba(174,175,173,.6);
+  animation:blinkC 1s steps(1) infinite;
+}
+@keyframes blinkC{50%{opacity:0}}
+/* 解决方案资源管理器 */
+.vs2026 .explorer{
+  flex:none;width:clamp(150px,22%,230px);background:var(--vs-panel);
+  border-left:1px solid #3f3f46;font-size:12px;color:#cfcfcf;
+}
+.vs2026 .exp-h{
+  padding:7px 12px;font-size:11.5px;color:#dcdcdc;background:var(--vs-chrome);
+  border-bottom:1px solid #3f3f46;
+}
+.vs2026 .tree{list-style:none;padding:8px 6px;margin:0}
+.vs2026 .tree li{padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .2s}
+.vs2026 .tree li:hover{background:#323236}
+.vs2026 .tree .lv0{color:#dcdcdc}
+.vs2026 .tree .lv1{padding-left:18px;background:rgba(155,79,150,.2);color:#fff}
+.vs2026 .tree .lv2{padding-left:40px;color:#9cdcfe}
+/* 状态栏 */
+.vs2026 .status{
+  flex:none;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:linear-gradient(90deg,#68217a,#7d2f92);color:#fff;
+  font-size:11.5px;padding:5px 12px;letter-spacing:.02em;
+}
+.vs2026 .prog{display:inline-flex;align-items:center;gap:6px}
+.vs2026 .prog i{width:70px;height:7px;border:1px solid rgba(255,255,255,.45);position:relative;background:rgba(0,0,0,.25)}
+.vs2026 .prog i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;right:1px;background:#fff;box-shadow:0 0 8px #fff;transform:scaleX(0);transform-origin:left;animation:build 3.2s linear infinite}
+@keyframes build{0%{transform:scaleX(0)}85%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+/* 移动端：隐藏资源管理器 */
+@media (max-width:760px){
+  .vs2026 .explorer{display:none}
+  .vs2026 .menu{display:none}
+  .vs2026 .code,.vs2026 .gutter{font-size:11px}
+}
+
+/* ---------- 2) IC 像素闯关游戏（rcl） ---------- */
+.pixelic{
+  background:
+    repeating-conic-gradient(#0d0b14 0 25%, #161220 0 50%) 0 0/22px 22px,
+    #0d0b14;
+  border:4px solid #000;border-radius:8px;
+  box-shadow:inset 0 0 0 3px #2b2d33, 6px 6px 0 rgba(0,0,0,.55), 0 0 40px rgba(63,240,122,.18);
+  padding:clamp(16px,2.6vw,24px);
+  display:flex;flex-direction:column;justify-content:center;gap:10px;
+  image-rendering:pixelated;
+}
+.pixelic .hud{display:flex;align-items:center;gap:14px;font:700 12px var(--mono);color:#7c8291;letter-spacing:.12em;flex-wrap:wrap}
+.pixelic .chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0d0e11;border:2px solid #3ff07a;box-shadow:2px 2px 0 #000;padding:4px 10px;
+}
+.pixelic .chip .pins{display:inline-grid;grid-template-columns:repeat(3,4px);gap:3px}
+.pixelic .chip .pins i{width:4px;height:4px;background:#3ff07a;display:block}
+.pixelic .chip .role{color:#3ff07a;text-shadow:0 0 8px rgba(63,240,122,.8)}
+/* 关卡场景 */
+.pixelic .stage{position:relative;height:78px;margin-top:2px}
+.pixelic .floor{
+  position:absolute;left:0;right:0;bottom:0;height:10px;
+  background:repeating-linear-gradient(90deg,#3ff07a 0 8px,#25c058 8px 10px);
+  box-shadow:0 2px 0 #000;
+}
+.pixelic .brick,.pixelic .cat,.pixelic .coin,.pixelic .flag,.pixelic .stage .pk{z-index:2}
+.pixelic .brick{
+  position:absolute;bottom:10px;width:22px;height:22px;
+  background:#c9762b;box-shadow:inset 0 0 0 2px #8a4d17,2px 2px 0 #000;
+}
+.pixelic .brick.b1{left:22%}
+.pixelic .brick.b2{left:calc(22% + 26px)}
+.pixelic .brick.q{
+  background:#ffd166;box-shadow:inset 0 0 0 2px #c98a1c,2px 2px 0 #000;
+  color:#7a4a00;font:900 15px/22px "PingFang SC","Microsoft YaHei",sans-serif;text-align:center;
+}
+/* 关卡里的小灯笼 */
+.pixelic .stage .pk{width:22px;height:19px;bottom:10px;left:56%;border-radius:50%/44%;box-shadow:0 0 14px 4px rgba(226,60,40,.4)}
+.pixelic .stage .pk::before{top:-4px;height:4px}
+.pixelic .stage .pk::after{bottom:-5px;height:5px}
+/* 猫咪主角（box-shadow 逐像素绘制） */
+.pixelic .cat{
+  --p:3px;position:absolute;bottom:10px;left:6%;z-index:3;
+  width:var(--p);height:var(--p);
+  filter:drop-shadow(1px 2px 0 rgba(0,0,0,.6));
+  box-shadow:
+    calc(var(--p)*4) calc(var(--p)*0) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*0) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*1) 0 #ff8c42, calc(var(--p)*4) calc(var(--p)*1) 0 #ff8c42,
+    calc(var(--p)*5) calc(var(--p)*1) 0 #ff8c42, calc(var(--p)*6) calc(var(--p)*1) 0 #ff8c42,
+    calc(var(--p)*7) calc(var(--p)*1) 0 #ff8c42, calc(var(--p)*8) calc(var(--p)*1) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*2) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*2) 0 #ff8c42,
+    calc(var(--p)*4) calc(var(--p)*2) 0 #fff, calc(var(--p)*5) calc(var(--p)*2) 0 #ff8c42,
+    calc(var(--p)*6) calc(var(--p)*2) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*2) 0 #fff,
+    calc(var(--p)*8) calc(var(--p)*2) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*2) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*3) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*3) 0 #ff8c42,
+    calc(var(--p)*4) calc(var(--p)*3) 0 #22223b, calc(var(--p)*5) calc(var(--p)*3) 0 #ff8c42,
+    calc(var(--p)*6) calc(var(--p)*3) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*3) 0 #22223b,
+    calc(var(--p)*8) calc(var(--p)*3) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*3) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*4) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*4) 0 #ff8c42,
+    calc(var(--p)*4) calc(var(--p)*4) 0 #ff8c42, calc(var(--p)*5) calc(var(--p)*4) 0 #ff8c42,
+    calc(var(--p)*6) calc(var(--p)*4) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*4) 0 #ff8c42,
+    calc(var(--p)*8) calc(var(--p)*4) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*4) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*5) 0 #ff8c42, calc(var(--p)*4) calc(var(--p)*5) 0 #ff5a3c,
+    calc(var(--p)*5) calc(var(--p)*5) 0 #ff8c42, calc(var(--p)*6) calc(var(--p)*5) 0 #ff5a3c,
+    calc(var(--p)*7) calc(var(--p)*5) 0 #ff8c42, calc(var(--p)*8) calc(var(--p)*5) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*6) 0 #ff8c42, calc(var(--p)*4) calc(var(--p)*6) 0 #ff8c42,
+    calc(var(--p)*5) calc(var(--p)*6) 0 #ff8c42, calc(var(--p)*6) calc(var(--p)*6) 0 #ff8c42,
+    calc(var(--p)*7) calc(var(--p)*6) 0 #ff8c42, calc(var(--p)*8) calc(var(--p)*6) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*7) 0 #ff8c42, calc(var(--p)*4) calc(var(--p)*7) 0 #fff,
+    calc(var(--p)*5) calc(var(--p)*7) 0 #fff, calc(var(--p)*6) calc(var(--p)*7) 0 #fff,
+    calc(var(--p)*7) calc(var(--p)*7) 0 #ff8c42, calc(var(--p)*8) calc(var(--p)*7) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*8) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*8) 0 #ff8c42,
+    calc(var(--p)*4) calc(var(--p)*8) 0 #ff8c42, calc(var(--p)*5) calc(var(--p)*8) 0 #ff8c42,
+    calc(var(--p)*6) calc(var(--p)*8) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*8) 0 #ff8c42,
+    calc(var(--p)*8) calc(var(--p)*8) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*8) 0 #ff8c42,
+    calc(var(--p)*10) calc(var(--p)*8) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*9) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*9) 0 #ff6b3d,
+    calc(var(--p)*4) calc(var(--p)*9) 0 #ff8c42, calc(var(--p)*5) calc(var(--p)*9) 0 #ff6b3d,
+    calc(var(--p)*6) calc(var(--p)*9) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*9) 0 #ff6b3d,
+    calc(var(--p)*8) calc(var(--p)*9) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*9) 0 #ff8c42,
+    calc(var(--p)*2) calc(var(--p)*10) 0 #ff8c42, calc(var(--p)*3) calc(var(--p)*10) 0 #ff8c42,
+    calc(var(--p)*4) calc(var(--p)*10) 0 #ff8c42, calc(var(--p)*5) calc(var(--p)*10) 0 #ff8c42,
+    calc(var(--p)*6) calc(var(--p)*10) 0 #ff8c42, calc(var(--p)*7) calc(var(--p)*10) 0 #ff8c42,
+    calc(var(--p)*8) calc(var(--p)*10) 0 #ff8c42, calc(var(--p)*9) calc(var(--p)*10) 0 #ff8c42,
+    calc(var(--p)*10) calc(var(--p)*10) 0 #ff8c42, calc(var(--p)*11) calc(var(--p)*10) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*11) 0 #ff8c42, calc(var(--p)*4) calc(var(--p)*11) 0 #ff8c42,
+    calc(var(--p)*5) calc(var(--p)*11) 0 #ff8c42, calc(var(--p)*6) calc(var(--p)*11) 0 #ff8c42,
+    calc(var(--p)*7) calc(var(--p)*11) 0 #ff8c42, calc(var(--p)*8) calc(var(--p)*11) 0 #ff8c42,
+    calc(var(--p)*9) calc(var(--p)*11) 0 #ff8c42, calc(var(--p)*10) calc(var(--p)*11) 0 #ff8c42,
+    calc(var(--p)*3) calc(var(--p)*12) 0 #22223b, calc(var(--p)*4) calc(var(--p)*12) 0 #22223b,
+    calc(var(--p)*8) calc(var(--p)*12) 0 #22223b, calc(var(--p)*9) calc(var(--p)*12) 0 #22223b;
+  animation:hop .9s steps(2) infinite;
+}
+@keyframes hop{50%{transform:translateY(-14px)}}
+.pixelic .flag{
+  position:absolute;bottom:10px;right:8%;width:5px;height:54px;background:#d8d8d8;
+  box-shadow:2px 2px 0 #000;
+}
+.pixelic .flag::before{
+  content:"";position:absolute;top:4px;left:5px;width:0;height:0;
+  border:10px solid transparent;border-left:16px solid #ff3d6e;border-width:8px 0 8px 16px;
+}
+.pixelic .coin{
+  position:absolute;bottom:40px;width:12px;height:16px;border-radius:3px;
+  background:#ffd166;box-shadow:2px 2px 0 #000,inset -2px 0 0 #d19b2e;
+  animation:coinSpin 1.1s steps(3) infinite;
+}
+.pixelic .coin.c1{left:38%}.pixelic .coin.c2{left:70%;animation-delay:.2s}.pixelic .coin.c3{left:80%;animation-delay:.4s}
+@keyframes coinSpin{50%{transform:scaleX(.35)}}
+.pixelic .who{
+  color:#e9fff1;font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:clamp(30px,6vw,58px);
+  text-shadow:3px 3px 0 #0a0, 6px 6px 0 #000, 0 0 22px rgba(63,240,122,.55);
+}
+.pixelic .sig{color:#3ff07a;text-shadow:2px 2px 0 #000;font-family:var(--mono)}
+.pixelic .bars{display:flex;flex-direction:column;gap:6px;max-width:340px}
+.pixelic .bar{height:16px;border:2px solid #000;background:#26282e;box-shadow:2px 2px 0 rgba(0,0,0,.6);position:relative}
+.pixelic .bar span{position:absolute;inset:2px 62px 2px 2px;display:block}
+.pixelic .bar.hp span{background:repeating-linear-gradient(90deg,#3ff07a 0 10px,#1fbf5c 10px 12px)}
+.pixelic .bar.mp span{background:repeating-linear-gradient(90deg,#ffd166 0 10px,#d19b2e 10px 12px)}
+.pixelic .bar b{position:absolute;right:6px;top:0;font:700 11px/12px var(--mono);color:#c9d2df;text-shadow:1px 1px 0 #000}
+
+/* ---------- 3) 液态玻璃风（JGhuihui）· 四层折射玻璃 ---------- */
+.liquid{
+  --mx:50%;--my:18%;
+  position:relative;overflow:hidden;border-radius:26px;
+  padding:clamp(20px,3.4vw,34px) clamp(24px,4vw,44px);
+  display:flex;flex-direction:column;justify-content:center;gap:6px;
+  color:#f6efff;isolation:isolate;
+  background:linear-gradient(150deg,#1b0f33 0%,#120a24 55%,#241038 100%);
+}
+/* 流体色域：四团持续漂移的模糊色斑，被玻璃真实采样 */
+.liquid .lgblobs{position:absolute;inset:0;z-index:-2}
+.liquid .lgblobs i{position:absolute;border-radius:50%;filter:blur(46px);opacity:.6;will-change:transform}
+.lb1{width:46%;height:150%;left:-8%;top:-30%;background:radial-gradient(circle at 40% 40%,#ff3df0,transparent 68%);animation:lgd1 16s ease-in-out infinite}
+.lb2{width:40%;height:140%;right:-8%;top:-10%;background:radial-gradient(circle at 55% 45%,#26e6ff,transparent 68%);animation:lgd2 19s ease-in-out infinite;opacity:.5}
+.lb3{width:50%;height:160%;left:26%;bottom:-60%;background:radial-gradient(circle at 50% 50%,#8b5cf6,transparent 70%);animation:lgd3 22s ease-in-out infinite}
+.lb4{width:26%;height:100%;right:16%;bottom:-10%;background:radial-gradient(circle at 50% 50%,#ffd166,transparent 70%);animation:lgd1 14s ease-in-out infinite reverse;opacity:.45}
+@keyframes lgd1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(9%,7%) scale(1.12)}66%{transform:translate(-5%,11%) scale(.94)}}
+@keyframes lgd2{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-12%,14%) scale(.88)}}
+@keyframes lgd3{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(10%,-9%) scale(1.15)}75%{transform:translate(-8%,-5%) scale(.96)}}
+/* 噪点：去掉塑料感 */
+.liquid .lggrain{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* 玻璃本体：背景采样 + 鼠标折射光斑 + 厚度内阴影 */
+.liquid .glass{
+  position:relative;z-index:1;border-radius:22px;
+  padding:clamp(18px,3vw,28px) clamp(22px,3.6vw,36px);
+  background:
+    radial-gradient(320px circle at var(--mx) var(--my),rgba(230,220,255,.16),transparent 46%),
+    linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 46%,rgba(200,150,255,.07));
+  backdrop-filter:blur(30px) saturate(215%) brightness(1.13) contrast(1.06);
+  -webkit-backdrop-filter:blur(30px) saturate(215%) brightness(1.13) contrast(1.06);
+  border:1px solid rgba(220,200,255,.18);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.24) inset,
+    0 -1px 0 rgba(255,255,255,.1) inset,
+    1px 0 0 rgba(255,255,255,.07) inset,
+    -1px 0 0 rgba(255,255,255,.07) inset,
+    0 -26px 46px -34px rgba(240,225,255,.6) inset,
+    0 20px 42px -28px rgba(0,0,0,.6) inset,
+    0 32px 72px -30px rgba(10,0,30,.92),
+    0 2px 8px rgba(0,0,0,.32);
+  overflow:hidden;
+}
+/* 折射棱镜环：锥形高光绕行 */
+.liquid .glass .ring{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  padding:1.6px;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  overflow:hidden;
+}
+.liquid .glass .ring i{ /* 高光旋转改为 transform 合成器动画（原来逐帧重绘 conic 渐变，是最大掉帧源） */
+  display:block;position:absolute;left:50%;top:50%;
+  width:230%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,
+    transparent 0deg,rgba(255,255,255,.55) 18deg,rgba(230,180,255,.3) 42deg,transparent 74deg,
+    transparent 168deg,rgba(180,200,255,.42) 196deg,rgba(255,255,255,.28) 224deg,transparent 258deg,
+    transparent 336deg,rgba(255,255,255,.3) 354deg,transparent 360deg);
+  animation:ringSpin 8s linear infinite;
+  will-change:transform;
+}
+@keyframes ringSpin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+/* 上弧光 + 底部厚度聚光 */
+.liquid .glass::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(130% 96% at 50% -4%,rgba(240,228,255,.2),transparent 66%),
+    linear-gradient(0deg,rgba(230,210,255,.11),transparent 15%);
+}
+/* 镜面反射斑：缓慢掠过玻璃表面 */
+.liquid .glass .spec{
+  position:absolute;width:44%;height:58%;left:-14%;top:-18%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,245,255,.4),rgba(240,220,255,.1) 58%,transparent 76%);
+  filter:blur(7px);animation:lgSpec 8s ease-in-out infinite;
+}
+@keyframes lgSpec{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(150%,120%) rotate(12deg)}}
+.liquid .role{color:rgba(255,255,255,.8);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.liquid .who{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45),0 0 30px rgba(255,255,255,.35)}
+.liquid .sig{color:rgba(255,255,255,.92);text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.liquid .sig b{color:#fff;font-weight:900;text-shadow:0 0 14px rgba(255,255,255,.8)}
+.liquid .pill{
+  align-self:flex-start;margin-top:12px;position:relative;z-index:2;
+  border:1px solid rgba(255,255,255,.55);border-radius:999px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(10px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 4px 14px rgba(0,0,0,.3);
+  padding:6px 16px;font:700 11px var(--mono);letter-spacing:.16em;color:#fff;
+}
+
+/* ---------- 4) 2092 科技风（zhangsen） ---------- */
+.futur2092{
+  background:
+    radial-gradient(90% 130% at 85% 10%, rgba(140,60,255,.4), transparent 55%),
+    radial-gradient(70% 120% at 10% 90%, rgba(0,240,255,.3), transparent 55%),
+    #05070f;
+  border:1px solid rgba(0,240,255,.5);color:#dffaff;
+  padding:clamp(18px,3vw,30px) clamp(22px,3.6vw,40px);
+  display:flex;flex-direction:column;justify-content:center;gap:8px;
+  clip-path:polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
+  box-shadow:0 0 46px rgba(0,240,255,.18);
+}
+.futur2092::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(rgba(0,240,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,255,.08) 1px, transparent 1px);
+  background-size:34px 34px;mask-image:linear-gradient(180deg,transparent,#000 60%);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 60%);
+}
+.futur2092::after{
+  content:"";position:absolute;left:0;right:0;height:26%;top:-30%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(0,240,255,.12),transparent);
+  animation:scanY 4.2s linear infinite;  /* translateY 合成器动画 */
+  will-change:transform;
+}
+@keyframes scanY{to{transform:translateY(615%)}}
+.futur2092 .role{color:#00f0ff;text-shadow:0 0 12px rgba(0,240,255,.9)}
+.futur2092 .who{
+  color:#eafcff;font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.02em;
+  text-shadow:0 0 14px rgba(0,240,255,.95),0 0 44px rgba(140,60,255,.7);
+}
+.futur2092 .sig{color:#9be8ff;text-shadow:0 0 10px rgba(0,240,255,.7)}
+.futur2092 .year{
+  position:absolute;right:clamp(10px,2.5vw,26px);top:50%;transform:translateY(-50%);
+  font:900 clamp(60px,12vw,130px)/1 "Arial Black","PingFang SC",sans-serif;
+  color:transparent;-webkit-text-stroke:1.5px rgba(0,240,255,.4);
+  pointer-events:none;user-select:none;
+}
+.futur2092 .chipid{
+  position:absolute;right:clamp(14px,3vw,34px);top:14px;
+  font:700 10px var(--mono);letter-spacing:.3em;color:rgba(0,240,255,.65);
+}
+
+/* ---------- 集五福 —— 五体书法 · 飞入 + 刷光 + 倾斜跟随 + 翻卡收集 + 详情卷轴 + 扫福 ---------- */
+.fu-cards{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:clamp(14px,2vw,24px);
+  perspective:1100px;
+}
+.fucard{
+  position:relative;width:clamp(150px,17vw,196px);aspect-ratio:3/4.3;
+  cursor:pointer;user-select:none;
+  opacity:0;
+  transition:opacity .7s ease,transform .85s cubic-bezier(.34,1.3,.5,1);
+}
+.fucard:nth-child(odd){transform:translateY(38px) scale(.88) rotate(-3deg)}
+.fucard:nth-child(even){transform:translateY(38px) scale(.88) rotate(3deg)}
+.fucard.in{opacity:1;transform:none}
+.fucard.in:hover{transform:translateY(-10px)}
+.fc-inner{
+  position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.4,1.35,.45,1);
+}
+.fucard.flip .fc-inner{transform:rotateY(180deg) !important}
+.fc-face{
+  position:absolute;inset:0;border-radius:16px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  padding:14px 10px;text-align:center;
+  border:1px solid rgba(227,178,60,.85);outline:1px solid rgba(227,178,60,.35);outline-offset:3px;
+  background:var(--fcface,radial-gradient(120% 90% at 50% 0%, #a32433 0%, #7c1521 52%, #57090f 100%));
+  box-shadow:0 16px 38px rgba(0,0,0,.5), 0 0 30px var(--ac-glow,rgba(227,178,60,.25)), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.fc-face::before{ /* 内圈金线 */
+  content:"";position:absolute;inset:7px;border:1px solid rgba(227,178,60,.55);border-radius:9px;pointer-events:none;
+}
+.fc-tag{
+  font:700 9px var(--mono);letter-spacing:.3em;text-indent:.3em;color:var(--dim);
+  border:1px solid rgba(227,178,60,.45);border-radius:999px;
+  padding:3px 10px;background:rgba(42,5,8,.5);
+}
+/* 五福卡五体书法（data-f 对应，避免依赖容器内序号）：小薇宋味 / 黄油硬朗 / 马善政楷 / 龙藏清秀 / 志忙行书 */
+.fucard[data-f="0"] .fc-fu,.fucard[data-f="0"] .fc-name{font-family:"ZCOOL XiaoWei","Songti SC",serif}
+.fucard[data-f="1"] .fc-fu,.fucard[data-f="1"] .fc-name{font-family:"ZCOOL QingKe HuangYou","Yuanti SC",sans-serif}
+.fucard[data-f="2"] .fc-fu,.fucard[data-f="2"] .fc-name{font-family:"Ma Shan Zheng","Kaiti SC",KaiTi,serif}
+.fucard[data-f="3"] .fc-fu,.fucard[data-f="3"] .fc-name{font-family:"Long Cang","Kaiti SC",KaiTi,cursive}
+.fucard[data-f="4"] .fc-fu,.fucard[data-f="4"] .fc-name{font-family:"Zhi Mang Xing","Xingkai SC",cursive}
+.fc-fu{
+  font-size:clamp(50px,6vw,72px);font-weight:400;line-height:1.1;color:var(--gold-lt);
+  text-shadow:0 0 20px var(--ac,rgba(243,217,139,.75));
+}
+.fc-name{
+  font-size:clamp(19px,2.2vw,24px);font-weight:400;
+  letter-spacing:.22em;text-indent:.22em;color:var(--gold-lt);
+  text-shadow:0 0 12px rgba(227,178,60,.5);
+}
+.fc-sub{font:11px/1.7 var(--serif);letter-spacing:.14em;color:var(--dim)}
+/* 查看详情小签 */
+.fc-more{
+  margin-top:4px;font:700 10px var(--mono);letter-spacing:.26em;text-indent:.26em;
+  color:var(--gold);border:1px dashed rgba(227,178,60,.55);border-radius:999px;
+  padding:4px 12px;background:rgba(42,5,8,.45);cursor:pointer;
+  transition:background .25s,color .25s,transform .25s;
+}
+.fucard:hover .fc-more{background:var(--gold);color:#5c0a12;transform:scale(1.08)}
+/* 刷光 —— 光带 translateX 合成器动画，五卡错峰 */
+.fc-shine{position:absolute;inset:0;border-radius:14px;overflow:hidden;pointer-events:none}
+.fc-shine::before{
+  content:"";position:absolute;top:-25%;bottom:-25%;left:0;width:32%;
+  background:linear-gradient(105deg,transparent,rgba(255,244,210,.42),transparent);
+  transform:translateX(-220%) skewX(-14deg);
+  animation:fuCardSheen 4.2s ease-in-out infinite;
+  animation-delay:var(--sd,0s);
+  will-change:transform;
+}
+@keyframes fuCardSheen{0%{transform:translateX(-220%) skewX(-14deg)}45%,100%{transform:translateX(430%) skewX(-14deg)}}
+/* 翻卡瞬间的金色粒子（JS 动态生成，transform 合成器动画） */
+.spark{
+  position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;
+  background:radial-gradient(circle,#fff7dd,var(--gold) 55%,transparent 75%);
+  box-shadow:0 0 10px rgba(243,217,139,.9);
+  pointer-events:none;opacity:0;z-index:5;
+  animation:sparkFly .75s ease-out forwards;
+  will-change:transform,opacity;
+}
+@keyframes sparkFly{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(calc(-50% + var(--sx,0px)),calc(-50% + var(--sy,0px))) scale(.2)}
+}
+/* 扫福光波扫过卡面 */
+.fucard.scan .fc-face.fc-front::after{
+  content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  background:linear-gradient(100deg,transparent 30%,rgba(120,255,170,.28) 50%,transparent 70%);
+  transform:translateX(-120%);animation:scanWave .55s ease forwards;
+}
+@keyframes scanWave{to{transform:translateX(120%)}}
+/* 抽中卡牌：跳动提示 */
+.fucard.picked{animation:pickJump .6s cubic-bezier(.34,1.6,.5,1) 2}
+@keyframes pickJump{35%{transform:translateY(-16px) scale(1.06)}}
+/* 卡背：已收集 + 倒福印 —— 沿用各卡主题底，加深色压暗保持系列感 */
+.fc-back{
+  transform:rotateY(180deg);
+  background:linear-gradient(rgba(26,4,8,.5),rgba(26,4,8,.72)),var(--fcface,radial-gradient(120% 100% at 50% 100%, #8a1a26 0%, #57090f 70%));
+  gap:12px;
+}
+.fc-seal{
+  font:700 13px var(--serif);letter-spacing:.3em;text-indent:.3em;color:#5c0a12;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  padding:7px 16px;border-radius:999px;
+  box-shadow:0 0 18px rgba(227,178,60,.5);
+}
+.fc-backfu{
+  font-size:clamp(40px,4.6vw,56px);font-weight:400;color:rgba(243,217,139,.92);
+  font-family:inherit;
+  text-shadow:0 0 16px rgba(243,217,139,.6);
+  transform:rotate(180deg);  /* 倒福 —— 福到了 */
+}
+.fc-year{font:10px var(--mono);letter-spacing:.3em;color:var(--dim)}
+/* ========= 11 张卡牌 · 每张独立的背景主题 =========
+   --ac: 福字光晕色  --ac-glow: 卡外光晕  --fcface: 卡面/卡背/详情底  --sd: 刷光错峰 */
+/* 壹 · 爱国福 —— 朱漆朝阳，金光万道 */
+.fucard[data-f="0"],.fu-panel[data-f="0"]{
+  --ac:rgba(255,120,90,.85);--ac-glow:rgba(255,100,70,.32);--sd:0s;
+  --fcface:
+    repeating-conic-gradient(from -90deg at 50% -22%, rgba(255,214,130,.10) 0 5deg, transparent 5deg 13deg),
+    radial-gradient(120% 90% at 50% 0%, #b3273a 0%, #8a1523 55%, #5c0a12 100%);
+}
+/* 贰 · 富强福 —— 鎏金稻仓，堆金聚宝 */
+.fucard[data-f="1"],.fu-panel[data-f="1"]{
+  --ac:rgba(255,214,110,.9);--ac-glow:rgba(255,190,60,.34);--sd:.9s;
+  --fcface:
+    radial-gradient(circle at 82% 16%, rgba(255,224,150,.3) 0 30px, transparent 31px),
+    radial-gradient(circle at 12% 78%, rgba(255,224,150,.22) 0 40px, transparent 41px),
+    radial-gradient(circle at 74% 88%, rgba(255,224,150,.16) 0 24px, transparent 25px),
+    linear-gradient(165deg, #8a5a12 0%, #6d420e 48%, #452607 100%);
+}
+/* 叁 · 和谐福 —— 翡翠竹影，和平青韵 */
+.fucard[data-f="2"],.fu-panel[data-f="2"]{
+  --ac:rgba(126,231,135,.85);--ac-glow:rgba(126,231,135,.28);--sd:1.8s;
+  --fcface:
+    repeating-linear-gradient(90deg, rgba(126,231,135,.09) 0 3px, transparent 3px 30px),
+    radial-gradient(120% 90% at 50% 0%, #1a6a48 0%, #10442f 52%, #082b1d 100%);
+}
+/* 肆 · 友善福 —— 粉樱暖玉，温柔以待 */
+.fucard[data-f="3"],.fu-panel[data-f="3"]{
+  --ac:rgba(255,150,170,.9);--ac-glow:rgba(255,140,160,.3);--sd:2.7s;
+  --fcface:
+    radial-gradient(circle at 20% 24%, rgba(255,178,196,.22) 0 26px, transparent 27px),
+    radial-gradient(circle at 84% 64%, rgba(255,178,196,.18) 0 34px, transparent 35px),
+    radial-gradient(circle at 48% 92%, rgba(255,178,196,.14) 0 22px, transparent 23px),
+    linear-gradient(165deg, #a44a5e 0%, #7d2f44 50%, #521828 100%);
+}
+/* 伍 · 敬业福 —— 紫金匠心，星夜勤耕 */
+.fucard[data-f="4"],.fu-panel[data-f="4"]{
+  --ac:rgba(190,150,255,.9);--ac-glow:rgba(180,140,255,.32);--sd:3.6s;
+  --fcface:
+    radial-gradient(circle at 50% 118%, rgba(190,150,255,.24) 0 56px, transparent 57px),
+    radial-gradient(1.5px 1.5px at 22% 20%, rgba(255,255,255,.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 76% 34%, rgba(255,255,255,.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 60% 12%, rgba(255,255,255,.35) 50%, transparent 51%),
+    linear-gradient(165deg, #3d2f6d 0%, #2a1e50 50%, #171033 100%);
+}
+/* 陆 · FC235 —— VS 深夜代码海 */
+.fucard[data-f="5"],.fu-panel[data-f="5"]{
+  --ac:rgba(156,220,254,.8);--ac-glow:rgba(155,79,150,.35);--sd:4.5s;
+  --fcface:
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(120,140,200,.07) 22px 23px),
+    linear-gradient(165deg, #232334 0%, #1a1a28 55%, #12121c 100%);
+}
+/* 柒 · rcl —— 星空像素关卡 */
+.fucard[data-f="6"],.fu-panel[data-f="6"]{
+  --ac:rgba(255,140,58,.85);--ac-glow:rgba(255,140,58,.28);--sd:5.4s;
+  --fcface:
+    radial-gradient(1.5px 1.5px at 16% 18%, rgba(255,255,255,.55) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 84% 26%, rgba(255,255,255,.45) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 66% 10%, rgba(255,255,255,.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 30% 40%, rgba(255,255,255,.3) 50%, transparent 51%),
+    linear-gradient(165deg, #14204a 0%, #0d1533 55%, #070b20 100%);
+}
+/* 捌 · JGhuihui —— 玻璃极光 */
+.fucard[data-f="7"],.fu-panel[data-f="7"]{
+  --ac:rgba(200,220,255,.85);--ac-glow:rgba(150,120,220,.32);--sd:6.3s;
+  --fcface:
+    radial-gradient(60% 46% at 18% 16%, rgba(255,150,190,.3), transparent 70%),
+    radial-gradient(56% 42% at 86% 78%, rgba(110,220,255,.3), transparent 70%),
+    linear-gradient(150deg, #4a2b58 0%, #5d3f78 46%, #2b6b83 100%);
+}
+/* 玖 · zhangsen —— 2092 赛博地平线 */
+.fucard[data-f="8"],.fu-panel[data-f="8"]{
+  --ac:rgba(0,240,255,.85);--ac-glow:rgba(0,240,255,.28);--sd:7.2s;
+  --fcface:
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,240,255,.045) 5px 6px),
+    radial-gradient(70% 40% at 50% 108%, rgba(0,240,255,.2), transparent 70%),
+    linear-gradient(165deg, #041421 0%, #030d18 55%, #02070d 100%);
+}
+/* 拾 · JNL OS —— 终端绿河 */
+.fucard[data-f="9"],.fu-panel[data-f="9"]{
+  --ac:rgba(120,255,150,.85);--ac-glow:rgba(120,255,150,.26);--sd:8.1s;
+  --fcface:
+    repeating-linear-gradient(90deg, transparent 0 9px, rgba(120,255,150,.05) 9px 10px),
+    radial-gradient(80% 50% at 50% -10%, rgba(120,255,150,.1), transparent 65%),
+    linear-gradient(165deg, #0d1a10 0%, #0a120c 55%, #060a07 100%);
+}
+/* 拾壹 · 云梦 —— 云端梦色 */
+.fucard[data-f="10"],.fu-panel[data-f="10"]{
+  --ac:rgba(255,255,255,.85);--ac-glow:rgba(200,150,255,.3);--sd:9s;
+  --fcface:
+    radial-gradient(58% 18% at 14% 30%, rgba(255,255,255,.32), transparent 72%),
+    radial-gradient(48% 15% at 88% 52%, rgba(255,255,255,.24), transparent 72%),
+    radial-gradient(40% 12% at 46% 76%, rgba(255,255,255,.18), transparent 72%),
+    linear-gradient(180deg, #2b3f83 0%, #6a55b0 44%, #c98bc3 76%, #f2c4b4 100%);
+}
+/* 收集进度：五格金条 + 文字 */
+.fu-progress{
+  margin-top:clamp(18px,2.6vw,26px);text-align:center;
+  font:13px var(--mono);letter-spacing:.3em;color:var(--dim);
+}
+.fu-bar{
+  display:flex;justify-content:center;gap:6px;margin:0 auto 12px;max-width:340px;
+}
+.fu-bar i{
+  flex:1;height:7px;border-radius:99px;
+  background:rgba(227,178,60,.16);border:1px solid rgba(227,178,60,.3);
+  transition:background .5s,box-shadow .5s;
+}
+.fu-bar i.on{background:linear-gradient(90deg,var(--gold-lt),var(--gold));box-shadow:0 0 12px rgba(227,178,60,.7)}
+/* 扫福按钮 */
+.fu-scan{
+  display:inline-flex;align-items:center;gap:10px;margin-top:16px;
+  font:700 15px var(--serif);letter-spacing:.28em;text-indent:.28em;
+  color:#4a0a10;cursor:pointer;border:1px solid rgba(255,244,210,.75);
+  background:linear-gradient(180deg,#ffe9ae 0%,var(--gold-lt) 38%,var(--gold) 82%,var(--gold-dp));
+  padding:13px 34px;border-radius:999px;
+  box-shadow:0 10px 30px rgba(227,178,60,.45), inset 0 1px 0 rgba(255,255,255,.7), inset 0 -2px 6px rgba(120,70,10,.35);
+  transition:transform .25s,box-shadow .25s;position:relative;
+}
+.fu-scan.pulse{animation:scanPulse .5s ease 3}
+@keyframes scanPulse{50%{transform:scale(1.12);box-shadow:0 10px 44px rgba(255,190,80,.85)}}
+.fu-scan:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(227,178,60,.65)}
+.fu-scan:disabled{opacity:.55;cursor:wait;transform:none}
+/* 集齐彩蛋 */
+.fu-done{
+  margin:16px auto 0;max-width:560px;text-align:center;
+  font:700 clamp(16px,2.2vw,21px)/1.6 var(--serif);letter-spacing:.18em;color:#5c0a12;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  padding:13px 22px;border-radius:12px;
+  box-shadow:0 0 44px rgba(227,178,60,.6);
+  opacity:0;transform:scale(.55);pointer-events:none;
+  transition:opacity .5s ease,transform .6s cubic-bezier(.34,1.5,.5,1);
+}
+.fu-done.show{opacity:1;transform:scale(1)}
+.fu-done.shake{animation:doneShake .45s ease}
+@keyframes doneShake{25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
+/* ---------- 福卡详情卷轴 ---------- */
+.fu-modal{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  padding:20px;visibility:hidden;pointer-events:none;
+}
+.fu-modal.open{visibility:visible;pointer-events:auto}
+.fu-modal .m-backdrop{
+  position:absolute;inset:0;background:rgba(12,1,3,.82);
+  backdrop-filter:blur(7px);opacity:0;transition:opacity .4s ease;
+}
+.fu-modal.open .m-backdrop{opacity:1}
+.fu-panel{
+  position:relative;width:min(430px,94vw);max-height:88vh;overflow:auto;
+  border-radius:20px;padding:clamp(26px,4vw,38px) clamp(20px,4vw,34px);
+  text-align:center;color:var(--ink);
+  border:1px solid rgba(227,178,60,.85);outline:1px solid rgba(227,178,60,.4);outline-offset:4px;
+  background:linear-gradient(rgba(22,4,8,.38),rgba(22,4,8,.58)),var(--fcface,radial-gradient(130% 90% at 50% 0%, #a32433 0%, #7c1521 50%, #520810 100%));
+  box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 50px var(--ac-glow,rgba(227,178,60,.35)), inset 0 1px 0 rgba(255,255,255,.14);
+  opacity:0;transform:scale(.5) rotateX(-28deg);
+  transition:opacity .45s ease,transform .65s cubic-bezier(.34,1.35,.5,1);
+  transform-style:preserve-3d;perspective:800px;
+}
+.fu-modal.open .fu-panel{opacity:1;transform:none}
+.fu-panel .m-close{
+  position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(227,178,60,.6);background:rgba(42,5,8,.55);color:var(--gold-lt);
+  font:16px/1 var(--mono);cursor:pointer;transition:transform .25s,background .25s;
+}
+.fu-panel .m-close:hover{transform:rotate(90deg) scale(1.1);background:rgba(200,22,31,.5)}
+.fu-panel .m-tag{font:700 10px var(--mono);letter-spacing:.34em;text-indent:.34em;color:var(--dim)}
+.fu-panel .m-rare{margin-top:8px;font:15px var(--serif);letter-spacing:.2em;color:var(--gold)}
+.fu-panel .m-rare b{color:var(--gold-lt);text-shadow:0 0 10px rgba(243,217,139,.8)}
+.fu-panel .m-fu{
+  font-size:clamp(78px,12vw,110px);font-weight:400;line-height:1.15;
+  color:var(--gold-lt);margin:clamp(6px,1.5vw,14px) 0 2px;
+  text-shadow:0 0 30px var(--ac,rgba(243,217,139,.8));
+  animation:mFuBreath 3.4s ease-in-out infinite alternate;
+}
+@keyframes mFuBreath{to{text-shadow:0 0 52px var(--ac,rgba(243,217,139,.95)),0 0 90px var(--ac-glow,rgba(227,178,60,.5))}}
+.fu-panel .m-name{
+  font-size:clamp(26px,4vw,34px);font-weight:400;letter-spacing:.3em;text-indent:.3em;
+  color:var(--gold-lt);text-shadow:0 0 16px rgba(227,178,60,.55);
+}
+.fu-panel .m-poem{
+  margin:clamp(12px,2vw,18px) auto 0;max-width:320px;
+  font:15px/2 var(--serif);letter-spacing:.16em;color:rgba(243,217,139,.85);
+  padding:10px 14px;border-top:1px solid rgba(227,178,60,.35);border-bottom:1px solid rgba(227,178,60,.35);
+}
+.fu-panel .m-bless{margin-top:12px;font:13px/1.9 var(--serif);letter-spacing:.12em;color:var(--dim)}
+.fu-panel .m-status{
+  margin-top:14px;display:inline-block;font:700 12px var(--mono);letter-spacing:.26em;text-indent:.26em;
+  color:var(--dim);border:1px solid rgba(227,178,60,.4);border-radius:999px;padding:5px 14px;
+}
+.fu-panel .m-status.got{color:#9ff0b0;border-color:rgba(126,231,135,.5)}
+.fu-panel .m-take{
+  display:block;width:100%;margin-top:18px;padding:13px 0;
+  font:700 16px var(--serif);letter-spacing:.34em;text-indent:.34em;
+  color:#5c0a12;border:1px solid var(--gold);border-radius:12px;cursor:pointer;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  box-shadow:0 6px 24px rgba(227,178,60,.45), inset 0 1px 0 rgba(255,255,255,.55);
+  transition:transform .25s,box-shadow .25s,filter .25s;
+}
+.fu-panel .m-take:hover{transform:scale(1.03);box-shadow:0 10px 34px rgba(227,178,60,.7)}
+.fu-panel .m-take:disabled{filter:grayscale(.5) brightness(.8);cursor:default;transform:none}
+.fu-panel .m-hint{margin-top:10px;font:10px var(--mono);letter-spacing:.28em;color:var(--dim)}
+/* 详情内的大福字沿用对应卡的五体书法 */
+.fu-panel[data-f="0"] .m-fu,.fu-panel[data-f="0"] .m-name{font-family:"ZCOOL XiaoWei","Songti SC",serif}
+.fu-panel[data-f="1"] .m-fu,.fu-panel[data-f="1"] .m-name{font-family:"ZCOOL QingKe HuangYou","Yuanti SC",sans-serif}
+.fu-panel[data-f="2"] .m-fu,.fu-panel[data-f="2"] .m-name{font-family:"Ma Shan Zheng","Kaiti SC",KaiTi,serif}
+.fu-panel[data-f="3"] .m-fu,.fu-panel[data-f="3"] .m-name{font-family:"Long Cang","Kaiti SC",KaiTi,cursive}
+.fu-panel[data-f="4"] .m-fu,.fu-panel[data-f="4"] .m-name{font-family:"Zhi Mang Xing","Xingkai SC",cursive}
+@media (max-width:760px){
+  .fu-cards{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
+  .fu-cards::-webkit-scrollbar{display:none}
+  .fucard{flex:0 0 148px}
+  .fu-panel{max-height:80vh}
+}
+@media (prefers-reduced-motion:reduce){
+  .fucard{opacity:1;transform:none;transition:none}
+  .fc-inner{transition:none}
+  .fc-shine::before{animation:none;opacity:0}
+  .fu-done{transition:none}
+  .fu-panel{transition:none}
+  .fu-modal .m-backdrop{transition:none}
+  .spark{animation:none;display:none}
+}
+
+/* ---------- 卡池标签 ---------- */
+.pool-label{
+  display:flex;align-items:center;gap:16px;
+  max-width:720px;margin:0 auto clamp(16px,2.4vw,24px);
+  font:700 clamp(12px,1.5vw,15px) var(--serif);letter-spacing:.32em;
+  color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.45);
+  white-space:nowrap;
+}
+.pool-label::before,.pool-label::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(227,178,60,.5));
+}
+.pool-label::after{background:linear-gradient(90deg,rgba(227,178,60,.5),transparent)}
+.sp-cards{margin-bottom:6px}
+/* ---------- 特别卡 · 六种风格 ---------- */
+.sp-visual{position:relative;width:100%;aspect-ratio:1/.72;border-radius:9px;overflow:hidden;margin-bottom:2px}
+/* FC235 —— VS2026 编辑器 */
+.sp-fc .sp-visual{background:var(--vs-bg,#1e1e2e);border:1px solid #3f3f46}
+.sp-tbar{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--vs-chrome,#252530);font:9px var(--mono);color:#888}
+.sp-tbar i{width:7px;height:7px;border-radius:50%;flex:none}
+.sp-tbar i:nth-child(1){background:#ff5f57}.sp-tbar i:nth-child(2){background:#febc2e}.sp-tbar i:nth-child(3){background:#28c840}
+.sp-tbar em{font-style:normal;margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-code{margin:0;padding:8px 10px;font:10.5px/1.8 var(--mono);color:#ccc;white-space:pre}
+.sp-code .k{color:#569cd6}.sp-code .t{color:#4ec9b0}.sp-code .c{color:#57a64a;font-style:italic}.sp-code .s{color:#ce9178}
+/* rcl —— 像素闯关 */
+.sp-rcl .sp-visual{background:#0b1020;border:1px solid rgba(120,160,255,.35);image-rendering:pixelated}
+.sp-hud{position:absolute;top:5px;left:0;right:0;display:flex;justify-content:space-between;padding:0 8px;font:700 8.5px var(--mono);letter-spacing:.12em;color:#8fd3ff}
+.sp-stage{position:absolute;inset:0}
+.sp-floor{position:absolute;left:0;right:0;bottom:12px;height:9px;background:repeating-linear-gradient(90deg,#2a5d34 0 9px,#1d4526 9px 18px);border-top:2px solid #3f8c4c}
+.sp-cat{ /* box-shadow 像素橘猫 */
+  position:absolute;left:26%;bottom:21px;width:6px;height:6px;background:transparent;
+  box-shadow:
+    6px -12px #ff8c3a,12px -12px #ff8c3a,
+    0 -6px #ff8c3a,6px -6px #ff8c3a,12px -6px #ff8c3a,18px -6px #ff8c3a,
+    -6px 0 #ff8c3a,0 0 #ff8c3a,6px 0 #1a1a1a,12px 0 #ff8c3a,18px 0 #ff8c3a,24px 0 #ff8c3a,
+    -6px 6px #ff8c3a,0 6px #ff8c3a,6px 6px #ff8c3a,12px 6px #ff8c3a,18px 6px #ff8c3a,24px 6px #ff8c3a,
+    24px -12px #ff8c3a,30px -6px #ff8c3a;
+  animation:catRun 1.6s steps(2) infinite;
+}
+@keyframes catRun{50%{transform:translateX(14px)}}
+.sp-coin{position:absolute;right:30%;top:26%;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a0,#e0a52e);box-shadow:0 0 10px rgba(255,214,110,.8);animation:coinSpin 1.2s ease-in-out infinite}
+@keyframes coinSpin{50%{transform:scaleX(.25)}}
+.sp-flag{position:absolute;right:9%;bottom:21px;width:3px;height:34px;background:#cfd6dd}
+.sp-flag::before{content:"";position:absolute;left:3px;top:0;width:16px;height:11px;background:#e2443c;clip-path:polygon(0 0,100% 50%,0 100%)}
+/* JGhuihui —— 液态玻璃 */
+.sp-jg .sp-visual{background:linear-gradient(135deg,#3a2b58,#7b4b8a 45%,#2b6b83)}
+.sp-blob{position:absolute;border-radius:50%;filter:blur(14px)}
+.sp-blob.b1{width:60%;height:60%;left:-12%;top:-14%;background:rgba(255,150,190,.55)}
+.sp-blob.b2{width:52%;height:52%;right:-10%;bottom:-16%;background:rgba(120,220,255,.5)}
+.sp-glassbox{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  padding:12px 20px;border-radius:14px;text-align:center;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.45);
+  backdrop-filter:blur(4px);box-shadow:0 8px 26px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.sp-glassbox b{display:block;font:700 22px var(--serif);color:#fff;text-shadow:0 0 14px rgba(255,255,255,.7)}
+.sp-glassbox span{display:block;font:7.5px var(--mono);letter-spacing:.3em;color:rgba(255,255,255,.85);margin-top:4px}
+/* zhangsen —— 2092 科技风 */
+.sp-zs .sp-visual{background:#02070d;border:1px solid rgba(0,240,255,.5);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.sp-future{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;font-family:var(--mono)}
+.sp-node{font:700 9px var(--mono);letter-spacing:.26em;color:#00f0ff;border:1px solid rgba(0,240,255,.5);padding:3px 9px}
+.sp-year{font:700 30px/1 var(--mono);color:#9ff4ff;text-shadow:0 0 18px rgba(0,240,255,.75)}
+.sp-sig{font:9px var(--mono);letter-spacing:.2em;color:rgba(0,240,255,.75)}
+.sp-zs .sp-visual::after{content:"";position:absolute;left:0;right:0;top:-40%;height:36%;background:linear-gradient(180deg,transparent,rgba(0,240,255,.16),transparent);animation:scanY2 3.6s linear infinite}
+@keyframes scanY2{to{transform:translateY(430%)}}
+/* JNL OS —— 终端风 */
+.sp-jnl .sp-visual{background:#0a0f0a;border:1px solid rgba(120,255,150,.35)}
+.sp-term{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:9px;padding:10px 12px;font:9.5px/1.5 var(--mono)}
+.sp-term .tl{color:#9fe8a8}
+.sp-term .tl b{color:#e8d27f;margin-right:5px}
+.sp-term .tl.ok::before{content:"✔";color:#5dff8a;margin-right:6px}
+.sp-term .tl.sl{color:#e8d27f;letter-spacing:.24em;margin-top:2px}
+/* 云梦 —— 梦境云层 */
+.sp-ym .sp-visual{background:linear-gradient(180deg,#2b3f83 0%,#6a55b0 46%,#c98bc3 78%,#f2c4b4 100%)}
+.sp-cloud{position:absolute;border-radius:999px;background:rgba(255,255,255,.5);filter:blur(7px)}
+.sp-cloud.c1{width:58%;height:16%;left:-8%;top:24%}
+.sp-cloud.c2{width:48%;height:13%;right:-6%;top:48%;background:rgba(255,255,255,.38)}
+.sp-dream{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.sp-dream b{font:700 clamp(30px,4vw,40px)/1 var(--serif);color:#fff;text-shadow:0 0 22px rgba(255,255,255,.85),0 2px 10px rgba(60,40,120,.6)}
+.sp-ds{font:8.5px var(--mono);letter-spacing:.3em;color:rgba(255,255,255,.92);text-shadow:0 1px 6px rgba(60,40,120,.6)}
+/* 特别卡姓名牌配 mono */
+.sp-fc .fc-name,.sp-rcl .fc-name,.sp-zs .fc-name,.sp-jnl .fc-name{font-family:var(--mono);letter-spacing:.1em;text-indent:.1em;font-size:clamp(16px,1.8vw,19px)}
+/* 特别卡进度条颜色微区分 */
+.sp-bar i.on{background:linear-gradient(90deg,#8fd3ff,#4ec9b0);box-shadow:0 0 12px rgba(78,201,176,.7)}
+/* ---------- 抽卡演出层 ---------- */
+.draw-ov{
+  position:fixed;inset:0;z-index:210;display:flex;align-items:center;justify-content:center;
+  background:rgba(15,2,4,.78);backdrop-filter:blur(5px);
+  opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s;
+}
+.draw-ov.open{opacity:1;visibility:visible}
+.draw-card{
+  position:relative;text-align:center;padding:clamp(30px,5vw,46px) clamp(34px,6vw,64px);
+  border-radius:20px;border:1px solid rgba(227,178,60,.85);outline:1px solid rgba(227,178,60,.4);outline-offset:4px;
+  background:linear-gradient(rgba(22,4,8,.4),rgba(22,4,8,.6)),var(--fcface,radial-gradient(130% 90% at 50% 0%, #a32433 0%, #7c1521 50%, #520810 100%));
+  box-shadow:0 24px 70px rgba(0,0,0,.65), 0 0 50px rgba(227,178,60,.35);
+  transform:scale(.6) rotateX(-22deg);transition:transform .55s cubic-bezier(.34,1.35,.5,1);
+}
+.draw-ov.open .draw-card{transform:none}
+.d-label{display:block;font:700 12px var(--mono);letter-spacing:.4em;text-indent:.4em;color:var(--gold)}
+.d-name{
+  display:block;margin:14px 0 6px;min-width:min(260px,60vw);
+  font:700 clamp(26px,4.4vw,38px)/1.3 var(--serif);color:var(--gold-lt);
+  text-shadow:0 0 26px rgba(243,217,139,.75);
+}
+.draw-ov.reveal .d-name{animation:dReveal .55s cubic-bezier(.34,1.5,.5,1)}
+@keyframes dReveal{from{transform:scale(1.7);filter:blur(6px);opacity:0}to{transform:none;filter:none;opacity:1}}
+.d-type{display:block;font:11px var(--mono);letter-spacing:.3em;color:var(--dim);min-height:16px}
+.d-hint{display:block;margin-top:14px;font:10px var(--mono);letter-spacing:.26em;color:var(--dim);opacity:.7}
+
+/* ---------- 联系 ---------- */
+.contact{text-align:center;max-width:920px;margin:0 auto}
+.contact .label{font:700 12px var(--mono);letter-spacing:.4em;color:var(--gold);margin-bottom:clamp(18px,3vw,30px);text-shadow:0 0 12px rgba(227,178,60,.5)}
+.mail{
+  display:inline-block;text-decoration:none;
+  font-weight:700;font-size:clamp(20px,4.6vw,50px);letter-spacing:.02em;line-height:1.3;
+  color:var(--gold-lt);
+  border-bottom:1px solid rgba(227,178,60,.6);padding-bottom:8px;
+  text-shadow:0 0 20px rgba(227,178,60,.4);
+  transition:color .3s,text-shadow .3s,border-color .3s;
+}
+.mail:hover{color:#ff6a55;border-color:#ff6a55;text-shadow:0 0 26px rgba(255,106,85,.8)}
+.contact .tiny{margin-top:clamp(16px,2.5vw,26px);font-size:14px;color:var(--dim);letter-spacing:.08em}
+
+/* ---------- 页脚 ---------- */
+footer{
+  padding:clamp(22px,3.5vw,40px) clamp(18px,4.5vw,60px);
+  display:flex;flex-wrap:wrap;gap:10px 30px;align-items:baseline;justify-content:center;
+  border-top:1px solid var(--line);
+  background:linear-gradient(rgba(0,0,0,.14),rgba(0,0,0,.26));
+  font-size:13px;letter-spacing:.1em;color:var(--dim);text-align:center;
+}
+footer .big{font-weight:700;font-size:clamp(16px,2.4vw,22px);letter-spacing:.1em;color:var(--gold-lt);text-shadow:0 0 12px rgba(227,178,60,.4)}
+footer .secret{color:#8a5a55}
+footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
+
+/* ---------- 新春序幕 · 开幕动画 ---------- */
+html.prelock{overflow:hidden}
+.prelude{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.prelude .curtain{
+  position:absolute;top:0;bottom:0;width:50.6%;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 12px, rgba(0,0,0,0) 12px 46px),
+    radial-gradient(130% 100% at 35% 0%, #a02330 0%, #7c1521 48%, #4d080e 100%);
+  box-shadow:inset 0 0 130px rgba(0,0,0,.55);
+  transition:transform 1.5s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
+  transform:translate3d(0,0,0);
+}
+/* 开幕期间暂停页面底层全部动画 —— 拉开瞬间集中算力给幕布，更丝滑 */
+html.prelock *:not(.prelude):not(.prelude *){animation-play-state:paused!important}
+.prelude .curtain::before{ /* 顶部金杆 */
+  content:"";position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  box-shadow:0 2px 14px rgba(227,178,60,.5);
+}
+.prelude .curtain::after{ /* 底部流苏 */
+  content:"";position:absolute;bottom:0;left:0;right:0;height:26px;
+  background:
+    repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 16px) bottom/100% 12px no-repeat,
+    linear-gradient(180deg, transparent, var(--gold));
+  opacity:.85;
+}
+.prelude .c-l{left:0;border-right:3px solid var(--gold)}
+.prelude .c-r{right:0;border-left:3px solid var(--gold)}
+.prelude.open .c-l{transform:translateX(-102%)}
+.prelude.open .c-r{transform:translateX(102%)}
+.pre-center{
+  position:relative;z-index:2;text-align:center;padding:0 20px;
+  animation:preIn 1s ease .1s both;
+  transition:opacity .7s ease,transform .9s ease;
+  will-change:opacity,transform;
+}
+.prelude.open .pre-center{opacity:0;transform:scale(1.22)}
+@keyframes preIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.pre-stamp{
+  position:relative;
+  width:clamp(110px,17vw,168px);aspect-ratio:1;border-radius:50%;margin:0 auto clamp(20px,3vw,30px);
+  display:flex;align-items:center;justify-content:center;
+  border:3px double var(--gold);
+  background:radial-gradient(circle at 38% 30%, rgba(200,22,31,.75), rgba(96,10,18,.92));
+  box-shadow:0 0 44px rgba(227,178,60,.45), inset 0 0 22px rgba(227,178,60,.22);
+}
+.pre-stamp::after{
+  content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 52px 8px rgba(227,178,60,.5);
+  opacity:.45;animation:haloBreath 3.2s ease-in-out infinite alternate;
+}
+.pre-stamp::before{content:none}
+/* 砸落标题 —— 大字快速缩小砸在幕布上，落地震动 + 扬尘 */
+.impact-zone{position:relative;text-align:center;margin-bottom:clamp(12px,2vw,20px)}
+.impact-zone{animation:groundShake .42s linear .58s}
+.slam-title{
+  font:700 clamp(22px,4.1vw,44px)/1.35 var(--serif);letter-spacing:.08em;color:var(--gold-lt);
+  text-shadow:0 0 26px rgba(227,178,60,.6),0 4px 18px rgba(0,0,0,.45);
+  animation:slamIn .38s cubic-bezier(.55,0,1,.45) .2s both;
+}
+.slam-title em{font-style:normal;display:inline-block;color:var(--gold);text-shadow:0 0 30px rgba(255,200,90,.75)}
+@keyframes slamIn{
+  0%{transform:scale(6.5);opacity:0;filter:blur(12px)}
+  55%{opacity:1}
+  100%{transform:scale(1);opacity:1;filter:blur(0)}
+}
+@keyframes groundShake{
+  0%,100%{transform:translate(0,0)}
+  15%{transform:translate(-7px,3px)}
+  30%{transform:translate(6px,-3px)}
+  45%{transform:translate(-5px,2px)}
+  60%{transform:translate(4px,-2px)}
+  75%{transform:translate(-2px,1px)}
+  90%{transform:translate(1px,0)}
+}
+/* 扬尘 —— 落地瞬间从大标题下沿向两侧炸开 */
+.slam-title{position:relative}
+.dust{position:absolute;left:50%;bottom:-8px;width:0;height:0;pointer-events:none}
+.dust b{
+  position:absolute;bottom:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(243,217,139,.7),rgba(163,35,51,.5) 58%,transparent 76%);
+  filter:blur(3px);opacity:0;
+  transform:translate(-50%,8px) scale(.25);
+  animation:dustFly 1.15s ease-out var(--dd,.58s) forwards;
+  will-change:transform,opacity;
+}
+.dust b:nth-child(1){left:-116px;width:58px;height:26px;--dx:-76px;--dy:-30px;--dd:.58s}
+.dust b:nth-child(2){left:-60px;width:42px;height:18px;--dx:-42px;--dy:-64px;--dd:.63s}
+.dust b:nth-child(3){left:-14px;width:30px;height:14px;--dx:-10px;--dy:-78px;--dd:.6s}
+.dust b:nth-child(4){left:16px;width:30px;height:14px;--dx:12px;--dy:-72px;--dd:.66s}
+.dust b:nth-child(5){left:62px;width:44px;height:18px;--dx:48px;--dy:-60px;--dd:.61s}
+.dust b:nth-child(6){left:118px;width:58px;height:26px;--dx:78px;--dy:-28px;--dd:.59s}
+@keyframes dustFly{
+  0%{opacity:0;transform:translate(-50%,8px) scale(.25)}
+  35%{opacity:.95}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) scale(1.8)}
+}
+/* 羊年祝福 —— 砸落完成后上浮显现 */
+.slam-sub{
+  margin-top:clamp(10px,1.6vw,16px);
+  font:700 clamp(15px,2.2vw,22px) var(--serif);
+  letter-spacing:.3em;text-indent:.3em;color:var(--gold);
+  text-shadow:0 0 14px rgba(227,178,60,.55);
+  animation:subRise .7s ease .95s both;
+}
+@keyframes subRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.prelude.done{display:none}
+/* 开幕之后：首屏元素渐入 */
+body.opened .hero-grid>.hero-left{animation:fadeUp .95s ease .1s both}
+body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .prelude .curtain{transition:none}
+  .pre-center,.pre-stamp,.pre-stamp::after,.fustamp::after{animation:none;transition:none}
+  .slam-title,.impact-zone,.slam-sub{animation:none!important}
+  .slam-sub,.impact-zone,.slam-title{opacity:1;transform:none}
+  .dust b{animation:none!important}
+  body.opened .hero-grid>.hero-left,body.opened .hero-grid>.hero-right{animation:none}
+}
+
+/* ---------- 置顶音乐台（独立于导航，单独一条，吸顶常驻） ---------- */
+.bgm-bar{
+  display:flex;align-items:center;gap:clamp(10px,2vw,18px);
+  padding:9px clamp(18px,4.5vw,56px);
+  background:linear-gradient(90deg,rgba(38,5,8,.55),rgba(80,10,14,.5) 55%,rgba(38,5,8,.55));
+  border-bottom:none;
+}
+/* 大播放按钮 —— 印章式圆形按钮（播放光晕呼吸用 ::after 透明度动画） */
+.bgm-play{
+  position:relative;
+  flex:none;width:clamp(54px,6vw,66px);height:clamp(54px,6vw,66px);border-radius:50%;
+  border:2px double var(--gold);cursor:pointer;
+  color:var(--gold-lt);font-size:clamp(19px,2.2vw,24px);
+  background:radial-gradient(circle at 36% 30%, rgba(200,22,31,.75), rgba(110,12,20,.9));
+  box-shadow:0 0 24px rgba(227,178,60,.35), inset 0 0 14px rgba(227,178,60,.18);
+  display:flex;align-items:center;justify-content:center;
+  transition:box-shadow .3s,transform .3s,color .3s;
+}
+.bgm-play::after{
+  content:"";position:absolute;inset:-9px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 36px 4px rgba(255,150,60,.6);
+  opacity:0;transition:opacity .4s;
+}
+.bgm-play:hover{box-shadow:0 0 40px rgba(227,178,60,.7), inset 0 0 18px rgba(227,178,60,.3);transform:scale(1.06)}
+.bgm-play.on::after{opacity:.55;animation:haloBreath 2s ease-in-out infinite alternate}
+.bgm-play.off{color:#8a5a55;border-color:var(--line)}
+/* 当前曲名 */
+.bgm-now{display:flex;flex-direction:column;gap:2px;min-width:0;flex:0 1 auto}
+.bgm-now .lab{font:700 10px var(--mono);letter-spacing:.3em;color:var(--gold)}
+.bgm-now .ttl{
+  font:700 clamp(15px,1.8vw,19px)/1.4 var(--serif);letter-spacing:.12em;color:var(--gold-lt);
+  text-shadow:0 0 12px rgba(227,178,60,.45);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:clamp(120px,20vw,300px);
+}
+/* 均衡器动画条 —— scaleY 合成器动画，不触发布局 */
+.bgm-eq{display:flex;align-items:flex-end;gap:3px;height:20px;flex:none}
+.bgm-eq i{width:3px;height:100%;background:var(--gold);box-shadow:0 0 8px rgba(227,178,60,.7);transform:scaleY(.3);transform-origin:bottom;animation:eqJump 1s ease-in-out infinite}
+.bgm-eq i:nth-child(2){animation-delay:.18s}
+.bgm-eq i:nth-child(3){animation-delay:.36s}
+.bgm-eq i:nth-child(4){animation-delay:.54s}
+.bgm-eq.paused i{animation-play-state:paused}
+@keyframes eqJump{50%{transform:scaleY(1)}}
+/* 上一曲 / 下一曲 */
+.bgm-skip{flex:none;display:flex;gap:8px}
+.bgm-skip button{
+  width:38px;height:38px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--line);background:rgba(84,10,14,.7);color:var(--dim);font-size:13px;
+  transition:color .25s,border-color .25s,box-shadow .25s;
+}
+.bgm-skip button:hover{color:var(--gold-lt);border-color:var(--gold);box-shadow:0 0 14px rgba(227,178,60,.4)}
+/* 曲目切换 chips */
+.bgm-chips{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
+.bgm-chips button{
+  padding:7px 14px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(42,5,8,.6);color:var(--dim);
+  font:13px var(--serif);letter-spacing:.1em;white-space:nowrap;
+  transition:color .25s,border-color .25s,background .25s,box-shadow .25s;
+}
+.bgm-chips button:hover{color:var(--gold-lt);border-color:var(--gold)}
+.bgm-chips button.cur{
+  color:#3a0a0a;background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  border-color:var(--gold);font-weight:700;
+  box-shadow:0 0 16px rgba(227,178,60,.55);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:980px){
+  .duo{grid-template-columns:1fr}
+  .sup-rows{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  header{padding:12px 16px}
+  .brand{white-space:nowrap;font-size:15px}
+  nav{gap:9px;white-space:nowrap;letter-spacing:0;font-size:12px}
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:20px}
+  .hero-left .orn{justify-content:center}
+  .hero-left .orn::before{content:""}
+  .hero-data{justify-content:center}
+  .hero-right{min-height:0;padding:6px 0 2px}
+  .fustamp{width:clamp(130px,34vw,170px)}
+  .about{grid-template-columns:1fr}
+  .bgm-chips{display:none}
+  .bgm-now{flex:1}
+  .bgm-now .ttl{max-width:none}
+  .row .leader{display:none}
+  .row{flex-wrap:wrap}
+  .row .d{margin-left:0;text-align:left;width:100%;order:3;padding-left:2px}
+  .hero-data div{padding:4px 16px}
+  .lantern.l2{display:none}
+  .duilian{display:none}
+  .pk.p3{right:4%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important}
+}
