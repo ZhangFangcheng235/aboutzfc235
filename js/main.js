@@ -294,6 +294,43 @@
   }
 })();
 
+// 卡池 Tab 切换：福卡池 / 特别卡池（切换时目标池卡牌重新飞入）
+(function(){
+  var tabs=document.querySelectorAll('.ptab'), wufu=document.getElementById('wufu');
+  if(!tabs.length||!wufu) return;
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      var pool=t.getAttribute('data-pool');
+      if(wufu.getAttribute('data-pool')===pool) return;
+      tabs.forEach(function(x){ x.classList.toggle('cur',x===t); x.setAttribute('aria-selected',x===t?'true':'false'); });
+      wufu.setAttribute('data-pool',pool);
+      /* 目标池卡牌渐次飞入（此前未进视口的卡保持 opacity:0） */
+      var poolCards=wufu.querySelectorAll('.fu-cards'+(pool==='sp'?'.sp-cards':':not(.sp-cards)')+' .fucard');
+      [].slice.call(poolCards).forEach(function(c,i){
+        c.classList.remove('in');
+        setTimeout(function(){ c.classList.add('in'); }, 60+i*90);
+      });
+    });
+  });
+})();
+
+// 置顶导航：下滑自动让位、上滑呼出（手机上不再挡内容）
+(function(){
+  var tz=document.querySelector('.topzone');
+  if(!tz) return;
+  var last=0, ticking=false;
+  window.addEventListener('scroll',function(){
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(function(){
+      var y=window.scrollY||window.pageYOffset;
+      if(y>160 && y>last+4) tz.classList.add('hide');
+      else if(y<last-4 || y<160) tz.classList.remove('hide');
+      last=y; ticking=false;
+    });
+  },{passive:true});
+})();
+
 // 时钟
 (function(){
   var el=document.getElementById('clock');

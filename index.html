@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=ZCOOL+XiaoWei&family=ZCOOL+QingKe+HuangYou&family=Long+Cang&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23a31621'/%3E%3Ctext x='32' y='46' font-family='Songti SC,SimSun,serif' font-weight='bold' font-size='38' fill='%23f3d98b' text-anchor='middle'%3E%E7%A6%8F%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230e3833'/%3E%3Ctext x='32' y='46' font-family='Songti SC,SimSun,serif' font-weight='bold' font-size='38' fill='%23e3b23c' text-anchor='middle'%3E%E7%A6%8F%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a2a26">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -322,16 +323,20 @@
 </section>
 
 <!-- 集五福 -->
-<section id="wufu" class="wufu">
+<section id="wufu" class="wufu" data-pool="fu">
   <div class="sec-head">
     <span class="sec-num">肆</span>
     <h2>集卡</h2>
     <span class="rule"></span>
     <span class="en">CARD COLLECTION</span>
   </div>
-  <p class="pool-label">❖ 福卡池 · 集齐触发「五福临门」❖</p>
+  <!-- 卡池切换 -->
+  <div class="pool-tabs" id="poolTabs" role="tablist" aria-label="卡池切换">
+    <button class="ptab cur" data-pool="fu" role="tab" aria-selected="true">❖ 福卡池<i>5</i></button>
+    <button class="ptab" data-pool="sp" role="tab" aria-selected="false">✦ 特别卡池<i>6</i></button>
+  </div>
   <div class="fu-cards">
-    <div class="fucard" data-f="0" title="点击收集 · 「详情」查看福卡故事" role="button" tabindex="0">
+    <div class="fucard" data-f="0" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">福卡 · 壹</span>
@@ -348,7 +353,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard" data-f="1" title="点击收集 · 「详情」查看福卡故事" role="button" tabindex="0">
+    <div class="fucard" data-f="1" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">福卡 · 贰</span>
@@ -365,7 +370,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard" data-f="2" title="点击收集 · 「详情」查看福卡故事" role="button" tabindex="0">
+    <div class="fucard" data-f="2" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">福卡 · 叁</span>
@@ -382,7 +387,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard" data-f="3" title="点击收集 · 「详情」查看福卡故事" role="button" tabindex="0">
+    <div class="fucard" data-f="3" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">福卡 · 肆</span>
@@ -399,7 +404,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard" data-f="4" title="点击收集 · 「详情」查看福卡故事" role="button" tabindex="0">
+    <div class="fucard" data-f="4" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">福卡 · 伍</span>
@@ -417,9 +422,8 @@
       </div>
     </div>
   </div>
-  <p class="pool-label">❖ 特别卡池 · SUPPORTERS &amp; FRIENDS ❖</p>
   <div class="fu-cards sp-cards">
-    <div class="fucard sp sp-fc" data-f="5" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-fc" data-f="5" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">特别 · 人物牌</span>
@@ -443,7 +447,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard sp sp-rcl" data-f="6" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-rcl" data-f="6" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">特别 · 人物牌</span>
@@ -468,7 +472,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard sp sp-jg" data-f="7" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-jg" data-f="7" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">特别 · 人物牌</span>
@@ -489,7 +493,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard sp sp-zs" data-f="8" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-zs" data-f="8" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">特别 · 人物牌</span>
@@ -512,7 +516,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard sp sp-jnl" data-f="9" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-jnl" data-f="9" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">联动 · JNL</span>
@@ -536,7 +540,7 @@
         </div>
       </div>
     </div>
-    <div class="fucard sp sp-ym" data-f="10" title="点击收集 · 「详情」查看卡片故事" role="button" tabindex="0">
+    <div class="fucard sp sp-ym" data-f="10" title="点击查看详情 · 收集请扫一扫抽卡" role="button" tabindex="0">
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <span class="fc-tag">联动 · YUNMENG</span>
