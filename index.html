@@ -38,13 +38,12 @@ body{
 a{color:inherit}
 ::selection{background:var(--gold);color:#2a0a0a}
 
-/* ---------- 顶栏 ---------- */
+/* ---------- 置顶区：导航 + 音乐台（一起吸顶） ---------- */
+.topzone{position:sticky;top:0;z-index:50}
 header{
-  position:sticky;top:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;
   padding:14px clamp(18px,4.5vw,56px);
-  background:linear-gradient(180deg,rgba(126,13,22,.9),rgba(126,13,22,.5));
-  backdrop-filter:blur(10px);
+  background:linear-gradient(180deg,rgba(112,11,20,.98),rgba(112,11,20,.92));
   border-bottom:1px solid var(--line);
 }
 .brand{font-weight:700;font-size:17px;letter-spacing:.08em;color:var(--gold-lt);text-shadow:0 0 14px rgba(227,178,60,.4)}
@@ -56,7 +55,10 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
 /* ---------- 首屏：新春请柬 ---------- */
 .hero{
   position:relative;overflow:hidden;text-align:center;
-  padding:clamp(64px,11vw,128px) clamp(20px,5vw,60px) clamp(44px,6vw,72px);
+  min-height:calc(100vh - 150px);
+  min-height:calc(100svh - 150px);
+  display:flex;align-items:center;
+  padding:clamp(56px,9vw,104px) clamp(20px,5vw,60px) clamp(44px,6vw,72px);
   background:radial-gradient(110% 85% at 50% 0%, #a82532 0%, #8a1a26 46%, transparent 100%);
 }
 /* 顶部挂灯笼 */
@@ -78,7 +80,6 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
     inset -4px -6px 12px rgba(80,5,8,.5),
     0 0 34px 8px rgba(226,60,40,.4),
     0 0 90px 30px rgba(226,60,40,.16);
-  animation:lanternGlow 3.4s ease-in-out infinite alternate;
 }
 .lantern .body::before,.lantern .body::after{ /* 金盖 */
   content:"";position:absolute;left:18%;right:18%;height:14%;
@@ -93,15 +94,16 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
   background:linear-gradient(180deg,var(--gold),#a8791f);
   clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
 }
-.lantern .glow{ /* 灯光 */
+.lantern .glow{ /* 灯光 —— 光晕呼吸走 opacity（合成器动画，不触发重绘） */
   position:absolute;inset:-40%;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,120,70,.28),transparent 65%);
+  background:radial-gradient(circle,rgba(255,120,70,.42),transparent 65%);
   pointer-events:none;
+  animation:glowBreath 3.4s ease-in-out infinite alternate;
 }
+@keyframes glowBreath{from{opacity:.55;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
 .lantern.l1{left:7%;animation-delay:0s}
 .lantern.l2{right:7%;animation-delay:-2.6s;transform:scale(.8)}
 @keyframes sway{0%,100%{transform:rotate(2.4deg)}50%{transform:rotate(-2.4deg)}}
-@keyframes lanternGlow{to{box-shadow:inset -4px -6px 12px rgba(80,5,8,.5),0 0 46px 12px rgba(236,80,50,.55),0 0 120px 40px rgba(236,80,50,.22)}}
 .lantern.l2{animation-name:sway2}
 @keyframes sway2{0%,100%{transform:scale(.8) rotate(2.4deg)}50%{transform:scale(.8) rotate(-2.4deg)}}
 
@@ -142,9 +144,9 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
   padding:6px 22px 6px 26px;margin-bottom:6px;
   box-shadow:0 0 22px rgba(0,0,0,.25),0 0 26px rgba(227,178,60,.18);
 }
-/* 春联 */
+/* 春联 —— 挂在右栏福印两侧，竖排 */
 .duilian{
-  position:absolute;top:clamp(210px,26vw,300px);z-index:3;
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;
   writing-mode:vertical-rl;
   font-weight:700;font-size:clamp(13px,1.6vw,18px);letter-spacing:.38em;
   color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.6);
@@ -154,8 +156,8 @@ nav a:hover{color:var(--gold-lt);border-color:var(--gold);text-shadow:0 0 12px r
   box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 24px rgba(227,178,60,.15);
   user-select:none;
 }
-.duilian.l{left:clamp(8px,2vw,26px)}
-.duilian.r{right:clamp(8px,2vw,26px)}
+.duilian.l{left:0}
+.duilian.r{right:0}
 /* 烟花 */
 .fws{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .fw{
@@ -206,30 +208,66 @@ h1{
 .hero-data dd{font-size:14px;font-weight:700;margin-top:3px;color:var(--gold-lt);text-shadow:0 0 10px rgba(227,178,60,.5)}
 .hero-data dd.cd{font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .hero-data dd.cd::after{content:" 秒";font-size:11px;color:var(--dim);font-weight:400;text-shadow:none}
-/* 福字金印（替代落日/月亮位） */
+/* 福字金印 —— 右栏主视觉，放大为请柬印章（光晕呼吸用 ::after 透明度动画） */
 .fustamp{
-  position:absolute;top:9%;right:9%;
-  width:clamp(76px,11vw,130px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  position:relative;flex:none;
+  width:clamp(170px,21vw,260px);aspect-ratio:1;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   border:3px double var(--gold);
   box-shadow:0 0 30px rgba(227,178,60,.35), inset 0 0 20px rgba(227,178,60,.18);
   background:radial-gradient(circle at 38% 30%, rgba(200,22,31,.55), rgba(110,12,20,.75));
-  animation:stampGlow 4s ease-in-out infinite alternate;
 }
-.fustamp::before{
-  content:"福";position:absolute;inset:8px;border:1px solid rgba(227,178,60,.5);border-radius:50%;
+.fustamp::after{
+  content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 48px 6px rgba(227,178,60,.5);
+  opacity:.4;animation:haloBreath 4s ease-in-out infinite alternate;
+}
+@keyframes haloBreath{to{opacity:1}}
+/* 书法福字 —— SVG 逐笔书写（序幕），完成态鎏金流光（首屏） */
+.fucallig{
+  position:absolute;inset:8px;border-radius:50%;
+  border:1px solid rgba(227,178,60,.5);
   display:flex;align-items:center;justify-content:center;
-  font:700 clamp(30px,5vw,54px)/1 var(--serif);color:var(--gold-lt);
-  text-shadow:0 0 18px rgba(243,217,139,.8);
-  transform:rotate(180deg);  /* 倒福 —— 福到了 */
 }
-@keyframes stampGlow{to{box-shadow:0 0 46px rgba(227,178,60,.5), inset 0 0 26px rgba(227,178,60,.26)}}
+.fusvg{width:76%;height:76%;overflow:visible}
+.fusvg path{
+  fill:none;stroke:#f6dfa0;stroke-width:7.5;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:0;   /* pathLength=1，配合逐笔书写 */
+  filter:drop-shadow(0 0 6px rgba(243,217,139,.55));
+}
+/* 序幕：一笔一笔写福，写完整字翻转 180° —— 福到了 */
+.prelude .fusvg path{animation:fuWrite .34s ease-out both}
+.prelude .fusvg path:nth-child(1){animation-delay:.3s}
+.prelude .fusvg path:nth-child(2){animation-delay:.62s}
+.prelude .fusvg path:nth-child(3){animation-delay:.94s}
+.prelude .fusvg path:nth-child(4){animation-delay:1.26s}
+.prelude .fusvg path:nth-child(5){animation-delay:1.58s}
+.prelude .fusvg path:nth-child(6){animation-delay:1.9s}
+.prelude .fusvg path:nth-child(7){animation-delay:2.22s}
+.prelude .fusvg path:nth-child(8){animation-delay:2.54s}
+.prelude .fusvg path:nth-child(9){animation-delay:2.86s}
+@keyframes fuWrite{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.prelude .fucallig{animation:fuFlip 1s cubic-bezier(.36,1.4,.5,1) 3.4s both}
+@keyframes fuFlip{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}
+/* 首屏：完成态倒福 + 鎏金流光扫过 */
+.fustamp .fucallig{transform:rotate(180deg)}
+.fushine{position:absolute;inset:0;border-radius:50%;overflow:hidden;pointer-events:none}
+.fushine::before{
+  content:"";position:absolute;top:-30%;bottom:-30%;left:0;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,240,200,.38),transparent);
+  transform:translateX(-180%) skewX(-14deg);
+  animation:fuSheen 4.6s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes fuSheen{0%{transform:translateX(-180%) skewX(-14deg)}55%,100%{transform:translateX(400%) skewX(-14deg)}}
+@keyframes stampSpin{to{transform:rotate(360deg)}}
 .fustamp .ring{
   position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
   animation:stampSpin 26s linear infinite;
 }
 .fustamp .ring text{
-  fill:rgba(243,217,139,.85);font:700 6.4px "Courier New",monospace;letter-spacing:.12em;
+  fill:rgba(243,217,139,.85);font:700 9px "Courier New",monospace;letter-spacing:.12em;
 }
 @keyframes stampSpin{to{transform:rotate(360deg)}}
 /* 地面小灯笼 + 暖雾 */
@@ -245,7 +283,7 @@ h1{
 .pk::after{content:"";position:absolute;bottom:-7px;left:20%;right:20%;height:7px;background:linear-gradient(180deg,var(--gold),#a8791f);clip-path:polygon(15% 0,85% 0,100% 100%,0 100%)}
 .pk.p1{left:9%;animation:flick 3.4s ease-in-out infinite}
 .pk.p3{right:9%;animation:flick 3.4s ease-in-out infinite -1.7s}
-@keyframes flick{50%{box-shadow:0 0 30px 9px rgba(236,80,40,.5), 0 4px 10px rgba(0,0,0,.5)}}
+@keyframes flick{50%{opacity:.7}}  /* 光晕呼吸改为整体透明度，避免逐帧重绘 box-shadow */
 .fog{
   position:absolute;left:-25%;right:-25%;bottom:-30px;height:120px;pointer-events:none;
   background:
@@ -257,6 +295,41 @@ h1{
   animation:fogDrift 17s ease-in-out infinite alternate;
 }
 @keyframes fogDrift{to{transform:translateX(6%)}}
+
+/* ---------- 首屏布局：左文右印，双栏请柬 ---------- */
+.hero-grid{
+  position:relative;z-index:4;
+  display:grid;grid-template-columns:1.25fr .75fr;
+  gap:clamp(28px,5vw,72px);align-items:center;
+  max-width:1240px;margin:0 auto;
+  text-align:left;
+}
+.hero-left .inv-label{margin-bottom:14px}
+.hero-left h1{margin:14px 0 10px}
+.hero-left .orn{justify-content:flex-start;margin-left:0}
+.hero-left .orn::before{content:none}
+.hero-data{justify-content:flex-start;flex-wrap:wrap;margin-top:clamp(24px,3.5vw,34px)}
+.hero-data div{padding:6px 24px 6px 0;border-right:1px solid var(--line)}
+.hero-data div:last-child{border-right:0}
+.hero-right{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  min-height:clamp(260px,30vw,380px);
+}
+
+/* ---------- 内容布局：关于 × 链接，双栏并排 ---------- */
+.duo{
+  display:grid;grid-template-columns:11fr 10fr;
+  gap:0 clamp(26px,4.5vw,58px);
+  align-items:start;
+  max-width:1440px;margin:0 auto;
+  padding:0 clamp(16px,4.5vw,60px);
+}
+.duo section{padding:clamp(36px,5vw,64px) 0}
+.duo .about{grid-template-columns:1fr;gap:20px}
+
+/* ---------- 支持区：卡片高度基线 ---------- */
+.sup{min-height:clamp(190px,20vw,240px)}
 
 /* ---------- 通用区块 ---------- */
 section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
@@ -324,9 +397,13 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .row:nth-child(3):hover .t{color:#e06a4d;text-shadow:0 0 18px rgba(224,106,77,.7)}
 
 /* =========================================================
-   技术支持 —— 每人一整行，各占一套独立主题 UI（保持不变）
+   技术支持 —— 2×2 网格，每人一卡，各占一套独立主题 UI（保持不变）
    ========================================================= */
-.sup-rows{display:flex;flex-direction:column;gap:clamp(18px,3vw,30px)}
+.sup-rows{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(16px,2.6vw,26px);
+  max-width:1440px;
+}
 .sup{position:relative;width:100%;min-height:clamp(150px,18vw,190px);overflow:hidden}
 .sup .who{font-weight:900;font-size:clamp(32px,6vw,66px);line-height:1;letter-spacing:-.02em}
 .sup .role{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.22em}
@@ -408,8 +485,8 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 }
 .vs2026 .prog{display:inline-flex;align-items:center;gap:6px}
 .vs2026 .prog i{width:70px;height:7px;border:1px solid rgba(255,255,255,.45);position:relative;background:rgba(0,0,0,.25)}
-.vs2026 .prog i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:0;background:#fff;box-shadow:0 0 8px #fff;animation:build 3.2s linear infinite}
-@keyframes build{0%{width:0}85%{width:98%}100%{width:98%}}
+.vs2026 .prog i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;right:1px;background:#fff;box-shadow:0 0 8px #fff;transform:scaleX(0);transform-origin:left;animation:build 3.2s linear infinite}
+@keyframes build{0%{transform:scaleX(0)}85%{transform:scaleX(1)}100%{transform:scaleX(1)}}
 /* 移动端：隐藏资源管理器 */
 @media (max-width:760px){
   .vs2026 .explorer{display:none}
@@ -586,18 +663,25 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
   overflow:hidden;
 }
 /* 折射棱镜环：锥形高光绕行 */
-.liquid .glass::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+.liquid .glass .ring{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;
   padding:1.6px;
-  background:conic-gradient(from var(--a,0deg),
-    transparent 0deg,rgba(255,255,255,.55) 18deg,rgba(230,180,255,.3) 42deg,transparent 74deg,
-    transparent 168deg,rgba(180,200,255,.42) 196deg,rgba(255,255,255,.28) 224deg,transparent 258deg,
-    transparent 336deg,rgba(255,255,255,.3) 354deg,transparent 360deg);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;mask-composite:exclude;
-  animation:lgSheen 8s linear infinite;
+  overflow:hidden;
 }
+.liquid .glass .ring i{ /* 高光旋转改为 transform 合成器动画（原来逐帧重绘 conic 渐变，是最大掉帧源） */
+  display:block;position:absolute;left:50%;top:50%;
+  width:230%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,
+    transparent 0deg,rgba(255,255,255,.55) 18deg,rgba(230,180,255,.3) 42deg,transparent 74deg,
+    transparent 168deg,rgba(180,200,255,.42) 196deg,rgba(255,255,255,.28) 224deg,transparent 258deg,
+    transparent 336deg,rgba(255,255,255,.3) 354deg,transparent 360deg);
+  animation:ringSpin 8s linear infinite;
+  will-change:transform;
+}
+@keyframes ringSpin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 /* 上弧光 + 底部厚度聚光 */
 .liquid .glass::after{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
@@ -605,8 +689,6 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
     radial-gradient(130% 96% at 50% -4%,rgba(240,228,255,.2),transparent 66%),
     linear-gradient(0deg,rgba(230,210,255,.11),transparent 15%);
 }
-@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
-@keyframes lgSheen{to{--a:360deg}}
 /* 镜面反射斑：缓慢掠过玻璃表面 */
 .liquid .glass .spec{
   position:absolute;width:44%;height:58%;left:-14%;top:-18%;pointer-events:none;
@@ -649,9 +731,10 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 .futur2092::after{
   content:"";position:absolute;left:0;right:0;height:26%;top:-30%;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(0,240,255,.12),transparent);
-  animation:scanY 4.2s linear infinite;
+  animation:scanY 4.2s linear infinite;  /* translateY 合成器动画 */
+  will-change:transform;
 }
-@keyframes scanY{to{top:130%}}
+@keyframes scanY{to{transform:translateY(615%)}}
 .futur2092 .role{color:#00f0ff;text-shadow:0 0 12px rgba(0,240,255,.9)}
 .futur2092 .who{
   color:#eafcff;font-family:"Arial Black","PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.02em;
@@ -670,7 +753,7 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
 }
 
 /* ---------- 联系 ---------- */
-.contact{text-align:center}
+.contact{text-align:center;max-width:920px;margin:0 auto}
 .contact .label{font:700 12px var(--mono);letter-spacing:.4em;color:var(--gold);margin-bottom:clamp(18px,3vw,30px);text-shadow:0 0 12px rgba(227,178,60,.5)}
 .mail{
   display:inline-block;text-decoration:none;
@@ -695,55 +778,190 @@ footer .big{font-weight:700;font-size:clamp(16px,2.4vw,22px);letter-spacing:.1em
 footer .secret{color:#8a5a55}
 footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
 
-/* ---------- 背景音乐按钮 + 选曲菜单 ---------- */
-.bgm-wrap{
-  position:fixed;right:20px;bottom:20px;z-index:60;
-  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+/* ---------- 新春序幕 · 开幕动画 ---------- */
+html.prelock{overflow:hidden}
+.prelude{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
 }
-.bgm-menu{
-  display:none;flex-direction:column;min-width:180px;
-  border:1px solid var(--gold);border-radius:8px;overflow:hidden;
-  background:rgba(30,9,11,.92);backdrop-filter:blur(8px);
-  box-shadow:0 10px 34px rgba(0,0,0,.55), 0 0 20px rgba(227,178,60,.15);
+.prelude .curtain{
+  position:absolute;top:0;bottom:0;width:50.6%;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 12px, rgba(0,0,0,0) 12px 46px),
+    radial-gradient(130% 100% at 35% 0%, #a02330 0%, #7c1521 48%, #4d080e 100%);
+  box-shadow:inset 0 0 130px rgba(0,0,0,.55);
+  transition:transform 1.5s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
+  transform:translate3d(0,0,0);
 }
-.bgm-menu.open{display:flex}
-.bgm-menu button{
-  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
-  padding:9px 14px;background:none;border:0;
-  border-bottom:1px dashed rgba(227,178,60,.25);
-  color:var(--ink);font:13px var(--serif);letter-spacing:.1em;
-  cursor:pointer;text-align:left;transition:background .2s,color .2s;
+/* 开幕期间暂停页面底层全部动画 —— 拉开瞬间集中算力给幕布，更丝滑 */
+html.prelock *:not(.prelude):not(.prelude *){animation-play-state:paused!important}
+.prelude .curtain::before{ /* 顶部金杆 */
+  content:"";position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  box-shadow:0 2px 14px rgba(227,178,60,.5);
 }
-.bgm-menu button:last-child{border-bottom:0}
-.bgm-menu button::before{content:"○";color:var(--dim);margin-right:8px}
-.bgm-menu button:hover{background:rgba(200,22,31,.35);color:var(--gold-lt)}
-.bgm-menu button.cur{color:var(--gold-lt)}
-.bgm-menu button.cur::before{content:"●";color:var(--gold);text-shadow:0 0 8px rgba(227,178,60,.8)}
-.bgm-menu em{font-style:normal;font-size:10px;color:var(--dim);letter-spacing:.2em;flex:none}
-.bgm-menu .tgl{color:var(--jade);justify-content:center;letter-spacing:.24em}
-.bgm-btn{
-  width:46px;height:46px;border-radius:50%;
-  border:1px solid var(--gold);background:rgba(84,10,14,.85);color:var(--gold-lt);
-  font-size:20px;cursor:pointer;backdrop-filter:blur(6px);
-  box-shadow:0 0 18px rgba(227,178,60,.3);
+.prelude .curtain::after{ /* 底部流苏 */
+  content:"";position:absolute;bottom:0;left:0;right:0;height:26px;
+  background:
+    repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 16px) bottom/100% 12px no-repeat,
+    linear-gradient(180deg, transparent, var(--gold));
+  opacity:.85;
+}
+.prelude .c-l{left:0;border-right:3px solid var(--gold)}
+.prelude .c-r{right:0;border-left:3px solid var(--gold)}
+.prelude.open .c-l{transform:translateX(-102%)}
+.prelude.open .c-r{transform:translateX(102%)}
+.pre-center{
+  position:relative;z-index:2;text-align:center;padding:0 20px;
+  animation:preIn 1s ease .1s both;
+  transition:opacity .7s ease,transform .9s ease;
+  will-change:opacity,transform;
+}
+.prelude.open .pre-center{opacity:0;transform:scale(1.22)}
+@keyframes preIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.pre-stamp{
+  position:relative;
+  width:clamp(110px,17vw,168px);aspect-ratio:1;border-radius:50%;margin:0 auto clamp(20px,3vw,30px);
+  display:flex;align-items:center;justify-content:center;
+  border:3px double var(--gold);
+  background:radial-gradient(circle at 38% 30%, rgba(200,22,31,.75), rgba(96,10,18,.92));
+  box-shadow:0 0 44px rgba(227,178,60,.45), inset 0 0 22px rgba(227,178,60,.22);
+}
+.pre-stamp::after{
+  content:"";position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 52px 8px rgba(227,178,60,.5);
+  opacity:.45;animation:haloBreath 3.2s ease-in-out infinite alternate;
+}
+.pre-stamp::before{content:none}
+.pre-line{font:700 11px var(--mono);letter-spacing:.42em;color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.5)}
+.pre-title{
+  font:700 clamp(34px,6.5vw,60px)/1.25 var(--serif);
+  letter-spacing:.3em;text-indent:.3em;color:var(--gold-lt);
+  text-shadow:0 0 24px rgba(227,178,60,.55);
+  margin:clamp(10px,1.6vw,16px) 0 clamp(22px,3.4vw,34px);
+}
+.pre-btn{
+  position:relative;
+  display:inline-flex;align-items:center;gap:12px;
+  padding:clamp(13px,1.6vw,17px) clamp(34px,5vw,56px);
+  border-radius:999px;cursor:pointer;
+  border:1px solid var(--gold);
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  color:#5c0a12;font:700 clamp(16px,2vw,20px) var(--serif);letter-spacing:.34em;text-indent:.34em;
+  box-shadow:0 6px 28px rgba(227,178,60,.45), inset 0 1px 0 rgba(255,255,255,.55);
+  transition:transform .3s,box-shadow .3s;
+}
+.pre-btn::after{
+  content:"";position:absolute;inset:-7px;border-radius:999px;pointer-events:none;
+  box-shadow:0 8px 40px rgba(255,180,80,.65);
+  opacity:.4;animation:haloBreath 2.6s ease-in-out infinite alternate;
+}
+.pre-btn:hover{transform:scale(1.06);box-shadow:0 10px 40px rgba(227,178,60,.7), inset 0 1px 0 rgba(255,255,255,.55)}
+.pre-tip{margin-top:clamp(14px,2.2vw,22px);font:13px var(--serif);letter-spacing:.18em;color:var(--dim)}
+.prelude.done{display:none}
+/* 开幕之后：首屏元素渐入 */
+body.opened .hero-grid>.hero-left{animation:fadeUp .95s ease .1s both}
+body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .prelude .curtain{transition:none}
+  .pre-center,.pre-btn,.pre-stamp,.pre-btn::after,.pre-stamp::after,.fustamp::after{animation:none;transition:none}
+  body.opened .hero-grid>.hero-left,body.opened .hero-grid>.hero-right{animation:none}
+}
+
+/* ---------- 置顶音乐台（独立于导航，单独一条，吸顶常驻） ---------- */
+.bgm-bar{
+  display:flex;align-items:center;gap:clamp(10px,2vw,18px);
+  padding:10px clamp(18px,4.5vw,56px);
+  background:linear-gradient(90deg,rgba(38,5,8,.98),rgba(80,10,14,.96) 55%,rgba(38,5,8,.98));
+  border-bottom:1px solid rgba(227,178,60,.3);
+}
+/* 大播放按钮 —— 印章式圆形按钮（播放光晕呼吸用 ::after 透明度动画） */
+.bgm-play{
+  position:relative;
+  flex:none;width:clamp(54px,6vw,66px);height:clamp(54px,6vw,66px);border-radius:50%;
+  border:2px double var(--gold);cursor:pointer;
+  color:var(--gold-lt);font-size:clamp(19px,2.2vw,24px);
+  background:radial-gradient(circle at 36% 30%, rgba(200,22,31,.75), rgba(110,12,20,.9));
+  box-shadow:0 0 24px rgba(227,178,60,.35), inset 0 0 14px rgba(227,178,60,.18);
   display:flex;align-items:center;justify-content:center;
   transition:box-shadow .3s,transform .3s,color .3s;
 }
-.bgm-btn:hover{box-shadow:0 0 28px rgba(227,178,60,.6);transform:scale(1.08)}
-.bgm-btn.on{animation:notePulse 2s ease-in-out infinite}
-.bgm-btn.off{color:#8a5a55;border-color:var(--line)}
-@keyframes notePulse{50%{box-shadow:0 0 26px rgba(255,140,46,.7)}}
+.bgm-play::after{
+  content:"";position:absolute;inset:-9px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 36px 4px rgba(255,150,60,.6);
+  opacity:0;transition:opacity .4s;
+}
+.bgm-play:hover{box-shadow:0 0 40px rgba(227,178,60,.7), inset 0 0 18px rgba(227,178,60,.3);transform:scale(1.06)}
+.bgm-play.on::after{opacity:.55;animation:haloBreath 2s ease-in-out infinite alternate}
+.bgm-play.off{color:#8a5a55;border-color:var(--line)}
+/* 当前曲名 */
+.bgm-now{display:flex;flex-direction:column;gap:2px;min-width:0;flex:0 1 auto}
+.bgm-now .lab{font:700 10px var(--mono);letter-spacing:.3em;color:var(--gold)}
+.bgm-now .ttl{
+  font:700 clamp(15px,1.8vw,19px)/1.4 var(--serif);letter-spacing:.12em;color:var(--gold-lt);
+  text-shadow:0 0 12px rgba(227,178,60,.45);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:clamp(120px,20vw,300px);
+}
+/* 均衡器动画条 —— scaleY 合成器动画，不触发布局 */
+.bgm-eq{display:flex;align-items:flex-end;gap:3px;height:20px;flex:none}
+.bgm-eq i{width:3px;height:100%;background:var(--gold);box-shadow:0 0 8px rgba(227,178,60,.7);transform:scaleY(.3);transform-origin:bottom;animation:eqJump 1s ease-in-out infinite}
+.bgm-eq i:nth-child(2){animation-delay:.18s}
+.bgm-eq i:nth-child(3){animation-delay:.36s}
+.bgm-eq i:nth-child(4){animation-delay:.54s}
+.bgm-eq.paused i{animation-play-state:paused}
+@keyframes eqJump{50%{transform:scaleY(1)}}
+/* 上一曲 / 下一曲 */
+.bgm-skip{flex:none;display:flex;gap:8px}
+.bgm-skip button{
+  width:38px;height:38px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--line);background:rgba(84,10,14,.7);color:var(--dim);font-size:13px;
+  transition:color .25s,border-color .25s,box-shadow .25s;
+}
+.bgm-skip button:hover{color:var(--gold-lt);border-color:var(--gold);box-shadow:0 0 14px rgba(227,178,60,.4)}
+/* 曲目切换 chips */
+.bgm-chips{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
+.bgm-chips button{
+  padding:7px 14px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(42,5,8,.6);color:var(--dim);
+  font:13px var(--serif);letter-spacing:.1em;white-space:nowrap;
+  transition:color .25s,border-color .25s,background .25s,box-shadow .25s;
+}
+.bgm-chips button:hover{color:var(--gold-lt);border-color:var(--gold)}
+.bgm-chips button.cur{
+  color:#3a0a0a;background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  border-color:var(--gold);font-weight:700;
+  box-shadow:0 0 16px rgba(227,178,60,.55);
+}
 
 /* ---------- 响应式 ---------- */
+@media (max-width:980px){
+  .duo{grid-template-columns:1fr}
+  .sup-rows{grid-template-columns:1fr}
+}
 @media (max-width:760px){
+  header{padding:12px 16px}
+  .brand{white-space:nowrap;font-size:15px}
+  nav{gap:12px;white-space:nowrap;letter-spacing:.06em;font-size:13px}
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:20px}
+  .hero-left .orn{justify-content:center}
+  .hero-left .orn::before{content:""}
+  .hero-data{justify-content:center}
+  .hero-right{min-height:0;padding:6px 0 2px}
+  .fustamp{width:clamp(130px,34vw,170px)}
   .about{grid-template-columns:1fr}
+  .bgm-chips{display:none}
+  .bgm-now{flex:1}
+  .bgm-now .ttl{max-width:none}
   .row .leader{display:none}
   .row{flex-wrap:wrap}
   .row .d{margin-left:0;text-align:left;width:100%;order:3;padding-left:2px}
   .hero-data div{padding:4px 16px}
   .lantern.l2{display:none}
   .duilian{display:none}
-  .fustamp{right:5%;top:5%}
   .pk.p3{right:4%}
 }
 @media (prefers-reduced-motion:reduce){
@@ -752,6 +970,35 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
 </style>
 </head>
 <body>
+
+<!-- 新春序幕 · 开幕 -->
+<div class="prelude" id="prelude">
+  <div class="curtain c-l" aria-hidden="true"></div>
+  <div class="curtain c-r" aria-hidden="true"></div>
+  <div class="pre-center">
+    <div class="pre-stamp" aria-hidden="true">
+      <div class="fucallig">
+        <svg class="fusvg" viewBox="0 0 100 100">
+          <path pathLength="1" d="M23,13 Q29,19 28,27"/>
+          <path pathLength="1" d="M9,36 Q25,31 42,34 Q31,45 22,56"/>
+          <path pathLength="1" d="M26,29 Q24,54 27,78"/>
+          <path pathLength="1" d="M37,46 Q41,53 45,60"/>
+          <path pathLength="1" d="M50,15 Q72,11 95,16"/>
+          <path pathLength="1" d="M58,29 L86,28 L85,50 L57,51 Z"/>
+          <path pathLength="1" d="M50,58 L93,56 L91,91 L48,93 Z"/>
+          <path pathLength="1" d="M49,74 Q71,71 92,73"/>
+          <path pathLength="1" d="M70,56 Q69,75 71,92"/>
+        </svg>
+      </div>
+    </div>
+    <p class="pre-line">❖ SPRING FESTIVAL 2027 · 丁未羊年 ❖</p>
+    <h2 class="pre-title">新春序幕</h2>
+    <button class="pre-btn" id="preOpen" type="button">开幕</button>
+    <p class="pre-tip">轻触开幕 —— 福到财到，与背景音乐一同启程</p>
+  </div>
+</div>
+
+<div class="topzone">
 
 <header>
   <div class="brand">Fangcheng<span>×</span>简方JF</div>
@@ -763,6 +1010,29 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   </nav>
 </header>
 
+<!-- 置顶音乐台 -->
+<div class="bgm-bar" id="bgmBar">
+  <button id="bgmBtn" class="bgm-play off" aria-label="播放 / 暂停背景音乐" title="播放 / 暂停">♪</button>
+  <div class="bgm-now">
+    <span class="lab">❖ NOW PLAYING</span>
+    <span class="ttl" id="bgmTitle">China P</span>
+  </div>
+  <div class="bgm-eq paused" id="bgmEq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="bgm-skip">
+    <button id="bgmPrev" aria-label="上一曲" title="上一曲">◀</button>
+    <button id="bgmNext" aria-label="下一曲" title="下一曲">▶</button>
+  </div>
+  <div class="bgm-chips" id="bgmChips">
+    <button data-i="0" class="cur">China P</button>
+    <button data-i="1">China A</button>
+    <button data-i="2">China 2</button>
+    <button data-i="3">恭喜发财</button>
+    <button data-i="4">过年啦</button>
+  </div>
+</div>
+
+</div><!-- /topzone -->
+
 <!-- 首屏：新春请柬 -->
 <section class="hero">
   <div class="fws" aria-hidden="true">
@@ -772,8 +1042,6 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
     <span class="fw f4"></span>
     <span class="fw f5"></span>
   </div>
-  <div class="duilian l" aria-hidden="true">梅花点点迎新春</div>
-  <div class="duilian r" aria-hidden="true">爆竹声声辞旧岁</div>
   <div class="lantern l1" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
   <div class="lantern l2" aria-hidden="true"><span class="glow"></span><span class="body"></span><span class="tassel"></span></div>
   <div class="clouds" aria-hidden="true">
@@ -781,29 +1049,57 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
     <span class="yun y2"></span>
     <span class="yun y3"></span>
   </div>
-  <div class="fustamp" aria-hidden="true">
-    <svg class="ring" viewBox="0 0 100 100">
-      <defs><path id="ringpath" d="M50,50 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
-      <text><textPath href="#ringpath" startOffset="0">2027 · 丁未羊年 · SPRING FESTIVAL · 2027 · 丁未羊年 ·&#160;</textPath></text>
-    </svg>
+
+  <!-- 首屏主体：左文右印 -->
+  <div class="hero-grid">
+    <div class="hero-left">
+      <p class="inv-label">❖ SPRING FESTIVAL 2027 · 2027 新春之邀 · 丁未羊年 ❖</p>
+      <h1>Fangcheng235</h1>
+      <p class="inv-alias">aka 简方JF<i>◆</i>懒</p>
+      <div class="orn"><span>◆ ◆ ◆</span></div>
+      <dl class="hero-data">
+        <div><dt>网名</dt><dd>简方JF</dd></div>
+        <div><dt>域名</dt><dd>zhangfangcheng.cn</dd></div>
+        <div><dt>现在时刻</dt><dd id="clock">--:--:--</dd></div>
+        <div><dt>距元旦 2027.01.01</dt><dd class="cd" id="cdNY">--</dd></div>
+        <div><dt>距春节 2027.02.06 · 丁未羊年</dt><dd class="cd" id="cdCNY">--</dd></div>
+      </dl>
+    </div>
+    <div class="hero-right">
+      <div class="duilian l" aria-hidden="true">梅花点点迎新春</div>
+      <div class="fustamp">
+        <svg class="ring" viewBox="0 0 100 100">
+          <defs><path id="ringpath" d="M50,50 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
+          <text><textPath href="#ringpath" startOffset="0">2027 · 丁未羊年 · SPRING FESTIVAL · 2027 · 丁未羊年 ·&#160;</textPath></text>
+        </svg>
+        <div class="fucallig" aria-hidden="true">
+          <svg class="fusvg" viewBox="0 0 100 100">
+            <path pathLength="1" d="M23,13 Q29,19 28,27"/>
+            <path pathLength="1" d="M9,36 Q25,31 42,34 Q31,45 22,56"/>
+            <path pathLength="1" d="M26,29 Q24,54 27,78"/>
+            <path pathLength="1" d="M37,46 Q41,53 45,60"/>
+            <path pathLength="1" d="M50,15 Q72,11 95,16"/>
+            <path pathLength="1" d="M58,29 L86,28 L85,50 L57,51 Z"/>
+            <path pathLength="1" d="M50,58 L93,56 L91,91 L48,93 Z"/>
+            <path pathLength="1" d="M49,74 Q71,71 92,73"/>
+            <path pathLength="1" d="M70,56 Q69,75 71,92"/>
+          </svg>
+          <i class="fushine"></i>
+        </div>
+      </div>
+      <div class="duilian r" aria-hidden="true">爆竹声声辞旧岁</div>
+    </div>
   </div>
-  <p class="inv-label">❖ SPRING FESTIVAL 2027 · 2027 新春之邀 · 丁未羊年 ❖</p>
-  <h1>Fangcheng235</h1>
-  <p class="inv-alias">aka 简方JF<i>◆</i>懒</p>
-  <div class="orn"><span>◆ ◆ ◆</span></div>
-  <dl class="hero-data">
-    <div><dt>网名</dt><dd>简方JF</dd></div>
-    <div><dt>域名</dt><dd>zhangfangcheng.cn</dd></div>
-    <div><dt>现在时刻</dt><dd id="clock">--:--:--</dd></div>
-    <div><dt>距元旦 2027.01.01</dt><dd class="cd" id="cdNY">--</dd></div>
-    <div><dt>距春节 2027.02.06 · 丁未羊年</dt><dd class="cd" id="cdCNY">--</dd></div>
-  </dl>
+
   <div class="pumpkins" aria-hidden="true">
     <span class="pk p1"></span>
     <span class="pk p3"></span>
   </div>
   <div class="fog" aria-hidden="true"></div>
 </section>
+
+<!-- 关于 × 链接：双栏并排 -->
+<div class="duo">
 
 <!-- 关于 -->
 <section id="about">
@@ -867,6 +1163,8 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
     </a>
   </div>
 </section>
+
+</div><!-- /duo -->
 
 <!-- 技术支持 -->
 <section id="support">
@@ -959,6 +1257,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
       <div class="lgblobs" aria-hidden="true"><i class="lb1"></i><i class="lb2"></i><i class="lb3"></i><i class="lb4"></i></div>
       <div class="lggrain" aria-hidden="true"></div>
       <div class="glass">
+        <i class="ring" aria-hidden="true"><i></i></i>
         <i class="spec" aria-hidden="true"></i>
         <div class="role">QIU 科技作者 / QIU TECH AUTHOR</div>
         <div class="who">JGhuihui</div>
@@ -994,32 +1293,28 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   <span class="secret">嘘，别告诉 rcl。</span>
 </footer>
 
-<audio id="bgm" loop preload="auto"></audio>
-<div class="bgm-wrap">
-  <div class="bgm-menu" id="bgmMenu">
-    <button class="tgl" data-act="toggle">▶ 播放 / 暂停</button>
-    <button data-i="0">China P<em>默认</em></button>
-    <button data-i="1">China A<em>备选</em></button>
-    <button data-i="2">China 2<em>备选</em></button>
-  </div>
-  <button id="bgmBtn" class="bgm-btn off" aria-label="背景音乐" title="背景音乐 · 点击选曲">♪</button>
-</div>
+<audio id="bgm" preload="auto"></audio>
 
 <script>
-// 背景音乐：三曲可选，默认 China P；自动播放被拦截则首次交互启动
+// 背景音乐：五曲可选（China P / A / 2 + 恭喜发财 + 过年啦），默认 China P
+// 自动播放被拦截则首次交互启动；支持上一曲/下一曲与列表循环
 (function(){
   var au=document.getElementById('bgm'), btn=document.getElementById('bgmBtn'),
-      menu=document.getElementById('bgmMenu');
-  if(!au||!btn||!menu) return;
+      ttl=document.getElementById('bgmTitle'), eq=document.getElementById('bgmEq'),
+      chips=document.getElementById('bgmChips'),
+      prev=document.getElementById('bgmPrev'), next=document.getElementById('bgmNext');
+  if(!au||!btn) return;
   au.volume=.42;
   au.muted=true;   /* 静音预播：浏览器允许静音自动播放，首次交互立刻出声 */
   var tracks=[
-    {src:'bgm.mp3'},      /* china_p —— 默认 */
-    {src:'china_a.mp3'},
-    {src:'china_2.mp3'}
+    {src:'bgm.mp3',        name:'China P'},
+    {src:'china_a.mp3',    name:'China A'},
+    {src:'china_2.mp3',    name:'China 2'},
+    {src:'gongxifacai.m4a',name:'刘德华 · 恭喜发财'},
+    {src:'guonianla.m4a',  name:'贺东 · 过年啦'}
   ];
   var idx=0, want=true;
-  au.src=tracks[0].src;
+  au.src=tracks[idx].src;
   /* 首次任意交互：解除静音（真正的"自动播放"从这里开始出声） */
   ['pointerdown','keydown','touchstart'].forEach(function(ev){
     document.addEventListener(ev,function(){ au.muted=false; },{once:true});
@@ -1027,39 +1322,58 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   function paint(){
     btn.classList.toggle('on',!au.paused);
     btn.classList.toggle('off',au.paused);
-    menu.querySelectorAll('[data-i]').forEach(function(it){
-      it.classList.toggle('cur', +it.getAttribute('data-i')===idx);
+    btn.textContent=au.paused?'♪':'❚❚';
+    eq.classList.toggle('paused',au.paused);
+    ttl.textContent=tracks[idx].name;
+    if(chips) chips.querySelectorAll('button').forEach(function(it){
+      it.classList.toggle('cur',+it.getAttribute('data-i')===idx);
     });
   }
   function play(i){
-    idx=i; want=true;
-    au.src=tracks[i].src;
+    idx=((i%tracks.length)+tracks.length)%tracks.length;
+    want=true;
+    au.src=tracks[idx].src;
     au.muted=false;
     au.play().catch(paint);
     paint();
   }
   function kick(){ if(want&&au.paused) au.play().catch(paint); }
-  document.addEventListener('pointerdown',function(e){
-    if(btn.contains(e.target)||menu.contains(e.target)) return;
-    kick(); menu.classList.remove('open');
+  document.addEventListener('pointerdown',kick);
+  document.addEventListener('keydown',kick);
+  btn.addEventListener('click',function(){
+    if(au.paused){ want=true; au.muted=false; au.play().catch(paint); }
+    else { want=false; au.pause(); }
+    paint();
   });
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape') menu.classList.remove('open');
-    kick();
-  });
-  btn.addEventListener('click',function(){ menu.classList.toggle('open'); paint(); });
-  menu.addEventListener('click',function(e){
+  if(prev) prev.addEventListener('click',function(){ play(idx-1); });
+  if(next) next.addEventListener('click',function(){ play(idx+1); });
+  if(chips) chips.addEventListener('click',function(e){
     var it=e.target.closest('[data-i]');
-    if(it){ play(+it.getAttribute('data-i')); menu.classList.remove('open'); return; }
-    if(e.target.closest('[data-act="toggle"]')){
-      if(au.paused){ want=true; au.muted=false; au.play().catch(paint); }
-      else { want=false; au.pause(); }
-      menu.classList.remove('open'); paint();
-    }
+    if(it) play(+it.getAttribute('data-i'));
   });
+  au.addEventListener('ended',function(){ play(idx+1); });  /* 一曲终了，自动下一曲 */
   au.addEventListener('play',paint);
   au.addEventListener('pause',paint);
   kick(); paint();
+})();
+
+// 新春序幕：开幕动画
+// 点击"开幕"→ 幕布拉开 + 解锁并启动背景音乐；6 秒未点则自动开幕
+(function(){
+  var pre=document.getElementById('prelude'), btn=document.getElementById('preOpen');
+  if(!pre||!btn) return;
+  var au=document.getElementById('bgm');
+  document.documentElement.classList.add('prelock');          /* 开幕期间锁定滚动 */
+  function open(){
+    if(pre.classList.contains('open')) return;
+    pre.classList.add('open');
+    document.documentElement.classList.remove('prelock');
+    document.body.classList.add('opened');                    /* 首屏元素渐入 */
+    if(au){ au.muted=false; au.play().catch(function(){}); }  /* 开幕即奏乐 */
+    setTimeout(function(){ pre.classList.add('done'); },1700);
+  }
+  btn.addEventListener('click',open);
+  setTimeout(function(){ if(!pre.classList.contains('open')) open(); },6000);
 })();
 
 // 时钟
@@ -1106,7 +1420,7 @@ footer .secret:hover{color:var(--gold-lt);text-shadow:0 0 10px var(--gold)}
   var el=win.querySelector('.typer'),
       pos=document.getElementById('vsPos'),
       full='public override string 签名 => "山岚雾内望岚山，悠悠湖水月儿弯";',
-      done='<span class="k">public override string</span> <span class="id">签名</span> =&gt; <span class="s">"山岚雾内望岚山，悠悠湖水月儿弯"</span>;';
+      done='<span class="k">public override string</span> <span class="id">签名</span> => <span class="s">"山岚雾内望岚山，悠悠湖水月儿弯"</span>;';
   var timer=null, started=false;
   function play(){
     if(timer) clearInterval(timer);
