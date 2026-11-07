@@ -752,6 +752,113 @@ section{padding:clamp(36px,5.5vw,72px) clamp(16px,4.5vw,60px);position:relative}
   font:700 10px var(--mono);letter-spacing:.3em;color:rgba(0,240,255,.65);
 }
 
+/* ---------- 集五福 —— 福卡展示：飞入 + 刷光 + 3D 翻卡收集 ---------- */
+.fu-cards{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:clamp(14px,2vw,24px);
+  perspective:1100px;
+}
+.fucard{
+  position:relative;width:clamp(150px,17vw,196px);aspect-ratio:3/4.3;
+  cursor:pointer;user-select:none;
+  opacity:0;
+  transition:opacity .7s ease,transform .85s cubic-bezier(.34,1.3,.5,1);
+}
+.fucard:nth-child(odd){transform:translateY(38px) scale(.88) rotate(-3deg)}
+.fucard:nth-child(even){transform:translateY(38px) scale(.88) rotate(3deg)}
+.fucard.in{opacity:1;transform:none}
+.fucard.in:hover{transform:translateY(-10px)}
+.fc-inner{
+  position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.4,1.35,.45,1);
+}
+.fucard.flip .fc-inner{transform:rotateY(180deg)}
+.fc-face{
+  position:absolute;inset:0;border-radius:14px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  padding:14px 10px;text-align:center;
+  border:1px solid var(--gold);outline:1px solid rgba(227,178,60,.35);outline-offset:3px;
+  background:radial-gradient(120% 90% at 50% 0%, #a32433 0%, #7c1521 52%, #57090f 100%);
+  box-shadow:0 14px 34px rgba(0,0,0,.4), 0 0 26px var(--ac-glow,rgba(227,178,60,.25));
+}
+.fc-face::before{ /* 内圈金线 */
+  content:"";position:absolute;inset:7px;border:1px solid rgba(227,178,60,.55);border-radius:9px;pointer-events:none;
+}
+.fc-tag{
+  font:700 9px var(--mono);letter-spacing:.3em;text-indent:.3em;color:var(--dim);
+  border:1px solid rgba(227,178,60,.45);border-radius:999px;
+  padding:3px 10px;background:rgba(42,5,8,.5);
+}
+.fc-fu{
+  font:700 clamp(50px,6vw,72px)/1.1 var(--serif);color:var(--gold-lt);
+  text-shadow:0 0 20px var(--ac,rgba(243,217,139,.75));
+}
+.fc-name{
+  font:700 clamp(17px,1.9vw,21px) var(--serif);
+  letter-spacing:.28em;text-indent:.28em;color:var(--gold-lt);
+  text-shadow:0 0 12px rgba(227,178,60,.5);
+}
+.fc-sub{font:11px/1.7 var(--serif);letter-spacing:.14em;color:var(--dim)}
+/* 刷光 —— 光带 translateX 合成器动画，五卡错峰 */
+.fc-shine{position:absolute;inset:0;border-radius:14px;overflow:hidden;pointer-events:none}
+.fc-shine::before{
+  content:"";position:absolute;top:-25%;bottom:-25%;left:0;width:32%;
+  background:linear-gradient(105deg,transparent,rgba(255,244,210,.42),transparent);
+  transform:translateX(-220%) skewX(-14deg);
+  animation:fuCardSheen 4.2s ease-in-out infinite;
+  animation-delay:var(--sd,0s);
+  will-change:transform;
+}
+@keyframes fuCardSheen{0%{transform:translateX(-220%) skewX(-14deg)}45%,100%{transform:translateX(430%) skewX(-14deg)}}
+/* 卡背：已收集 + 倒福印 */
+.fc-back{
+  transform:rotateY(180deg);
+  background:radial-gradient(120% 100% at 50% 100%, #8a1a26 0%, #57090f 70%);
+  gap:12px;
+}
+.fc-seal{
+  font:700 13px var(--serif);letter-spacing:.3em;text-indent:.3em;color:#5c0a12;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  padding:7px 16px;border-radius:999px;
+  box-shadow:0 0 18px rgba(227,178,60,.5);
+}
+.fc-backfu{
+  font:700 clamp(40px,4.6vw,56px)/1 var(--serif);color:rgba(243,217,139,.92);
+  text-shadow:0 0 16px rgba(243,217,139,.6);
+  transform:rotate(180deg);  /* 倒福 —— 福到了 */
+}
+.fc-year{font:10px var(--mono);letter-spacing:.3em;color:var(--dim)}
+/* 五卡各自的福运点缀色 */
+.fucard:nth-child(1){--ac:rgba(255,120,90,.8);--ac-glow:rgba(255,100,70,.3);--sd:0s}
+.fucard:nth-child(2){--ac:rgba(255,190,80,.8);--ac-glow:rgba(255,180,60,.3);--sd:.9s}
+.fucard:nth-child(3){--ac:rgba(126,231,135,.8);--ac-glow:rgba(126,231,135,.25);--sd:1.8s}
+.fucard:nth-child(4){--ac:rgba(255,150,170,.8);--ac-glow:rgba(255,140,160,.28);--sd:2.7s}
+.fucard:nth-child(5){--ac:rgba(190,150,255,.85);--ac-glow:rgba(180,140,255,.3);--sd:3.6s}
+/* 收集进度 + 集齐彩蛋 */
+.fu-progress{margin-top:clamp(18px,2.6vw,26px);text-align:center;font:13px var(--mono);letter-spacing:.3em;color:var(--dim)}
+.fu-done{
+  margin:16px auto 0;max-width:560px;text-align:center;
+  font:700 clamp(16px,2.2vw,21px)/1.6 var(--serif);letter-spacing:.18em;color:#5c0a12;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  padding:13px 22px;border-radius:12px;
+  box-shadow:0 0 44px rgba(227,178,60,.6);
+  opacity:0;transform:scale(.55);pointer-events:none;
+  transition:opacity .5s ease,transform .6s cubic-bezier(.34,1.5,.5,1);
+}
+.fu-done.show{opacity:1;transform:scale(1)}
+@media (max-width:760px){
+  .fu-cards{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
+  .fu-cards::-webkit-scrollbar{display:none}
+  .fucard{flex:0 0 148px}
+}
+@media (prefers-reduced-motion:reduce){
+  .fucard{opacity:1;transform:none;transition:none}
+  .fc-inner{transition:none}
+  .fc-shine::before{animation:none;opacity:0}
+  .fu-done{transition:none}
+}
+
 /* ---------- 联系 ---------- */
 .contact{text-align:center;max-width:920px;margin:0 auto}
 .contact .label{font:700 12px var(--mono);letter-spacing:.4em;color:var(--gold);margin-bottom:clamp(18px,3vw,30px);text-shadow:0 0 12px rgba(227,178,60,.5)}
@@ -945,7 +1052,7 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
 @media (max-width:760px){
   header{padding:12px 16px}
   .brand{white-space:nowrap;font-size:15px}
-  nav{gap:12px;white-space:nowrap;letter-spacing:.06em;font-size:13px}
+  nav{gap:9px;white-space:nowrap;letter-spacing:0;font-size:12px}
   .hero-grid{grid-template-columns:1fr;text-align:center;gap:20px}
   .hero-left .orn{justify-content:center}
   .hero-left .orn::before{content:""}
@@ -1006,6 +1113,7 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
     <a href="#about">关于</a>
     <a href="#links">链接</a>
     <a href="#support">支持</a>
+    <a href="#wufu">五福</a>
     <a href="#contact">联系</a>
   </nav>
 </header>
@@ -1278,6 +1386,100 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
   </div>
 </section>
 
+<!-- 集五福 -->
+<section id="wufu" class="wufu">
+  <div class="sec-head">
+    <span class="sec-num">肆</span>
+    <h2>集五福</h2>
+    <span class="rule"></span>
+    <span class="en">COLLECT FIVE FU</span>
+  </div>
+  <div class="fu-cards">
+    <div class="fucard" title="点击收集" role="button" tabindex="0">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="fc-tag">福卡 · 壹</span>
+          <div class="fc-fu">福</div>
+          <h3 class="fc-name">爱国福</h3>
+          <p class="fc-sub">山河无恙 · 家国安宁</p>
+          <i class="fc-shine"></i>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-seal">已收集</div>
+          <div class="fc-backfu">福</div>
+          <span class="fc-year">丁未 · 羊年</span>
+        </div>
+      </div>
+    </div>
+    <div class="fucard" title="点击收集" role="button" tabindex="0">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="fc-tag">福卡 · 贰</span>
+          <div class="fc-fu">福</div>
+          <h3 class="fc-name">富强福</h3>
+          <p class="fc-sub">仓廪丰实 · 国泰民安</p>
+          <i class="fc-shine"></i>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-seal">已收集</div>
+          <div class="fc-backfu">福</div>
+          <span class="fc-year">丁未 · 羊年</span>
+        </div>
+      </div>
+    </div>
+    <div class="fucard" title="点击收集" role="button" tabindex="0">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="fc-tag">福卡 · 叁</span>
+          <div class="fc-fu">福</div>
+          <h3 class="fc-name">和谐福</h3>
+          <p class="fc-sub">家和万事 · 睦邻安康</p>
+          <i class="fc-shine"></i>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-seal">已收集</div>
+          <div class="fc-backfu">福</div>
+          <span class="fc-year">丁未 · 羊年</span>
+        </div>
+      </div>
+    </div>
+    <div class="fucard" title="点击收集" role="button" tabindex="0">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="fc-tag">福卡 · 肆</span>
+          <div class="fc-fu">福</div>
+          <h3 class="fc-name">友善福</h3>
+          <p class="fc-sub">与人为善 · 温柔相待</p>
+          <i class="fc-shine"></i>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-seal">已收集</div>
+          <div class="fc-backfu">福</div>
+          <span class="fc-year">丁未 · 羊年</span>
+        </div>
+      </div>
+    </div>
+    <div class="fucard" title="点击收集" role="button" tabindex="0">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="fc-tag">福卡 · 伍</span>
+          <div class="fc-fu">福</div>
+          <h3 class="fc-name">敬业福</h3>
+          <p class="fc-sub">心无旁骛 · 事事有成</p>
+          <i class="fc-shine"></i>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-seal">已收集</div>
+          <div class="fc-backfu">福</div>
+          <span class="fc-year">丁未 · 羊年</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="fu-progress" id="fuProgress">已收集 0 / 5 · 点击卡牌收集</p>
+  <div class="fu-done" id="fuDone">❖ 五福临门 · 新的一年万事顺遂 ❖</div>
+</section>
+
 <!-- 联系 -->
 <section id="contact" class="contact">
   <div class="panel">
@@ -1374,6 +1576,39 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
   }
   btn.addEventListener('click',open);
   setTimeout(function(){ if(!pre.classList.contains('open')) open(); },6000);
+})();
+
+// 集五福：进视口依次飞入展示，点击翻卡收集，集齐五张触发「五福临门」
+(function(){
+  var cards=[].slice.call(document.querySelectorAll('.fucard'));
+  var prog=document.getElementById('fuProgress'), done=document.getElementById('fuDone');
+  if(!cards.length) return;
+  var got={};
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el=e.target, i=cards.indexOf(el);
+      setTimeout(function(){ el.classList.add('in'); }, i*130);   /* 依次飞入 */
+      io.unobserve(el);
+    });
+  },{threshold:.25});
+  cards.forEach(function(c){ io.observe(c); });
+  cards.forEach(function(c){
+    function act(){
+      c.classList.toggle('flip');
+      var i=cards.indexOf(c);
+      if(c.classList.contains('flip')) got[i]=1; else delete got[i];
+      if(prog) prog.textContent='已收集 '+Object.keys(got).length+' / '+cards.length;
+      if(done){
+        if(Object.keys(got).length===cards.length) done.classList.add('show');
+        else done.classList.remove('show');
+      }
+    }
+    c.addEventListener('click',act);
+    c.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); }
+    });
+  });
 })();
 
 // 时钟
