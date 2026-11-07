@@ -942,13 +942,60 @@ html.prelock *:not(.prelude):not(.prelude *){animation-play-state:paused!importa
   opacity:.45;animation:haloBreath 3.2s ease-in-out infinite alternate;
 }
 .pre-stamp::before{content:none}
-.pre-line{font:700 11px var(--mono);letter-spacing:.42em;color:var(--gold);text-shadow:0 0 12px rgba(227,178,60,.5)}
-.pre-title{
-  font:700 clamp(34px,6.5vw,60px)/1.25 var(--serif);
-  letter-spacing:.3em;text-indent:.3em;color:var(--gold-lt);
-  text-shadow:0 0 24px rgba(227,178,60,.55);
-  margin:clamp(10px,1.6vw,16px) 0 clamp(22px,3.4vw,34px);
+/* 砸落标题 —— 大字快速缩小砸在幕布上，落地震动 + 扬尘 */
+.impact-zone{position:relative;text-align:center;margin-bottom:clamp(12px,2vw,20px)}
+.impact-zone{animation:groundShake .42s linear .58s}
+.slam-title{
+  font:700 clamp(22px,4.1vw,44px)/1.35 var(--serif);letter-spacing:.08em;color:var(--gold-lt);
+  text-shadow:0 0 26px rgba(227,178,60,.6),0 4px 18px rgba(0,0,0,.45);
+  animation:slamIn .38s cubic-bezier(.55,0,1,.45) .2s both;
 }
+.slam-title em{font-style:normal;display:inline-block;color:var(--gold);text-shadow:0 0 30px rgba(255,200,90,.75)}
+@keyframes slamIn{
+  0%{transform:scale(6.5);opacity:0;filter:blur(12px)}
+  55%{opacity:1}
+  100%{transform:scale(1);opacity:1;filter:blur(0)}
+}
+@keyframes groundShake{
+  0%,100%{transform:translate(0,0)}
+  15%{transform:translate(-7px,3px)}
+  30%{transform:translate(6px,-3px)}
+  45%{transform:translate(-5px,2px)}
+  60%{transform:translate(4px,-2px)}
+  75%{transform:translate(-2px,1px)}
+  90%{transform:translate(1px,0)}
+}
+/* 扬尘 —— 落地瞬间从大标题下沿向两侧炸开 */
+.slam-title{position:relative}
+.dust{position:absolute;left:50%;bottom:-8px;width:0;height:0;pointer-events:none}
+.dust b{
+  position:absolute;bottom:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(243,217,139,.7),rgba(163,35,51,.5) 58%,transparent 76%);
+  filter:blur(3px);opacity:0;
+  transform:translate(-50%,8px) scale(.25);
+  animation:dustFly 1.15s ease-out var(--dd,.58s) forwards;
+  will-change:transform,opacity;
+}
+.dust b:nth-child(1){left:-116px;width:58px;height:26px;--dx:-76px;--dy:-30px;--dd:.58s}
+.dust b:nth-child(2){left:-60px;width:42px;height:18px;--dx:-42px;--dy:-64px;--dd:.63s}
+.dust b:nth-child(3){left:-14px;width:30px;height:14px;--dx:-10px;--dy:-78px;--dd:.6s}
+.dust b:nth-child(4){left:16px;width:30px;height:14px;--dx:12px;--dy:-72px;--dd:.66s}
+.dust b:nth-child(5){left:62px;width:44px;height:18px;--dx:48px;--dy:-60px;--dd:.61s}
+.dust b:nth-child(6){left:118px;width:58px;height:26px;--dx:78px;--dy:-28px;--dd:.59s}
+@keyframes dustFly{
+  0%{opacity:0;transform:translate(-50%,8px) scale(.25)}
+  35%{opacity:.95}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) scale(1.8)}
+}
+/* 羊年祝福 —— 砸落完成后上浮显现 */
+.slam-sub{
+  margin-top:clamp(10px,1.6vw,16px);
+  font:700 clamp(15px,2.2vw,22px) var(--serif);
+  letter-spacing:.3em;text-indent:.3em;color:var(--gold);
+  text-shadow:0 0 14px rgba(227,178,60,.55);
+  animation:subRise .7s ease .95s both;
+}
+@keyframes subRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 .pre-btn{
   position:relative;
   display:inline-flex;align-items:center;gap:12px;
@@ -975,6 +1022,9 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
 @media (prefers-reduced-motion:reduce){
   .prelude .curtain{transition:none}
   .pre-center,.pre-btn,.pre-stamp,.pre-btn::after,.pre-stamp::after,.fustamp::after{animation:none;transition:none}
+  .slam-title,.impact-zone,.slam-sub{animation:none!important}
+  .slam-sub,.impact-zone,.slam-title{opacity:1;transform:none}
+  .dust b{animation:none!important}
   body.opened .hero-grid>.hero-left,body.opened .hero-grid>.hero-right{animation:none}
 }
 
@@ -1083,6 +1133,10 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
   <div class="curtain c-l" aria-hidden="true"></div>
   <div class="curtain c-r" aria-hidden="true"></div>
   <div class="pre-center">
+    <div class="impact-zone">
+      <h2 class="slam-title">欢迎访问<em>Fangcheng235</em>的主页<i class="dust" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i></h2>
+      <p class="slam-sub">❖ 丁未羊年 · 三阳开泰 ❖</p>
+    </div>
     <div class="pre-stamp" aria-hidden="true">
       <div class="fucallig">
         <svg class="fusvg" viewBox="0 0 100 100">
@@ -1098,8 +1152,6 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
         </svg>
       </div>
     </div>
-    <p class="pre-line">❖ SPRING FESTIVAL 2027 · 丁未羊年 ❖</p>
-    <h2 class="pre-title">新春序幕</h2>
     <button class="pre-btn" id="preOpen" type="button">开幕</button>
     <p class="pre-tip">轻触开幕 —— 福到财到，与背景音乐一同启程</p>
   </div>
