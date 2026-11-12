@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="方程的工艺百科全书 · 语言篇 —— C* 语言与 C 语言（C23）系统教程">
+<title>方程的工艺百科全书 · 语言篇</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+QingKe+HuangYou&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230e3833'/%3E%3Ctext x='32' y='46' font-family='Songti SC,SimSun,serif' font-weight='bold' font-size='38' fill='%23e3b23c' text-anchor='middle'%3E%E7%99%BE%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a2a26">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/wiki.css">
+</head>
+<body class="wiki-body">
+
+<!-- 顶部：书脊式导航 -->
+<header class="wiki-top">
+  <a class="wiki-back" href="index.html" title="返回主页">← 主页</a>
+  <div class="wiki-title">
+    <span class="wt-seal">百</span>
+    <span class="wt-txt"><b>方程的工艺百科全书</b><i>THE CRAFT ENCYCLOPEDIA</i></span>
+  </div>
+  <div class="wiki-search">
+    <span class="ws-ico">⌕</span>
+    <input id="wikiSearch" type="search" placeholder="检索目录 / 章节…" autocomplete="off" aria-label="检索目录">
+    <kbd>/</kbd>
+  </div>
+  <button class="wiki-menu" id="wikiMenu" type="button" aria-label="打开目录">☰ 目录</button>
+</header>
+<div class="wiki-progress" id="wikiProgress" aria-hidden="true"><i></i></div>
+
+<div class="wiki-shell">
+  <!-- 左：多级目录树 -->
+  <aside class="wiki-side" id="wikiSide">
+    <div class="side-inner">
+      <div class="side-head">
+        <span class="sh-en">CONTENTS</span>
+        <span class="sh-cn">总 目 录</span>
+      </div>
+      <div class="side-search"><span>⌕</span><input id="sideSearch" type="search" placeholder="检索 90 节目录…" autocomplete="off" aria-label="检索目录"></div>
+      <nav class="wiki-tree" id="wikiTree" aria-label="百科目录"></nav>
+      <div class="side-foot">
+        <span>❖ 持续编纂中 ❖</span>
+        <span id="sideCount">—</span>
+      </div>
+    </div>
+  </aside>
+  <div class="side-mask" id="sideMask"></div>
+
+  <!-- 右：正文 -->
+  <main class="wiki-main" id="wikiMain">
+    <div class="crumb" id="wikiCrumb"></div>
+    <article class="wiki-article" id="wikiArticle"></article>
+    <div class="wiki-pager" id="wikiPager"></div>
+    <footer class="wiki-footer">
+      <span>方程的工艺百科全书 · 语言篇</span>
+      <span>© <span id="yr">2027</span> Fangcheng235 · 手写整理 · 无框架</span>
+    </footer>
+  </main>
+</div>
+
+<div class="wiki-copy-toast" id="wikiToast" aria-live="polite">已复制 ✓</div>
+
+<script src="js/wiki-cstar-data.js"></script>
+<script src="js/wiki-c-data.js"></script>
+<script src="js/wiki.js"></script>
+</body>
+</html>

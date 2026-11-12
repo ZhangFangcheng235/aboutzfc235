@@ -1549,3 +1549,13 @@ body.opened .hero-grid>.hero-right{animation:fadeUp .95s ease .28s both}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important}
 }
+
+/* ---------- 百科入口（导航） ---------- */
+nav a.nav-wiki{color:var(--gold-lt);font-weight:700}
+nav a.nav-wiki:hover{text-shadow:0 0 14px rgba(227,178,60,.8)}
+@media (max-width:760px){
+  header{padding:12px 12px}
+  .brand{font-size:13.5px;letter-spacing:.02em}
+  nav{gap:5px;font-size:11.5px}
+  nav a{padding:2px 1px}
+}
