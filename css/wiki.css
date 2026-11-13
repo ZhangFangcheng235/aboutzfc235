@@ -628,6 +628,13 @@ a.wa-pg:hover{border-color:var(--accent-2);box-shadow:var(--shadow-lg);transform
 .wiki-wipe.show{visibility:visible;pointer-events:auto}
 .wiki-wipe.go{opacity:0;transition:opacity var(--wipe-fade,.45s) ease}
 .wipe-inner{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:20px}
+.wipe-tag{
+  font:700 11px/1 var(--mono);letter-spacing:.5em;text-indent:.5em;
+  color:var(--accent-ink);background:var(--accent-soft);
+  padding:5px 14px 5px 18px;border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+  animation:wipeRise .26s cubic-bezier(.22,.61,.36,1) both;
+}
 .wipe-num{
   font:800 clamp(60px,12vw,110px)/1 var(--mono);
   color:color-mix(in srgb,var(--accent) 48%,var(--bg));letter-spacing:-.05em;
@@ -645,6 +652,21 @@ a.wa-pg:hover{border-color:var(--accent-2);box-shadow:var(--shadow-lg);transform
 .wiki-wipe.show .wipe-bar{animation:wipeBar var(--wipe-hold,1.05s) .1s cubic-bezier(.22,.61,.36,1) both}
 @keyframes wipeRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes wipeBar{from{width:0}to{width:88px}}
+/* 课程过场：比卷过场更「轻」，呈卡片状，强调「二级目录各自独立」 */
+.wiki-wipe.is-course{
+  background:
+    radial-gradient(46% 38% at 50% 46%,var(--accent-soft) 0%,transparent 70%),
+    var(--bg);
+}
+.wiki-wipe.is-course .wipe-inner{
+  gap:13px;padding:30px 46px;border-radius:20px;
+  background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow-lg);
+}
+.wiki-wipe.is-course .wipe-num{
+  font-size:clamp(46px,9vw,82px);
+  color:color-mix(in srgb,var(--accent) 60%,var(--bg));
+}
+.wiki-wipe.is-course .wipe-name{color:var(--accent-ink)}
 
 /* ---------- 正文入场（每次路由切换，仅合成器属性） ---------- */
 .wiki-article.fx-in>*{animation:fxRise .46s cubic-bezier(.22,.61,.36,1) both}

@@ -17,8 +17,8 @@
       id:'vol', num:'壹', short:'语言篇', treeLabel:'语言篇',
       title:'方程的工艺百科全书 · 语言篇',
       en:'VOLUME I · LANGUAGES',
-      lead:'把学过的语言，一页一页写清楚。本卷收录六门语言/技术的系统教程：C* 语言（依据官方仓库教材整理归纳）、C 语言（按 C23 标准从头讲一遍）、C++（在 C 之上叠加面向对象与泛型）、以及构成现代网页的三大基石 HTML（结构）、CSS（样式）、JavaScript（行为）。',
-      courses:[window.WIKI_CSTAR, window.WIKI_C, window.WIKI_CPP, window.WIKI_HTML, window.WIKI_CSS, window.WIKI_JS].filter(Boolean),
+      lead:'把学过的语言，一页一页写清楚。本卷收录七门语言/技术的系统教程：C* 语言（依据官方仓库教材整理归纳）、C 语言（按 C23 标准从头讲一遍）、C++（在 C 之上叠加面向对象与泛型）、汇编语言（离机器最近的助记符，x86 / NASM 主线）、以及构成现代网页的三大基石 HTML（结构）、CSS（样式）、JavaScript（行为）。',
+      courses:[window.WIKI_CSTAR, window.WIKI_C, window.WIKI_CPP, window.WIKI_ASM, window.WIKI_HTML, window.WIKI_CSS, window.WIKI_JS].filter(Boolean),
       read:[
         ['按顺序读，但允许跳读','每节都从「是什么」讲到「为什么」再到「怎么用」，有基础的读者可以直接看代码与小结。'],
         ['区分编译型与解释型','C* / C / C++ 需要编译链接（<code>gcc -std=c2x</code>、<code>g++ -std=c++20</code>）；HTML / CSS / JS 由浏览器直接解释运行，改完刷新即可见，无需编译。'],
@@ -36,8 +36,8 @@
       id:'os', num:'贰', short:'操作系统篇', treeLabel:'操作系统篇',
       title:'方程的工艺百科全书 · 操作系统篇',
       en:'VOLUME II · OPERATING SYSTEMS',
-      lead:'把造过的、用过的系统，一层一层拆开看。本卷以自研操作系统原型 Java Net Lava OS（JNL OS）为线索讲清它的构建与架构；另设 Windows 知识与 Linux 知识两门通用系统教程，从内核、文件系统、权限、进程服务到命令行、网络与排错，把日常工程里真正用得到的操作系统知识系统整理成可查阅的教程。',
-      courses:[window.WIKI_JNL, window.WIKI_WIN, window.WIKI_LINUX].filter(Boolean),
+      lead:'把造过的、用过的系统，一层一层拆开看。本卷以自研操作系统原型 Java Net Lava OS（JNL OS）为线索讲清它的构建与架构；另设 Windows 知识与 Linux 知识两门通用系统教程，从内核、文件系统、权限、进程服务到命令行、网络与排错，把日常工程里真正用得到的操作系统知识系统整理成可查阅的教程；还收录 DOS 这门命令行操作系统的历史与实模式底层，作为理解现代系统「从哪来」的钥匙。',
+      courses:[window.WIKI_JNL, window.WIKI_WIN, window.WIKI_LINUX, window.WIKI_DOS].filter(Boolean),
       read:[
         ['按需选课程，不必从头读','三门的定位不同：JNL OS 是「自研系统实例」，Windows / Linux 是「通用系统知识」。带着问题进对应课程即可。'],
         ['把命令当成可核查的证据','Windows 与 Linux 各章的命令都可在本机复现：用 <code>ipconfig</code>/<code>ip</code> 看网络、<code>Get-Process</code>/<code>ps</code> 看进程、<code>reg query</code>/<code>cat /etc/passwd</code> 看配置，边读边验证。'],
@@ -361,7 +361,8 @@
       wipeNum=document.getElementById('wipeNum'),
       wipeName=document.getElementById('wipeName'),
       wipeEn=document.getElementById('wipeEn'),
-      lastVol=null, wipeTimer=null, reduce=false;
+      wipeTag=document.getElementById('wipeTag'),
+      lastVol=null, lastCourse=null, wipeTimer=null, reduce=false;
   try{ reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(_){}
   var WIPE_MIN=600, WIPE_MAX=4000, WIPE_KEY='zfc-wiki-wipe',
       wipeMs=1500, wipeFade=450, wipeHold=1050;
@@ -381,19 +382,24 @@
     var sv=parseInt(localStorage.getItem(WIPE_KEY),10);
     applyWipe(isNaN(sv)?1500:sv,false);
   }catch(_){ applyWipe(1500,false); }
-  function playWipe(v){
+  function courseWipeNode(c){
+    return {num:c.num||'', short:c.title||'', en:c.en||'COURSE', title:c.title||''};
+  }
+  function playWipe(v,kind){
     if(!wipe||reduce) return;
     var node=v||{num:'✦',short:HOME.title,en:HOME.en};
     if(wipeNum) wipeNum.textContent=node.num||'';
     if(wipeName) wipeName.textContent=node.short||node.title||'';
     if(wipeEn) wipeEn.textContent=node.en||'';
+    if(wipeTag) wipeTag.textContent=(kind==='course'?'课 程':kind==='vol'?'卷':'');
     clearTimeout(wipeTimer);
-    wipe.classList.remove('show','go');
+    wipe.classList.remove('show','go','is-vol','is-course');
+    if(kind) wipe.classList.add('is-'+kind);
     void wipe.offsetWidth;
     wipe.classList.add('show');
     wipeTimer=setTimeout(function(){
       wipe.classList.add('go');
-      wipeTimer=setTimeout(function(){ wipe.classList.remove('show','go'); },wipeFade);
+      wipeTimer=setTimeout(function(){ wipe.classList.remove('show','go','is-vol','is-course'); },wipeFade);
     },wipeHold);
   }
   function fxEnter(){
@@ -408,11 +414,21 @@
     var node=INDEX[id]||INDEX['index'];
     id=node.data.id;
     var volId=node.vol || (node.type==='volume'?node.data.id:'index');
-    /* 切卷 / 首次进入时触发过场：仅跨卷时闪现卷名，同卷内翻页不打扰 */
+    var courseId=node.type==='course'?node.data.id
+                :(node.type==='chapter'||node.type==='section')?node.course
+                :null;
+    /* 过场动画：切卷或进入不同课程时触发。
+       跨卷 → 播放卷过场并重置课程记忆；
+       同卷内进入不同课程 → 播放该课程专属过场（二级目录各自有独立过场）；
+       同一课程内翻章节/小节 → 不打扰。 */
     if(volId!==lastVol){
-      lastVol=volId;
-      playWipe(volId!=='index' && INDEX[volId] ? INDEX[volId].data : null);
+      lastVol=volId; lastCourse=null;
+      playWipe(volId!=='index' && INDEX[volId] ? INDEX[volId].data : null,'vol');
+    } else if(courseId && courseId!==lastCourse){
+      lastCourse=courseId;
+      playWipe(courseWipeNode(INDEX[courseId].data),'course');
     }
+    if(node.type==='home'||node.type==='volume'){ lastCourse=null; }
     if(node.type==='home') renderIndex();
     else if(node.type==='volume') renderVolume(node.data);
     else if(node.type==='course') renderCourse(node.data);
