@@ -701,7 +701,8 @@ a.wa-pg:hover{border-color:var(--accent-2);box-shadow:var(--shadow-lg);transform
 .wa-vol-card{position:relative;padding-right:18px}
 .wa-vol-card i{font-style:normal}
 .wa-vol-card em{
-  display:block;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;
+  margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);
   font-style:normal;font-size:11.5px;line-height:1.6;color:var(--dim-2);
 }
 .wa-vol-card:hover em{border-color:var(--accent-2)}
