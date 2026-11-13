@@ -35,12 +35,12 @@
       id:'os', num:'贰', short:'操作系统篇', treeLabel:'操作系统篇',
       title:'方程的工艺百科全书 · 操作系统篇',
       en:'VOLUME II · OPERATING SYSTEMS',
-      lead:'把造过的东西，一层一层拆开看。本卷以自研操作系统原型 Java Net Lava OS（JNL OS）为线索，依据项目归档文档，讲清它的定位、架构、构建流程、远程调试与里程碑。',
-      courses:[window.WIKI_JNL].filter(Boolean),
+      lead:'把造过的、用过的系统，一层一层拆开看。本卷以自研操作系统原型 Java Net Lava OS（JNL OS）为线索讲清它的构建与架构；另设 Windows 知识与 Linux 知识两门通用系统教程，从内核、文件系统、权限、进程服务到命令行、网络与排错，把日常工程里真正用得到的操作系统知识系统整理成可查阅的教程。',
+      courses:[window.WIKI_JNL, window.WIKI_WIN, window.WIKI_LINUX].filter(Boolean),
       read:[
-        ['先读「边界」，再读「架构」','第 1 章说清它是什么、不是什么；第 2 章把内核、用户空间、桌面三层拆开。跳过边界容易对完成度产生误判。'],
-        ['把命令当成可核查的证据','第 3～5 章的每条命令都对应归档文档里的真实脚本与端点，复现时可用 <code>uname -r</code>、<code>JNL OS boot OK</code>、<code>out/desktop.png</code> 逐项核对。'],
-        ['区分「已完成」与「规划中」','文档用 M0–M7 里程碑划分进度，第 6 章把已完成、未完成、明确不承诺三件事分开列，读表格时留意这一层。'],
+        ['按需选课程，不必从头读','三门的定位不同：JNL OS 是「自研系统实例」，Windows / Linux 是「通用系统知识」。带着问题进对应课程即可。'],
+        ['把命令当成可核查的证据','Windows 与 Linux 各章的命令都可在本机复现：用 <code>ipconfig</code>/<code>ip</code> 看网络、<code>Get-Process</code>/<code>ps</code> 看进程、<code>reg query</code>/<code>cat /etc/passwd</code> 看配置，边读边验证。'],
+        ['对照着读 Windows 与 Linux','两者讲同一类概念（内核、文件、权限、服务、网络），但实现与命令迥异；对照读能建立「操作系统共性」的认知，而不被困在单一平台。'],
         ['用目录检索定位','左侧目录支持筛选，按 <code>/</code> 可快速聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。']
       ],
       more:[
