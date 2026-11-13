@@ -341,6 +341,17 @@ html[data-theme="dark"] .wa-num{color:var(--border)}
   color:var(--dim);font-size:14.5px;
 }
 
+/* 敷衍：两个大字 + 一串感叹号（4.4 专用，跟随配色） */
+.wa-blunt{
+  display:block;margin:12px 0 22px;
+  font-size:clamp(48px,9vw,96px);font-weight:900;line-height:1.1;
+  letter-spacing:.1em;color:var(--accent-ink);
+  word-break:break-all;overflow-wrap:anywhere;
+}
+.wa-blunt-bang{
+  font-size:.42em;letter-spacing:.02em;color:var(--accent);opacity:.9;
+}
+
 /* 表格 */
 .wa-table-hint{display:none}
 .wa-table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:10px;background:var(--bg)}
