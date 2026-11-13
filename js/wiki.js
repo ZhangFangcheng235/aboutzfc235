@@ -68,6 +68,26 @@
         {title:'安全架构篇',desc:'零信任落地 · 可信计算 · 机密计算',state:'编纂中'},
         {title:'专题案例篇',desc:'公开事件复盘 · 攻防时间线',state:'编纂中'}
       ]
+    },
+    {
+      id:'med', num:'肆', short:'医学篇', treeLabel:'医学篇',
+      title:'方程的工艺百科全书 · 医学篇',
+      en:'VOLUME IV · MEDICINE',
+      lead:'把身体的道理与救命的手法，一页一页写清楚。本卷课程按地支顺序（子丑寅卯辰巳午未申酉戌亥）编排，与前三卷课程所用的天干（甲乙丙丁戊己庚辛壬癸）相区别；目前先只开「子 · 中医基础与急救」一门，系统整理阴阳五行、藏象气血、经络腧穴与望闻问切四诊，重点讲清把脉、穴位定位、针灸与推拿的原理和安全边界，末章单列实用急救法。全卷只作知识整理与入门教育，不构成诊疗建议或执业资格；诊疗、针刺、放血等操作须由执业医师施行，急症一律先拨打 120。',
+      courses:[window.WIKI_TCM].filter(Boolean),
+      codeUnit:'段口诀与流程',
+      read:[
+        ['先立边界，再学技术','本卷是知识整理，不是诊疗手册，也不能替代正规急救培训。第 1 章开头、第 7 章针刺禁忌、第 9 章用药红线与第 10 章急救总则，四处的边界说明建议先读一遍。'],
+        ['按「基础 → 四诊 → 外治 → 急救」的顺序读','第 1~2 章建立概念框架，第 3~5 章把望闻问切当作信息采集来学，第 6~8 章理解经络穴位与外治法，第 9 章只作方药常识扫盲，第 10 章是全篇最可能真正用上的部分。'],
+        ['把四诊当成证据链','望、闻、问、切各有能回答与不能回答的问题，任何单一信息都不作定论；第 5 章的「脉症合参」与第 9 章的「八纲辨证」讲的就是怎样把信息拼成判断，而不是照表自查。'],
+        ['急救法请务必读完','心搏骤停、气道梗阻、大出血、热射病、脑卒中等以分钟计生死，决定预后的是呼救、按压、除颤、止血与降温。传统掐人中、放血、刮痧一类做法只能作为辅助，绝不能推迟基础生命支持。'],
+        ['带着问题查，也按顺序读','左侧目录支持筛选，按 <code>/</code> 可聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。每门课程进入时都有独立过场动画。']
+      ],
+      more:[
+        {title:'现代医学篇',desc:'解剖 · 生理 · 诊断基础',state:'编纂中'},
+        {title:'中药与方剂篇',desc:'本草 · 方剂 · 炮制',state:'编纂中'},
+        {title:'养生与康复篇',desc:'导引 · 食疗 · 节气起居',state:'编纂中'}
+      ]
     }
   ];
 
@@ -290,7 +310,7 @@
   function courseCard(c){
     var s=statsOf({courses:[c]});
     return '<a class="wa-cl-card" href="#'+c.id+'"><i>'+esc(c.num)+'</i><b>'+esc(c.title)+'</b><span>'
-      +(c.chapters||[]).length+' 章 · '+s.secs+' 节 · '+s.codes+' 个示例</span></a>';
+      +(c.chapters||[]).length+' 章 · '+s.secs+' 节 · '+s.codes+' '+(c.codeUnit||'个示例')+'</span></a>';
   }
   function readList(items){
     return '<ol class="wa-steps">'+items.map(function(i){
@@ -319,11 +339,12 @@
     h+='<h3>怎么读这套书</h3>'
       +'<ol class="wa-steps">'
       +'<li><b>按「篇」进入</b>每卷是一个独立主题，卷首页会给出本卷的课程清单与阅读建议，不必从第一卷读起。</li>'
+      +'<li><b>编号按天干地支</b>卷用壹贰叁肆；前三卷课程按天干 <b>甲乙丙丁戊己庚辛壬癸</b> 排序，第肆卷医学篇改用第二套序列 <b>子丑寅卯辰巳午未申酉戌亥</b> 开篇，两套都严格依序、不跳字。</li>'
       +'<li><b>用目录树定位</b>左侧目录按「卷 → 课程 → 章 → 节」四级展开，当前位置自动高亮；按 <code>/</code> 可聚焦搜索框筛选。</li>'
       +'<li><b>网址即书签</b>每个层级都有独立地址（如 <code>#c-1-1</code>、<code>#jnl-2-1</code>），可直接分享某一节。</li>'
       +'<li><b>留意内容规模</b>每节标题下方标注内容块数、代码示例数、字数与预计阅读时长，方便安排时间。</li>'
       +'</ol>';
-    h+='<h3>编纂说明</h3><p>全书内容手写整理、无框架依赖。语言篇依据公开教材与 C23 标准归纳，操作系统篇依据项目归档文档整理，网络攻防技术篇依据公开标准（OWASP、RFC、MITRE ATT&CK、等保 2.0 等）与工程实践归纳，以原理与防御为主线；文档中未载明的细节以「待补 / 编纂中」标注，不作推测。网络攻防技术篇的所有主动探测与实验均假定在自有或书面授权环境内进行，请勿用于第三方系统。</p>';
+    h+='<h3>编纂说明</h3><p>全书内容手写整理、无框架依赖。语言篇依据公开教材与 C23 标准归纳，操作系统篇依据项目归档文档整理，网络攻防技术篇依据公开标准（OWASP、RFC、MITRE ATT&CK、等保 2.0 等）与工程实践归纳，以原理与防御为主线；文档中未载明的细节以「待补 / 编纂中」标注，不作推测。网络攻防技术篇的所有主动探测与实验均假定在自有或书面授权环境内进行，请勿用于第三方系统。<b>医学篇仅作知识整理与入门教育</b>，依据中医经典理论与公开急救指南归纳，不构成诊疗建议、处方依据或急救培训证书；诊疗、针刺、放血、正骨等操作须由具备资质的执业医师施行，急症危症一律先拨打 120 并遵循专业调度指导。</p>';
     h+='</div>';
     article.innerHTML=h; setPager('','');
   }
@@ -331,7 +352,7 @@
     crumbs([{t:v.short}]);
     var s=v.stat;
     var h=cover(v.en,v.title,v.lead,
-      [s.courses+' 门课程',s.chapters+' 章',s.secs+' 节教程',s.codes+' 个代码示例','约 '+wan(s.chars)+' 万字']);
+      [s.courses+' 门课程',s.chapters+' 章',s.secs+' 节教程',s.codes+' '+(v.codeUnit||'个代码示例'),'约 '+wan(s.chars)+' 万字']);
     h+='<div class="wa-body"><h3>本卷目录</h3><div class="wa-chapter-list">';
     (v.courses||[]).forEach(function(c){ h+=courseCard(c); });
     h+='</div><h3>怎么读这一卷</h3>'+readList(v.read||[]);
@@ -368,7 +389,10 @@
     var bs=blocksOf(s), codes=0, chars=0;
     bs.forEach(function(b){ if(b.t==='code') codes++; chars+=blockText(b).length; });
     var mins=Math.max(2,Math.round(chars/380));
-    var stat='<span><b>'+bs.length+'</b> 内容块</span><span><b>'+codes+'</b> 代码示例</span>'
+    var stat='<span><b>'+bs.length+'</b> 内容块</span>'
+      +(c.codeUnit
+        ? '<span><b>'+bs.filter(function(b){ return b.t!=='p'&&b.t!=='h'; }).length+'</b> 图表与清单</span>'
+        : '<span><b>'+codes+'</b> 代码示例</span>')
       +'<span><b>'+chars+'</b> 字</span><span><b>'+mins+'</b> 分钟阅读</span>';
     var h=head(s,'SECTION '+s.num+' · '+c.title,(s.tags||[]).concat(c.chips||[]).slice(0,4),stat);
     h+='<div class="wa-body">'+bs.map(blockHTML).join('')+'</div>';
