@@ -17,8 +17,8 @@
       id:'vol', num:'壹', short:'语言篇', treeLabel:'语言篇',
       title:'方程的工艺百科全书 · 语言篇',
       en:'VOLUME I · LANGUAGES',
-      lead:'把学过的语言，一页一页写清楚。本卷收录七门语言/技术的系统教程：C* 语言（依据官方仓库教材整理归纳）、C 语言（按 C23 标准从头讲一遍）、C++（在 C 之上叠加面向对象与泛型）、汇编语言（离机器最近的助记符，x86 / NASM 主线）、以及构成现代网页的三大基石 HTML（结构）、CSS（样式）、JavaScript（行为）。',
-      courses:[window.WIKI_CSTAR, window.WIKI_C, window.WIKI_CPP, window.WIKI_ASM, window.WIKI_HTML, window.WIKI_CSS, window.WIKI_JS].filter(Boolean),
+      lead:'把学过的语言，一页一页写清楚。本卷收录七门语言/技术的系统教程：C* 语言（依据官方仓库教材整理归纳）、C 语言（按 C23 标准从头讲一遍）、C++（在 C 之上叠加面向对象与泛型）、HTML（结构）、CSS（样式）、JavaScript（行为）、以及离机器最近的助记符汇编语言（x86 / NASM 主线）。',
+      courses:[window.WIKI_CSTAR, window.WIKI_C, window.WIKI_CPP, window.WIKI_HTML, window.WIKI_CSS, window.WIKI_JS, window.WIKI_ASM].filter(Boolean),
       read:[
         ['按顺序读，但允许跳读','每节都从「是什么」讲到「为什么」再到「怎么用」，有基础的读者可以直接看代码与小结。'],
         ['区分编译型与解释型','C* / C / C++ 需要编译链接（<code>gcc -std=c2x</code>、<code>g++ -std=c++20</code>）；HTML / CSS / JS 由浏览器直接解释运行，改完刷新即可见，无需编译。'],
