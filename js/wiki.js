@@ -355,13 +355,31 @@
     article.innerHTML=h; setPager(s.id,INDEX[cid].vol);
   }
 
-  /* ---------- 过场动画 ---------- */
+  /* ---------- 过场动画（时长可在「外观设置」里自定义，单位毫秒） ---------- */
   var wipe=document.getElementById('wikiWipe'),
       wipeNum=document.getElementById('wipeNum'),
       wipeName=document.getElementById('wipeName'),
       wipeEn=document.getElementById('wipeEn'),
       lastVol=null, wipeTimer=null, reduce=false;
   try{ reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(_){}
+  var WIPE_MIN=600, WIPE_MAX=4000, WIPE_KEY='zfc-wiki-wipe',
+      wipeMs=1500, wipeFade=450, wipeHold=1050;
+  function applyWipe(ms,save){
+    ms=Math.max(WIPE_MIN,Math.min(WIPE_MAX,Math.round(ms/100)*100));
+    wipeMs=ms;
+    wipeFade=Math.round(ms*0.3);   /* 后 30% 用于淡出 */
+    wipeHold=ms-wipeFade;          /* 前 70% 卷名停留 */
+    document.documentElement.style.setProperty('--wipe-fade',wipeFade+'ms');
+    document.documentElement.style.setProperty('--wipe-hold',wipeHold+'ms');
+    var val=document.getElementById('wipeVal'), rng=document.getElementById('wipeRange');
+    if(val) val.textContent=(ms/1000).toFixed(1)+' s';
+    if(rng && +rng.value!==ms) rng.value=ms;
+    if(save!==false){ try{ localStorage.setItem(WIPE_KEY,String(ms)); }catch(_){} }
+  }
+  try{
+    var sv=parseInt(localStorage.getItem(WIPE_KEY),10);
+    applyWipe(isNaN(sv)?1500:sv,false);
+  }catch(_){ applyWipe(1500,false); }
   function playWipe(v){
     if(!wipe||reduce) return;
     var node=v||{num:'✦',short:HOME.title,en:HOME.en};
@@ -374,8 +392,8 @@
     wipe.classList.add('show');
     wipeTimer=setTimeout(function(){
       wipe.classList.add('go');
-      wipeTimer=setTimeout(function(){ wipe.classList.remove('show','go'); },280);
-    },430);
+      wipeTimer=setTimeout(function(){ wipe.classList.remove('show','go'); },wipeFade);
+    },wipeHold);
   }
   function fxEnter(){
     if(reduce) return;
@@ -518,12 +536,15 @@
       clearTimeout(tt);tt=setTimeout(function(){ toast.classList.remove('show'); toast.textContent='已复制 ✓'; },1200);
     }
   }
-  if(palettePop){
-    palettePop.innerHTML=PALETTES.map(function(p){
+  var palItems=document.getElementById('palItems');
+  if(palItems){
+    palItems.innerHTML=PALETTES.map(function(p){
       return '<button class="pal-item" type="button" data-pal="'+p.id+'">'
         +'<i style="background:linear-gradient(135deg,'+p.c2+' 0 50%,'+p.c1+' 50% 100%)"></i>'
         +'<span>'+p.name+'</span></button>';
     }).join('');
+  }
+  if(palettePop){
     palettePop.addEventListener('click',function(e){
       var b=e.target.closest('.pal-item');
       if(!b) return;
@@ -544,6 +565,24 @@
   var saved=null;
   try{ saved=localStorage.getItem(PK)||localStorage.getItem('zfc-wiki-theme'); }catch(_){}
   applyPalette(saved==='dark'?'night':(saved||'slate'),true);
+
+  /* 过场时长：拖动即时生效并记住选择；「试播一次」立即预览当前时长 */
+  var wipeRange=document.getElementById('wipeRange'), wipeTry=document.getElementById('wipeTry');
+  if(wipeRange) wipeRange.addEventListener('input',function(){ applyWipe(+this.value); });
+  if(wipeTry) wipeTry.addEventListener('click',function(){
+    closePalette();
+    if(reduce){
+      if(toast){
+        toast.textContent='系统已开启「减少动态效果」，过场未播放';
+        toast.classList.add('show');
+        clearTimeout(tt); tt=setTimeout(function(){ toast.classList.remove('show'); toast.textContent='已复制 ✓'; },1600);
+      }
+      return;
+    }
+    var id=decodeURIComponent(location.hash.replace(/^#/,'')||'index'), n=INDEX[id],
+        vid=n?(n.vol||(n.type==='volume'?n.data.id:null)):null;
+    playWipe(vid&&INDEX[vid]?INDEX[vid].data:null);
+  });
 
   var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
   route();

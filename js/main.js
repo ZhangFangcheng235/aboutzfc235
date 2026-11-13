@@ -110,7 +110,35 @@
       if(Array.isArray(j) && j.length===DATA.length && j.every(function(d){ return d && d.name && d.poem; })) DATA=j;
     }).catch(function(){});
   }catch(e){}
-  var got={};
+  var got={}, dup={}, draws=0, repeats=0;
+  /* 稀有度 → 抽取权重：星级越高越稀有、权重越低（★ 记 1 星，☆ 记半星，半星线性插值） */
+  var RARITY_W={1:120,2:78,3:46,4:22,5:9};
+  function starsOf(rare){
+    var m=String(rare||'').match(/[★☆]+/);
+    if(!m) return 3;
+    var n=0,s=m[0];
+    for(var i=0;i<s.length;i++) n+=(s.charAt(i)==='★'?1:0.5);
+    return Math.max(1,Math.min(5,n));
+  }
+  function weightAt(i){
+    var s=starsOf(DATA[i]&&DATA[i].rare), lo=Math.floor(s), hi=Math.ceil(s);
+    return lo===hi?RARITY_W[lo]:RARITY_W[lo]+(RARITY_W[hi]-RARITY_W[lo])*(s-lo);
+  }
+  function weightTable(){
+    var ws=[],total=0,i;
+    for(i=0;i<cards.length;i++){ var w=weightAt(i); ws.push(w); total+=w; }
+    return {ws:ws,total:total};
+  }
+  /* 全池加权抽取：已收集的卡同样留在池内 —— 因此重复抽取必然发生 */
+  function pickWeighted(){
+    var W=weightTable(), t=Math.random()*W.total, pi=cards.length-1;
+    for(var i=0;i<cards.length;i++){ t-=W.ws[i]; if(t<=0){ pi=i; break; } }
+    return pi;
+  }
+  function probAt(i){
+    var W=weightTable();
+    return (W.ws[i]/W.total*100).toFixed(1)+'%';
+  }
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine=window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -129,7 +157,8 @@
     var fu=0,sp=0,k;
     for(k=0;k<FU_N;k++) if(got[k]) fu++;
     for(k=FU_N;k<cards.length;k++) if(got[k]) sp++;
-    if(prog) prog.textContent='福卡 '+fu+' / '+FU_N+' · 特别卡 '+sp+' / '+(cards.length-FU_N)+(fu+sp<cards.length?' · 扫一扫抽取':' · 全部集齐');
+    if(prog) prog.textContent='福卡 '+fu+' / '+FU_N+' · 特别卡 '+sp+' / '+(cards.length-FU_N)
+      +' · 已抽 '+draws+' 次 · 重复 '+repeats+' 次'+(fu+sp===cards.length?' · 已集齐，仍可继续抽':'');
     if(bar) [].slice.call(bar.children).forEach(function(s,i){ s.classList.toggle('on',!!got[i]); });
     if(spBar) [].slice.call(spBar.children).forEach(function(s,i){ s.classList.toggle('on',!!got[FU_N+i]); });
     if(done){ if(fu===FU_N) done.classList.add('show'); else done.classList.remove('show'); }
@@ -189,14 +218,14 @@
     var d=DATA[i];
     panel.setAttribute('data-f',i);
     mTag.textContent=d.tag;
-    mRare.textContent=d.rare;
+    mRare.textContent=d.rare+'  ·  出率 '+probAt(i);
     mName.textContent=d.name;
     mPoem.innerHTML=d.poem;
     mBless.textContent=d.bless;
     var isGot=!!got[i];
-    mStatus.textContent=isGot?'已收集':'未收集';
+    mStatus.textContent=isGot?('已收集'+(dup[i]?' · 重复 '+dup[i]+' 次':'')):'未收集';
     mStatus.classList.toggle('got',isGot);
-    mTake.textContent=isGot?'已收集 · 关闭':'去抽卡';
+    mTake.textContent=isGot?'再抽一次':'去抽卡';
     modal.classList.add('open');
   }
   function closeDetail(){ modal.classList.remove('open'); }
@@ -214,25 +243,34 @@
   });
   /* 「去抽卡」：关闭详情并跳到扫福按钮；已收集则直接关闭 */
   mTake.addEventListener('click',function(){
-    var ungot=!got[curF];
     closeDetail();
-    if(ungot && scanBtn){
+    if(scanBtn){   /* 已收集也允许继续抽（可重复抽取） */
       scanBtn.scrollIntoView({behavior:'smooth',block:'center'});
       scanBtn.classList.add('pulse');
       setTimeout(function(){ scanBtn.classList.remove('pulse'); },1600);
     }
   });
 
-  /* ---------- 扫一扫 · 加权抽卡演出（福卡稀有，特别卡常出） ---------- */
+  /* ---------- 扫一扫 · 按稀有度权重全池抽取（含已收集卡，重复为必然） ---------- */
   function finishDraw(pi){
-    var card=cards[pi];
-    card.classList.add('picked');
-    setTimeout(function(){ card.classList.remove('picked'); },1300);
-    collect(pi,card);
-    setTimeout(function(){ openDetail(pi); },450);
+    var card=cards[pi], isDup=!!got[pi];
+    draws++;
+    if(isDup){
+      repeats++;
+      dup[pi]=(dup[pi]||0)+1;
+      card.setAttribute('data-dup','重复 ×'+dup[pi]);
+      card.classList.add('dupe');
+      setTimeout(function(){ card.classList.remove('dupe'); card.removeAttribute('data-dup'); },1300);
+      paint();
+    }else{
+      card.classList.add('picked');
+      setTimeout(function(){ card.classList.remove('picked'); },1300);
+      collect(pi,card);
+      setTimeout(function(){ openDetail(pi); },450);
+    }
   }
   function closeDraw(){
-    drawOv.classList.remove('open','reveal');
+    drawOv.classList.remove('open','reveal','dup');
     if(scanBtn) scanBtn.disabled=false;
     if(drawOv._pending!=null){
       var p=drawOv._pending; drawOv._pending=null;
@@ -245,13 +283,6 @@
   if(scanBtn){
     scanBtn.addEventListener('click',function(){
       if(scanBtn.disabled) return;
-      var rest=[];
-      cards.forEach(function(c,i){ if(!got[i]) rest.push(i); });
-      if(!rest.length){   /* 全集齐：摇横幅 */
-        if(done){ done.classList.add('shake'); setTimeout(function(){ done.classList.remove('shake'); },500); }
-        if(spDone){ spDone.classList.add('shake'); setTimeout(function(){ spDone.classList.remove('shake'); },500); }
-        return;
-      }
       scanBtn.disabled=true;
       /* 绿光波扫过全部卡面 */
       cards.forEach(function(c,k){
@@ -260,19 +291,13 @@
           setTimeout(function(){ c.classList.remove('scan'); },600);
         },k*90);
       });
-      /* 加权随机：福卡权重 1（稀有），特别卡权重 3（常出） */
-      var total=0;
-      rest.forEach(function(i){ total+= i<FU_N?1:3; });
-      var t=Math.random()*total, pi=rest[0];
-      for(var r=0;r<rest.length;r++){
-        t-= rest[r]<FU_N?1:3;
-        if(t<=0){ pi=rest[r]; break; }
-      }
-      if(reduce){ finishDraw(pi); return; }
+      /* 全池按稀有度权重抽取：越稀有越难出；已收集的卡照常在池内 → 必然抽到重复 */
+      var pi=pickWeighted(), isDup=!!got[pi];
+      if(reduce){ if(scanBtn) scanBtn.disabled=false; finishDraw(pi); return; }
       /* 演出：遮罩层 + 快速轮播卡名 → 定格结果 */
       var names=DATA.map(function(d){ return d.name; });
       dLabel.textContent='扫 福 中'; dName.textContent='···'; dType.textContent='';
-      drawOv.classList.add('open'); drawOv.classList.remove('reveal');
+      drawOv.classList.add('open'); drawOv.classList.remove('reveal','dup');
       var cycle=setInterval(function(){ dName.textContent=names[Math.floor(Math.random()*names.length)]; },90);
       setTimeout(function(){
         clearInterval(cycle);
@@ -284,9 +309,12 @@
           });
         }catch(e){}
         drawOv.classList.add('reveal');
-        dLabel.textContent='获 得';
+        drawOv.classList.toggle('dup',isDup);
+        dLabel.textContent=isDup?'又 见':'获 得';
         dName.textContent=DATA[pi].name;
-        dType.textContent=pi<FU_N?'✦ 稀有 · 福卡 ✦':'特别 · '+DATA[pi].rare;
+        dType.textContent=isDup
+          ? '✦ 重复 · 已拥有 ×'+((dup[pi]||0)+1)+' ✦ · 出率 '+probAt(pi)
+          : (pi<FU_N?'✦ 稀有 · 福卡 ✦':'特别 · '+DATA[pi].rare)+' · 出率 '+probAt(pi);
         drawOv._pending=pi;
         setTimeout(function(){ if(drawOv.classList.contains('reveal')) closeDraw(); },2100);
       },1500);

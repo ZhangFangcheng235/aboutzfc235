@@ -896,6 +896,19 @@ section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
 /* 抽中卡牌：跳动提示 */
 .fucard.picked{animation:pickJump .6s cubic-bezier(.34,1.6,.5,1) 2}
 @keyframes pickJump{35%{transform:translateY(-16px) scale(1.06)}}
+/* 抽到重复卡：轻抖动 + 「重复 ×N」浮签，不翻转、不爆金粒子 */
+.fucard.dupe{animation:dupeShake .5s ease 2}
+.fucard.dupe::after{
+  content:attr(data-dup);position:absolute;left:50%;top:-16px;z-index:6;
+  white-space:nowrap;pointer-events:none;
+  font:700 10px var(--mono);letter-spacing:.18em;color:#06231f;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+  border:1px solid rgba(255,244,210,.85);border-radius:999px;padding:4px 12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+  animation:dupeTag 1.25s ease both;
+}
+@keyframes dupeShake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+@keyframes dupeTag{0%{opacity:0;transform:translate(-50%,8px) scale(.8)}18%{opacity:1;transform:translate(-50%,0) scale(1)}76%{opacity:1}100%{opacity:0;transform:translate(-50%,-10px)}}
 /* 卡背：已收集 + 倒福印 —— 沿用各卡主题底，加深色压暗保持系列感 */
 .fc-back{
   transform:rotateY(180deg);
@@ -1013,6 +1026,10 @@ section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
 .fu-progress{
   margin-top:clamp(18px,2.6vw,26px);text-align:center;
   font:13px var(--mono);letter-spacing:.3em;color:var(--dim);
+}
+.fu-note{
+  margin:9px 0 0;text-align:center;
+  font:11px/1.8 var(--mono);letter-spacing:.1em;color:var(--dim);opacity:.85;
 }
 .fu-bar{
   display:flex;justify-content:center;gap:6px;margin:0 auto 12px;max-width:340px;
@@ -1173,6 +1190,7 @@ section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
   .fu-panel{transition:none}
   .fu-modal .m-backdrop{transition:none}
   .spark{animation:none;display:none}
+  .fucard.dupe,.fucard.dupe::after{animation:none}
 }
 
 /* ---------- 卡池 Tab 切换 ---------- */
@@ -1301,6 +1319,10 @@ section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
 @keyframes dReveal{from{transform:scale(1.7);filter:blur(6px);opacity:0}to{transform:none;filter:none;opacity:1}}
 .d-type{display:block;font:11px var(--mono);letter-spacing:.3em;color:var(--dim);min-height:16px}
 .d-hint{display:block;margin-top:14px;font:10px var(--mono);letter-spacing:.26em;color:var(--dim);opacity:.7}
+/* 重复卡：演出层改冷调，与「首次获得」区分开 */
+.draw-ov.dup .d-label{color:var(--cyan)}
+.draw-ov.dup .d-name{color:#efe8cf;text-shadow:0 0 18px rgba(160,220,200,.4)}
+.draw-ov.dup .draw-card{box-shadow:0 24px 70px rgba(0,0,0,.65),0 0 40px rgba(120,200,175,.3)}
 
 /* ---------- 联系 ---------- */
 .contact{text-align:center;max-width:920px;margin:0 auto}
