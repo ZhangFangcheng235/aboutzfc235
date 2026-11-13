@@ -17,11 +17,12 @@
       id:'vol', num:'壹', short:'语言篇', treeLabel:'语言篇',
       title:'方程的工艺百科全书 · 语言篇',
       en:'VOLUME I · LANGUAGES',
-      lead:'把学过的东西，一页一页写清楚。本卷收录两门语言的系统教程：C* 语言（依据官方仓库教材整理归纳）与 C 语言（按 C23 标准从头到尾讲一遍）。',
-      courses:[window.WIKI_CSTAR, window.WIKI_C].filter(Boolean),
+      lead:'把学过的语言，一页一页写清楚。本卷收录六门语言/技术的系统教程：C* 语言（依据官方仓库教材整理归纳）、C 语言（按 C23 标准从头讲一遍）、C++（在 C 之上叠加面向对象与泛型）、以及构成现代网页的三大基石 HTML（结构）、CSS（样式）、JavaScript（行为）。',
+      courses:[window.WIKI_CSTAR, window.WIKI_C, window.WIKI_CPP, window.WIKI_HTML, window.WIKI_CSS, window.WIKI_JS].filter(Boolean),
       read:[
         ['按顺序读，但允许跳读','每节都从「是什么」讲到「为什么」再到「怎么用」，有基础的读者可以直接看代码与小结。'],
-        ['每个示例都亲手编译一次','教程里的示例按 C23 编写，用 <code>gcc -std=c2x -Wall -Wextra</code> 即可编译；改坏它、再修好它，比读三遍更有效。'],
+        ['区分编译型与解释型','C* / C / C++ 需要编译链接（<code>gcc -std=c2x</code>、<code>g++ -std=c++20</code>）；HTML / CSS / JS 由浏览器直接解释运行，改完刷新即可见，无需编译。'],
+        ['Web 三件套要一起学','HTML 管结构、CSS 管样式、JavaScript 管行为，三者分工协作；建议先 HTML 再 CSS 最后 JS，再回头看它们如何组合成页面。'],
         ['留意提示框与练习','蓝色为要点、绿色为技巧、橙色为易错陷阱、红色为危险操作；每节末尾的练习用来检验是否真的理解。'],
         ['用目录检索定位','左侧目录支持筛选，按 <code>/</code> 可快速聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。']
       ],
