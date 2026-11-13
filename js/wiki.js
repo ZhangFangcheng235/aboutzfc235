@@ -1,10 +1,55 @@
 /* ==========================================================
    方程的工艺百科全书 · 渲染与交互
-   数据来自 wiki-cstar-data.js / wiki-c-data.js（window.WIKI_CSTAR / WIKI_C）
+   数据：wiki-cstar-data.js / wiki-c-data.js / wiki-os-data.js
+   结构：全书 → 卷 → 课程 → 章 → 节
    ========================================================== */
 (function(){
   'use strict';
-  var courses=[window.WIKI_CSTAR, window.WIKI_C].filter(Boolean);
+
+  /* ---------- 卷（一级目录） ---------- */
+  var HOME={
+    id:'index', title:'方程的工艺百科全书',
+    en:'THE CRAFT ENCYCLOPEDIA',
+    lead:'把学过的、造过的东西，一页一页写清楚。这里按「篇」分卷，每卷下再分课程、章、节，编号可循，随时可查。'
+  };
+  var VOLUMES=[
+    {
+      id:'vol', num:'壹', short:'语言篇', treeLabel:'语言篇',
+      title:'方程的工艺百科全书 · 语言篇',
+      en:'VOLUME I · LANGUAGES',
+      lead:'把学过的东西，一页一页写清楚。本卷收录两门语言的系统教程：C* 语言（依据官方仓库教材整理归纳）与 C 语言（按 C23 标准从头到尾讲一遍）。',
+      courses:[window.WIKI_CSTAR, window.WIKI_C].filter(Boolean),
+      read:[
+        ['按顺序读，但允许跳读','每节都从「是什么」讲到「为什么」再到「怎么用」，有基础的读者可以直接看代码与小结。'],
+        ['每个示例都亲手编译一次','教程里的示例按 C23 编写，用 <code>gcc -std=c2x -Wall -Wextra</code> 即可编译；改坏它、再修好它，比读三遍更有效。'],
+        ['留意提示框与练习','蓝色为要点、绿色为技巧、橙色为易错陷阱、红色为危险操作；每节末尾的练习用来检验是否真的理解。'],
+        ['用目录检索定位','左侧目录支持筛选，按 <code>/</code> 可快速聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。']
+      ],
+      more:[
+        {title:'工艺篇',desc:'编译原理 · 工具链 · 造轮子',state:'编纂中'},
+        {title:'器物篇',desc:'硬件 · 系统 · 网络',state:'编纂中'},
+        {title:'杂谈篇',desc:'随笔与学习方法',state:'编纂中'}
+      ]
+    },
+    {
+      id:'os', num:'贰', short:'操作系统篇', treeLabel:'操作系统篇',
+      title:'方程的工艺百科全书 · 操作系统篇',
+      en:'VOLUME II · OPERATING SYSTEMS',
+      lead:'把造过的东西，一层一层拆开看。本卷以自研操作系统原型 Java Net Lava OS（JNL OS）为线索，依据项目归档文档，讲清它的定位、架构、构建流程、远程调试与里程碑。',
+      courses:[window.WIKI_JNL].filter(Boolean),
+      read:[
+        ['先读「边界」，再读「架构」','第 1 章说清它是什么、不是什么；第 2 章把内核、用户空间、桌面三层拆开。跳过边界容易对完成度产生误判。'],
+        ['把命令当成可核查的证据','第 3～5 章的每条命令都对应归档文档里的真实脚本与端点，复现时可用 <code>uname -r</code>、<code>JNL OS boot OK</code>、<code>out/desktop.png</code> 逐项核对。'],
+        ['区分「已完成」与「规划中」','文档用 M0–M7 里程碑划分进度，第 6 章把已完成、未完成、明确不承诺三件事分开列，读表格时留意这一层。'],
+        ['用目录检索定位','左侧目录支持筛选，按 <code>/</code> 可快速聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。']
+      ],
+      more:[
+        {title:'嵌入式篇',desc:'裸机 · 驱动 · 实时系统',state:'编纂中'},
+        {title:'网络篇',desc:'协议栈 · 服务 · 安全',state:'编纂中'},
+        {title:'工具篇',desc:'构建系统 · 调试器 · CI',state:'编纂中'}
+      ]
+    }
+  ];
 
   /* ---------- 逐节扩写内容：由 wiki-x-*.js 注入 ---------- */
   var EXTRA={};
@@ -24,30 +69,28 @@
     if(b.q) n+=plain(b.q)+plain(b.a);
     return n;
   }
-  /* 全书规模统计（供卷首与小节元信息展示） */
-  var TOT={blocks:0,codes:0,chars:0};
-  courses.forEach(function(c){
-    (c.chapters||[]).forEach(function(ch){
-      (ch.sections||[]).forEach(function(s){
-        var bs=blocksOf(s);
-        TOT.blocks+=bs.length;
-        bs.forEach(function(b){ if(b.t==='code') TOT.codes++; TOT.chars+=blockText(b).length; });
+  /* 规模统计 */
+  function statsOf(v){
+    var o={blocks:0,codes:0,chars:0,secs:0,courses:(v.courses||[]).length,chapters:0};
+    (v.courses||[]).forEach(function(c){
+      (c.chapters||[]).forEach(function(ch){
+        o.chapters++;
+        (ch.sections||[]).forEach(function(s){
+          o.secs++;
+          var bs=blocksOf(s);
+          o.blocks+=bs.length;
+          bs.forEach(function(b){ if(b.t==='code') o.codes++; o.chars+=blockText(b).length; });
+        });
       });
     });
+    return o;
+  }
+  var TOT={blocks:0,codes:0,chars:0,secs:0,courses:0,chapters:0};
+  VOLUMES.forEach(function(v){
+    v.stat=statsOf(v);
+    ['blocks','codes','chars','secs','courses','chapters'].forEach(function(k){ TOT[k]+=v.stat[k]; });
   });
-
-  var VOL={
-    id:'vol', num:'壹',
-    title:'方程的工艺百科全书 · 语言篇',
-    lead:'把学过的东西，一页一页写清楚。本卷收录两门语言的系统教程：C* 语言（依据官方仓库教材整理归纳）与 C 语言（按 C23 标准从头到尾讲一遍）。',
-    en:'VOLUME I · LANGUAGES'
-  };
-  /* 后续篇章占位：先做语言篇 */
-  var MORE=[
-    {title:'工艺篇',desc:'编译原理 · 工具链 · 造轮子',state:'编纂中'},
-    {title:'器物篇',desc:'硬件 · 系统 · 网络',state:'编纂中'},
-    {title:'杂谈篇',desc:'随笔与学习方法',state:'编纂中'}
-  ];
+  function wan(n){ return (Math.round(n/1000)/10).toFixed(1); }
 
   var tree=document.getElementById('wikiTree'),
       article=document.getElementById('wikiArticle'),
@@ -58,20 +101,24 @@
       sideCount=document.getElementById('sideCount'),
       progress=document.getElementById('wikiProgress');
 
-  /* ---------- 索引：id -> 节点 ---------- */
-  var INDEX={}, FLAT=[];   /* FLAT：所有小节按阅读顺序 */
-  courses.forEach(function(c){
-    INDEX[c.id]={type:'course',data:c,parent:'vol'};
-    (c.chapters||[]).forEach(function(ch){
-      INDEX[ch.id]={type:'chapter',data:ch,parent:c.id};
-      (ch.sections||[]).forEach(function(s){
-        INDEX[s.id]={type:'section',data:s,parent:ch.id,course:c.id};
-        FLAT.push(s.id);
+  /* ---------- 索引 ---------- */
+  var INDEX={}, FLAT={};   /* FLAT[卷id] = 该卷全部小节，按阅读顺序 */
+  INDEX[HOME.id]={type:'home',data:HOME};
+  VOLUMES.forEach(function(v){
+    INDEX[v.id]={type:'volume',data:v,parent:HOME.id};
+    FLAT[v.id]=[];
+    (v.courses||[]).forEach(function(c){
+      INDEX[c.id]={type:'course',data:c,parent:v.id,vol:v.id};
+      (c.chapters||[]).forEach(function(ch){
+        INDEX[ch.id]={type:'chapter',data:ch,parent:c.id,course:c.id,vol:v.id};
+        (ch.sections||[]).forEach(function(s){
+          INDEX[s.id]={type:'section',data:s,parent:ch.id,course:c.id,vol:v.id};
+          FLAT[v.id].push(s.id);
+        });
       });
     });
   });
-  INDEX[VOL.id]={type:'volume',data:VOL};
-  if(sideCount) sideCount.textContent='共 '+courses.length+' 门 · '+FLAT.length+' 节';
+  if(sideCount) sideCount.textContent='共 '+VOLUMES.length+' 卷 · '+TOT.courses+' 门 · '+TOT.secs+' 节';
 
   /* ---------- 目录树 ---------- */
   function btn(node,arrow){
@@ -80,7 +127,7 @@
     if(arrow) b.innerHTML='<span class="t-arrow">▾</span>';
     else b.innerHTML='<span class="t-arrow" style="opacity:0">·</span>';
     var n=document.createElement('span');n.className='t-num';n.textContent=node.num||'';
-    var l=document.createElement('span');l.className='t-label';l.textContent=node.title;
+    var l=document.createElement('span');l.className='t-label';l.textContent=node.treeLabel||node.title;
     b.appendChild(n);b.appendChild(l);
     b.setAttribute('data-goto',node.id);
     return b;
@@ -100,15 +147,17 @@
   }
   function buildTree(){
     tree.innerHTML='';
-    var volKids=courses.map(function(c){
-      var chapKids=(c.chapters||[]).map(function(ch){
-        var secKids=(ch.sections||[]).map(function(s){ return tnode('t-sec',s,null,false); });
-        return tnode('t-chap',ch,secKids,secKids.length>0);
+    tree.appendChild(tnode('t-home',HOME,null,false));
+    VOLUMES.forEach(function(v){
+      var courseKids=(v.courses||[]).map(function(c){
+        var chapKids=(c.chapters||[]).map(function(ch){
+          var secKids=(ch.sections||[]).map(function(s){ return tnode('t-sec',s,null,false); });
+          return tnode('t-chap',ch,secKids,secKids.length>0);
+        });
+        return tnode('t-course',c,chapKids,true);
       });
-      return tnode('t-course',c,chapKids,true);
+      tree.appendChild(tnode('t-vol',v,courseKids,true));
     });
-    tree.appendChild(tnode('t-vol',VOL,volKids,true));
-    /* 后续篇章占位节点 */
     var more=document.createElement('div');
     more.className='t-node t-empty';
     more.innerHTML='更多篇章 · 编纂中';
@@ -116,7 +165,6 @@
   }
   buildTree();
 
-  /* 折叠：点击箭头只折叠，点击文字跳转 + 展开 */
   tree.addEventListener('click',function(e){
     var arrow=e.target.closest('.t-arrow');
     var b=e.target.closest('.t-btn');
@@ -128,34 +176,28 @@
     }
     location.hash=b.getAttribute('data-goto');
   });
-  /* 默认折叠：除当前路径外全部章收起 */
   function expandPath(id){
     var cur=INDEX[id];
     if(!cur) return;
     var chain=[];
     var p=cur.parent;
     while(p && INDEX[p]){ chain.push(INDEX[p].data.id); p=INDEX[p].parent; }
-    /* 全部章收起，卷/课程展开 */
     tree.querySelectorAll('.t-chap').forEach(function(n){
       n.classList.toggle('closed',chain.indexOf(n.getAttribute('data-id'))===-1);
     });
     tree.querySelectorAll('.t-vol,.t-course').forEach(function(n){ n.classList.remove('closed'); });
-    /* 当前项高亮 */
     tree.querySelectorAll('.t-node').forEach(function(n){ n.classList.remove('cur'); });
     var target=tree.querySelector('.t-node[data-id="'+id+'"]');
     if(target){
       target.classList.add('cur');
       var side=document.getElementById('wikiSide');
       var r=target.getBoundingClientRect(), sr=side.getBoundingClientRect();
-      if(r.top<sr.top+40||r.bottom>sr.bottom-40){
-        tree.scrollTop+=r.top-sr.top-140;
-      }
+      if(r.top<sr.top+40||r.bottom>sr.bottom-40){ tree.scrollTop+=r.top-sr.top-140; }
     }
   }
 
   /* ---------- 工具 ---------- */
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  /* 轻量高亮：单遍分词，注释 / 字符串 / 预处理 / 关键字 / 数字一次替换，避免嵌套占位符 */
   var KW='int|char|float|double|long|short|void|bool|true|false|nullptr|const|constexpr|static|extern|register|auto|volatile|unsigned|signed|struct|union|enum|typedef|sizeof|return|if|else|while|do|for|switch|case|default|break|continue|goto|typeof|typeof_unqual|_Generic|static_assert|alignof|alignas|restrict|inline|_Atomic|string|none|function|print|show|input|constant|and|or|not|use|until|foreach|in';
   var CODE_RE=new RegExp(
     '(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)'+
@@ -210,54 +252,76 @@
       +'<div class="cover-stat">'+stats.map(function(s){ return '<span>'+esc(s)+'</span>'; }).join('')+'</div></div>';
   }
   function crumbs(parts){
-    crumb.innerHTML='<a href="#vol">百科全书</a>'+parts.map(function(p){
+    crumb.innerHTML='<a href="#index">百科全书</a>'+parts.map(function(p){
       return '<s>›</s>'+(p.id?'<a href="#'+p.id+'">'+esc(p.t)+'</a>':'<b>'+esc(p.t)+'</b>');
     }).join('');
-    /* 窄屏面包屑保持单行、从左显示；当前节标题在正文里已完整呈现 */
   }
-  function setPager(id){
-    var i=FLAT.indexOf(id);
+  function setPager(id,volId){
+    var list=FLAT[volId]||[];
+    var i=list.indexOf(id);
     if(i===-1){ pager.innerHTML=''; return; }
     function a(j,cls,lab){
-      if(j<0||j>=FLAT.length) return '<div class="wa-pg '+cls+' empty"><span>'+lab+'</span><b>没有了</b></div>';
-      var s=INDEX[FLAT[j]].data;
+      if(j<0||j>=list.length) return '<div class="wa-pg '+cls+' empty"><span>'+lab+'</span><b>没有了</b></div>';
+      var s=INDEX[list[j]].data;
       return '<a class="wa-pg '+cls+'" href="#'+s.id+'"><span>'+lab+'</span><b>'+esc(s.num+' '+s.title)+'</b></a>';
     }
     pager.innerHTML=a(i-1,'prev','← 上一节')+a(i+1,'next','下一节 →');
   }
+  function courseCard(c){
+    var s=statsOf({courses:[c]});
+    return '<a class="wa-cl-card" href="#'+c.id+'"><i>'+esc(c.num)+'</i><b>'+esc(c.title)+'</b><span>'
+      +(c.chapters||[]).length+' 章 · '+s.secs+' 节 · '+s.codes+' 个示例</span></a>';
+  }
+  function readList(items){
+    return '<ol class="wa-steps">'+items.map(function(i){
+      return '<li><b>'+i[0]+'</b>'+i[1]+'</li>';
+    }).join('')+'</ol>';
+  }
+  function moreList(more){
+    return '<div class="wa-chapter-list">'+more.map(function(m){
+      return '<div class="wa-cl-card" style="opacity:.62;cursor:default"><i>'+esc(m.state)+'</i><b>'+esc(m.title)+'</b><span>'+esc(m.desc)+'</span></div>';
+    }).join('')+'</div>';
+  }
 
   /* ---------- 页面渲染 ---------- */
-  function renderVolume(){
-    crumbs([{t:'语言篇'}]);
-    var wan=(Math.round(TOT.chars/1000)/10).toFixed(1);
-    var h=cover(VOL.en,VOL.title,VOL.lead,
-      ['2 门语言',FLAT.length+' 节教程',TOT.codes+' 个代码示例','约 '+wan+' 万字']);
-    h+='<div class="wa-body"><h3>本卷目录</h3><div class="wa-chapter-list">';
-    courses.forEach(function(c){
-      var secs=0,codes=0;
-      (c.chapters||[]).forEach(function(ch){ (ch.sections||[]).forEach(function(s){
-        secs++; blocksOf(s).forEach(function(b){ if(b.t==='code') codes++; });
-      });});
-      h+='<a class="wa-cl-card" href="#'+c.id+'"><i>'+esc(c.num)+'</i><b>'+esc(c.title)+'</b><span>'
-        +(c.chapters||[]).length+' 章 · '+secs+' 节 · '+codes+' 个示例</span></a>';
+  function renderIndex(){
+    crumbs([]);
+    var h=cover(HOME.en,HOME.title,HOME.lead,
+      [VOLUMES.length+' 卷',TOT.courses+' 门课程',TOT.secs+' 节教程','约 '+wan(TOT.chars)+' 万字']);
+    h+='<div class="wa-body"><h3>全书分卷</h3><div class="wa-chapter-list wa-vol-list">';
+    VOLUMES.forEach(function(v){
+      var s=v.stat;
+      h+='<a class="wa-cl-card wa-vol-card" href="#'+v.id+'"><i>'+esc(v.num)+'</i><b>'+esc(v.short)+'</b>'
+        +'<span>'+s.courses+' 门课程 · '+s.chapters+' 章 · '+s.secs+' 节 · 约 '+wan(s.chars)+' 万字</span>'
+        +'<em>'+esc((v.courses||[]).map(function(c){return c.title;}).join(' / '))+'</em></a>';
     });
     h+='</div>';
-    h+='<h3>怎么读这套教程</h3>'
+    h+='<h3>怎么读这套书</h3>'
       +'<ol class="wa-steps">'
-      +'<li><b>按顺序读，但允许跳读</b>每节都从「是什么」讲到「为什么」再到「怎么用」，有基础的读者可以直接看代码与小结。</li>'
-      +'<li><b>每个示例都亲手编译一次</b>教程里的示例按 C23 编写，用 <code>gcc -std=c2x -Wall -Wextra</code> 即可编译；改坏它、再修好它，比读三遍更有效。</li>'
-      +'<li><b>留意提示框与练习</b>蓝色为要点、绿色为技巧、橙色为易错陷阱、红色为危险操作；每节末尾的练习用来检验是否真的理解。</li>'
-      +'<li><b>用目录检索定位</b>左侧目录支持筛选，按 <code>/</code> 可快速聚焦搜索框；网址带 <code>#小节编号</code> 可直接分享某一节。</li>'
+      +'<li><b>按「篇」进入</b>每卷是一个独立主题，卷首页会给出本卷的课程清单与阅读建议，不必从第一卷读起。</li>'
+      +'<li><b>用目录树定位</b>左侧目录按「卷 → 课程 → 章 → 节」四级展开，当前位置自动高亮；按 <code>/</code> 可聚焦搜索框筛选。</li>'
+      +'<li><b>网址即书签</b>每个层级都有独立地址（如 <code>#c-1-1</code>、<code>#jnl-2-1</code>），可直接分享某一节。</li>'
+      +'<li><b>留意内容规模</b>每节标题下方标注内容块数、代码示例数、字数与预计阅读时长，方便安排时间。</li>'
       +'</ol>';
-    h+='<h3>后续篇章</h3><div class="wa-chapter-list">';
-    MORE.forEach(function(m){
-      h+='<div class="wa-cl-card" style="opacity:.62;cursor:default"><i>'+esc(m.state)+'</i><b>'+esc(m.title)+'</b><span>'+esc(m.desc)+'</span></div>';
-    });
-    h+='</div></div>';
-    article.innerHTML=h; setPager('');
+    h+='<h3>编纂说明</h3><p>全书内容手写整理、无框架依赖。语言篇依据公开教材与 C23 标准归纳，操作系统篇依据项目归档文档整理，均标注了资料来源与状态日期；文档中未载明的细节以「待补 / 编纂中」标注，不作推测。</p>';
+    h+='</div>';
+    article.innerHTML=h; setPager('','');
+  }
+  function renderVolume(v){
+    crumbs([{t:v.short}]);
+    var s=v.stat;
+    var h=cover(v.en,v.title,v.lead,
+      [s.courses+' 门课程',s.chapters+' 章',s.secs+' 节教程',s.codes+' 个代码示例','约 '+wan(s.chars)+' 万字']);
+    h+='<div class="wa-body"><h3>本卷目录</h3><div class="wa-chapter-list">';
+    (v.courses||[]).forEach(function(c){ h+=courseCard(c); });
+    h+='</div><h3>怎么读这一卷</h3>'+readList(v.read||[]);
+    h+='<h3>后续篇章</h3>'+moreList(v.more||[]);
+    h+='</div>';
+    article.innerHTML=h; setPager('','');
   }
   function renderCourse(c){
-    crumbs([{t:'语言篇',id:'vol'},{t:c.title}]);
+    var v=INDEX[INDEX[c.id].vol].data;
+    crumbs([{t:v.short,id:v.id},{t:c.title}]);
     var n=(c.chapters||[]).reduce(function(a,x){return a+(x.sections||[]).length;},0);
     var h=cover(c.en||'COURSE',c.title,c.lead,[(c.chapters||[]).length+' 章',n+' 节'].concat(c.chips||[]));
     h+='<div class="wa-body"><h3>章节目录</h3><div class="wa-chapter-list">';
@@ -265,22 +329,22 @@
       h+='<a class="wa-cl-card" href="#'+ch.id+'"><i>'+esc(ch.num)+'</i><b>'+esc(ch.title)+'</b><span>'+esc((ch.sections||[]).length+' 节 · '+ch.lead.slice(0,28)+'…')+'</span></a>';
     });
     h+='</div></div>';
-    article.innerHTML=h; setPager('');
+    article.innerHTML=h; setPager('','');
   }
   function renderChapter(ch,cid){
-    var c=INDEX[cid].data;
-    crumbs([{t:'语言篇',id:'vol'},{t:c.title,id:c.id},{t:ch.num+' '+ch.title}]);
+    var c=INDEX[cid].data, v=INDEX[INDEX[cid].vol].data;
+    crumbs([{t:v.short,id:v.id},{t:c.title,id:c.id},{t:ch.num+' '+ch.title}]);
     var h=head(ch,'CHAPTER '+ch.num+' · '+c.title,c.chips||[]);
     h+='<div class="wa-body"><h3>本章小节</h3><div class="wa-sec-list">';
     (ch.sections||[]).forEach(function(s){
       h+='<button class="wa-sec-item" data-goto="'+s.id+'"><em>'+esc(s.num)+'</em><b>'+esc(s.title)+'</b><span>阅读 →</span></button>';
     });
     h+='</div></div>';
-    article.innerHTML=h; setPager('');
+    article.innerHTML=h; setPager('','');
   }
   function renderSection(s,chid,cid){
-    var ch=INDEX[chid].data, c=INDEX[cid].data;
-    crumbs([{t:'语言篇',id:'vol'},{t:c.title,id:c.id},{t:ch.num+' '+ch.title,id:ch.id},{t:s.num+' '+s.title}]);
+    var ch=INDEX[chid].data, c=INDEX[cid].data, v=INDEX[INDEX[cid].vol].data;
+    crumbs([{t:v.short,id:v.id},{t:c.title,id:c.id},{t:ch.num+' '+ch.title,id:ch.id},{t:s.num+' '+s.title}]);
     var bs=blocksOf(s), codes=0, chars=0;
     bs.forEach(function(b){ if(b.t==='code') codes++; chars+=blockText(b).length; });
     var mins=Math.max(2,Math.round(chars/380));
@@ -288,24 +352,61 @@
       +'<span><b>'+chars+'</b> 字</span><span><b>'+mins+'</b> 分钟阅读</span>';
     var h=head(s,'SECTION '+s.num+' · '+c.title,(s.tags||[]).concat(c.chips||[]).slice(0,4),stat);
     h+='<div class="wa-body">'+bs.map(blockHTML).join('')+'</div>';
-    article.innerHTML=h; setPager(s.id);
+    article.innerHTML=h; setPager(s.id,INDEX[cid].vol);
   }
+
+  /* ---------- 过场动画 ---------- */
+  var wipe=document.getElementById('wikiWipe'),
+      wipeNum=document.getElementById('wipeNum'),
+      wipeName=document.getElementById('wipeName'),
+      wipeEn=document.getElementById('wipeEn'),
+      lastVol=null, wipeTimer=null, reduce=false;
+  try{ reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(_){}
+  function playWipe(v){
+    if(!wipe||reduce) return;
+    var node=v||{num:'✦',short:HOME.title,en:HOME.en};
+    if(wipeNum) wipeNum.textContent=node.num||'';
+    if(wipeName) wipeName.textContent=node.short||node.title||'';
+    if(wipeEn) wipeEn.textContent=node.en||'';
+    clearTimeout(wipeTimer);
+    wipe.classList.remove('show','go');
+    void wipe.offsetWidth;
+    wipe.classList.add('show');
+    wipeTimer=setTimeout(function(){
+      wipe.classList.add('go');
+      wipeTimer=setTimeout(function(){ wipe.classList.remove('show','go'); },280);
+    },430);
+  }
+  function fxEnter(){
+    if(reduce) return;
+    article.classList.remove('fx-in');
+    void article.offsetWidth;
+    article.classList.add('fx-in');
+  }
+
+  /* ---------- 路由 ---------- */
   function render(id){
-    var node=INDEX[id];
-    if(!node) node=INDEX['vol'];
+    var node=INDEX[id]||INDEX['index'];
     id=node.data.id;
-    if(node.type==='volume') renderVolume();
+    var volId=node.vol || (node.type==='volume'?node.data.id:'index');
+    /* 切卷 / 首次进入时触发过场：仅跨卷时闪现卷名，同卷内翻页不打扰 */
+    if(volId!==lastVol){
+      lastVol=volId;
+      playWipe(volId!=='index' && INDEX[volId] ? INDEX[volId].data : null);
+    }
+    if(node.type==='home') renderIndex();
+    else if(node.type==='volume') renderVolume(node.data);
     else if(node.type==='course') renderCourse(node.data);
     else if(node.type==='chapter') renderChapter(node.data,node.parent);
     else renderSection(node.data,node.parent,node.course);
     expandPath(id);
-    document.title=(node.data.num?node.data.num+' · ':'')+node.data.title+' | 方程的工艺百科全书';
+    fxEnter();
+    var vt=node.type==='home'?'':(INDEX[volId]&&INDEX[volId].data.short?INDEX[volId].data.short+' · ':'');
+    document.title=(node.data.num?node.data.num+' · ':'')+node.data.title+' | '+vt+'方程的工艺百科全书';
     window.scrollTo({top:0,behavior:'instant'});
   }
-
-  /* ---------- 路由 ---------- */
   function route(){
-    var id=decodeURIComponent(location.hash.replace(/^#/,'')||'vol');
+    var id=decodeURIComponent(location.hash.replace(/^#/,'')||'index');
     render(id);
     closeSide();
   }
@@ -338,7 +439,7 @@
     q=q.trim().toLowerCase();
     if(!q){
       tree.querySelectorAll('.t-node').forEach(function(n){ n.classList.remove('t-hide'); });
-      expandPath((location.hash.replace(/^#/,'')||'vol'));  /* 恢复当前路径的折叠状态 */
+      expandPath((location.hash.replace(/^#/,'')||'index'));
       return;
     }
     tree.querySelectorAll('.t-sec').forEach(function(n){
@@ -357,7 +458,6 @@
     if(!el) return;
     el.addEventListener('input',function(){
       filter(el.value);
-      /* 两个搜索框保持同步 */
       var other=el===search?(document.getElementById('sideSearch')):search;
       if(other && other.value!==el.value) other.value=el.value;
     });
@@ -370,7 +470,7 @@
       var box=window.innerWidth<=900?document.getElementById('sideSearch'):search;
       if(box){ openSide(); box.focus(); }
     }
-    if(e.key==='Escape'){ closeSide(); if(search) search.blur(); }
+    if(e.key==='Escape'){ closeSide(); closePalette(); if(search) search.blur(); }
   });
 
   /* ---------- 手机目录抽屉 ---------- */
@@ -388,23 +488,62 @@
   window.addEventListener('scroll',updProgress,{passive:true});
   window.addEventListener('resize',updProgress);
 
-  /* ---------- 深色 / 浅色切换 ---------- */
-  var themeBtn=document.getElementById('wikiTheme'), TK='zfc-wiki-theme';
-  try{
-    if(localStorage.getItem(TK)==='dark') document.documentElement.setAttribute('data-theme','dark');
-  }catch(_){}
-  function applyMeta(){
+  /* ---------- 配色切换 ---------- */
+  var PALETTES=[
+    {id:'slate',name:'蓝墨',   c1:'#1e6fa8',c2:'#f6f8fb'},
+    {id:'sand', name:'暖砂',   c1:'#c2552f',c2:'#faf6ef'},
+    {id:'moss', name:'苔原',   c1:'#3f7d52',c2:'#f4f7f1'},
+    {id:'plum', name:'绛紫',   c1:'#8b4a8f',c2:'#faf6fb'},
+    {id:'night',name:'深空夜', c1:'#4fb8d8',c2:'#0e1520',dark:true}
+  ];
+  var PK='zfc-wiki-palette', paletteBtn=document.getElementById('wikiPalette'),
+      palettePop=document.getElementById('palettePop');
+  var PAL_META={slate:'#f6f8fb',sand:'#faf6ef',moss:'#f4f7f1',plum:'#faf6fb',night:'#0e1520'};
+  function applyPalette(id,init){
+    var p=null;
+    PALETTES.forEach(function(x){ if(x.id===id) p=x; });
+    if(!p) p=PALETTES[0];
+    document.documentElement.setAttribute('data-palette',p.id);
+    if(p.dark) document.documentElement.setAttribute('data-theme','dark');
+    else document.documentElement.removeAttribute('data-theme');
     var meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute('content',document.documentElement.getAttribute('data-theme')==='dark'?'#0c1220':'#ffffff');
+    if(meta) meta.setAttribute('content',PAL_META[p.id]);
+    try{ localStorage.setItem(PK,p.id); }catch(_){}
+    if(palettePop) palettePop.querySelectorAll('.pal-item').forEach(function(b){
+      b.classList.toggle('on',b.getAttribute('data-pal')===p.id);
+    });
+    if(!init && toast){
+      toast.textContent=p.name+' · 已切换';
+      toast.classList.add('show');
+      clearTimeout(tt);tt=setTimeout(function(){ toast.classList.remove('show'); toast.textContent='已复制 ✓'; },1200);
+    }
   }
-  applyMeta();
-  if(themeBtn) themeBtn.addEventListener('click',function(){
-    var isDark=document.documentElement.getAttribute('data-theme')==='dark';
-    if(isDark) document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme','dark');
-    try{ localStorage.setItem(TK,isDark?'light':'dark'); }catch(_){}
-    applyMeta();
+  if(palettePop){
+    palettePop.innerHTML=PALETTES.map(function(p){
+      return '<button class="pal-item" type="button" data-pal="'+p.id+'">'
+        +'<i style="background:linear-gradient(135deg,'+p.c2+' 0 50%,'+p.c1+' 50% 100%)"></i>'
+        +'<span>'+p.name+'</span></button>';
+    }).join('');
+    palettePop.addEventListener('click',function(e){
+      var b=e.target.closest('.pal-item');
+      if(!b) return;
+      applyPalette(b.getAttribute('data-pal'));
+      closePalette();
+    });
+  }
+  function openPalette(){ if(palettePop) palettePop.classList.add('open'); }
+  function closePalette(){ if(palettePop) palettePop.classList.remove('open'); }
+  if(paletteBtn) paletteBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(palettePop) palettePop.classList.toggle('open');
   });
+  document.addEventListener('click',function(e){
+    if(palettePop && !e.target.closest('.palette-wrap')) closePalette();
+  });
+  /* 初始：兼容旧版深色偏好 */
+  var saved=null;
+  try{ saved=localStorage.getItem(PK)||localStorage.getItem('zfc-wiki-theme'); }catch(_){}
+  applyPalette(saved==='dark'?'night':(saved||'slate'),true);
 
   var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
   route();
