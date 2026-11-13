@@ -1323,6 +1323,26 @@ section{padding:clamp(44px,6.5vw,88px) clamp(16px,4.5vw,60px);position:relative}
 .draw-ov.dup .d-label{color:var(--cyan)}
 .draw-ov.dup .d-name{color:#efe8cf;text-shadow:0 0 18px rgba(160,220,200,.4)}
 .draw-ov.dup .draw-card{box-shadow:0 24px 70px rgba(0,0,0,.65),0 0 40px rgba(120,200,175,.3)}
+/* 隐藏款（全站最难）：首次抽中时金光加冕 */
+.draw-ov.legend .d-label{
+  color:var(--gold-lt);letter-spacing:.3em;text-indent:.3em;
+  animation:legendGlow 1.2s ease-in-out infinite alternate;
+}
+.draw-ov.legend .d-name{
+  color:#fff6d8;text-shadow:0 0 32px rgba(255,214,110,.95),0 0 12px rgba(255,240,190,.8);
+  animation:legendGlow 1s ease-in-out infinite alternate;
+}
+.draw-ov.legend .draw-card{
+  border-color:var(--gold-lt);
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 90px rgba(255,200,90,.55),inset 0 0 40px rgba(255,215,120,.18);
+}
+.draw-ov.legend .draw-card::after{
+  content:"";position:absolute;inset:-10px;border-radius:26px;pointer-events:none;
+  border:1px solid rgba(255,225,150,.5);
+  animation:legendRing 1.4s ease-out infinite;
+}
+@keyframes legendGlow{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+@keyframes legendRing{0%{opacity:.7;transform:scale(.97)}100%{opacity:0;transform:scale(1.08)}}
 
 /* ---------- 联系 ---------- */
 .contact{text-align:center;max-width:920px;margin:0 auto}

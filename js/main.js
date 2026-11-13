@@ -99,7 +99,7 @@
     {name:'友善福',tag:'福卡 · 肆',rare:'稀有度 ★★★',poem:'上善若水<br>水善利万物而不争',bless:'愿与人为善，温柔相待；你给出的善意，都会绕回来。'},
     {name:'敬业福',tag:'福卡 · 伍',rare:'稀有度 ★★★★★',poem:'业精于勤荒于嬉<br>行成于思毁于随',bless:'愿心无旁骛，事事有成；白天写代码，晚上开直播，皆是热爱。'},
     {name:'FC235',tag:'特别 · 人物牌',rare:'人物牌 ★★★★★',poem:'白天写代码，晚上开直播<br>网站自己手搓',bless:'站长本尊，VS2026 般可靠——编译通过，人生顺遂。'},
-    {name:'rcl',tag:'特别 · 人物牌',rare:'人物牌 ★★★★',poem:'WORLD 1-1<br>橘猫常驻 · 喵~',bless:'像素世界里的特别支持者——嘘，别告诉 rcl。'},
+    {name:'rcl',tag:'隐藏 · 人物牌',rare:'隐藏款 ★★★★★★',w:4,poem:'WORLD 1-1<br>橘猫常驻 · 喵~',bless:'像素世界里的特别支持者——全站最难抽到的一张，嘘，别告诉 rcl。'},
     {name:'JGhuihui',tag:'特别 · 人物牌',rare:'人物牌 ★★★★',poem:'wow<br>液态玻璃 · 折射万千',bless:'QIU 科技作者——像四层折射玻璃一样通透的人。'},
     {name:'zhangsen',tag:'特别 · 人物牌',rare:'人物牌 ★★★★',poem:'NODE-Z2 / 2092<br>由 zhangsen 强力驱动',bless:'来自 2092 的支持者——扫描线之下的硬核浪漫。'},
     {name:'JNL OS',tag:'联动 · JNL',rare:'联动牌 ★★★★',poem:'安全 · 稳定 · 高效<br>3GB 内存流畅运行',bless:'Java Net Lava OS——基于 Debian 13 的 Cinnamon 发行版，开箱即用、离线部署。jnlos.netlify.app'},
@@ -121,7 +121,9 @@
     return Math.max(1,Math.min(5,n));
   }
   function weightAt(i){
-    var s=starsOf(DATA[i]&&DATA[i].rare), lo=Math.floor(s), hi=Math.ceil(s);
+    var d=DATA[i]||{};
+    if(typeof d.w==='number' && d.w>0) return d.w;   /* 显式权重覆盖：隐藏款专用 */
+    var s=starsOf(d.rare), lo=Math.floor(s), hi=Math.ceil(s);
     return lo===hi?RARITY_W[lo]:RARITY_W[lo]+(RARITY_W[hi]-RARITY_W[lo])*(s-lo);
   }
   function weightTable(){
@@ -270,7 +272,7 @@
     }
   }
   function closeDraw(){
-    drawOv.classList.remove('open','reveal','dup');
+    drawOv.classList.remove('open','reveal','dup','legend');
     if(scanBtn) scanBtn.disabled=false;
     if(drawOv._pending!=null){
       var p=drawOv._pending; drawOv._pending=null;
@@ -292,7 +294,7 @@
         },k*90);
       });
       /* 全池按稀有度权重抽取：越稀有越难出；已收集的卡照常在池内 → 必然抽到重复 */
-      var pi=pickWeighted(), isDup=!!got[pi];
+      var pi=pickWeighted(), isDup=!!got[pi], isLegend=typeof DATA[pi].w==='number';
       if(reduce){ if(scanBtn) scanBtn.disabled=false; finishDraw(pi); return; }
       /* 演出：遮罩层 + 快速轮播卡名 → 定格结果 */
       var names=DATA.map(function(d){ return d.name; });
@@ -310,11 +312,12 @@
         }catch(e){}
         drawOv.classList.add('reveal');
         drawOv.classList.toggle('dup',isDup);
-        dLabel.textContent=isDup?'又 见':'获 得';
+        drawOv.classList.toggle('legend',isLegend&&!isDup);
+        dLabel.textContent=isLegend&&!isDup?'✦ 隐 藏 款 ✦':(isDup?'又 见':'获 得');
         dName.textContent=DATA[pi].name;
         dType.textContent=isDup
           ? '✦ 重复 · 已拥有 ×'+((dup[pi]||0)+1)+' ✦ · 出率 '+probAt(pi)
-          : (pi<FU_N?'✦ 稀有 · 福卡 ✦':'特别 · '+DATA[pi].rare)+' · 出率 '+probAt(pi);
+          : (isLegend?'✦ 全站最难 · 隐藏款 ✦':(pi<FU_N?'✦ 稀有 · 福卡 ✦':'特别 · '+DATA[pi].rare))+' · 出率 '+probAt(pi);
         drawOv._pending=pi;
         setTimeout(function(){ if(drawOv.classList.contains('reveal')) closeDraw(); },2100);
       },1500);
