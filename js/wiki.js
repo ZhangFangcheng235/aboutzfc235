@@ -298,6 +298,19 @@
 
   /* ---------- 工具 ---------- */
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* 内容字段（导语 / 标题 / 摘要 / FAQ 问题）里允许少量排版标记：
+     先解码实体，再整体转义，最后只还原白名单标签，避免把 <b> 显示成字面文字；
+     形如 <stdio.h>、<iostream> 的尖括号内容不在白名单，仍按字面显示。 */
+  var RICH_RE=/&lt;(\/?)(b|code|i|em|strong|small|span|u|sub|sup|br)\s*&gt;/gi;
+  function rich(s){
+    var t=String(s==null?'':s)
+      .replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"')
+      .replace(/&#0?39;|&apos;/g,"'").replace(/&amp;/g,'&');
+    return esc(t).replace(RICH_RE,function(m,sl,tag){ return '<'+sl+tag.toLowerCase()+'>'; });
+  }
+  function plain(s){
+    return String(s==null?'':s).replace(/<\/?(?:b|code|i|em|strong|small|span|u|sub|sup|br)\s*\/?>/gi,'');
+  }
   var KW='int|char|float|double|long|short|void|bool|true|false|nullptr|const|constexpr|static|extern|register|auto|volatile|unsigned|signed|struct|union|enum|typedef|sizeof|return|if|else|while|do|for|switch|case|default|break|continue|goto|typeof|typeof_unqual|_Generic|static_assert|alignof|alignas|restrict|inline|_Atomic|string|none|function|print|show|input|constant|and|or|not|use|until|foreach|in';
   var CODE_RE=new RegExp(
     '(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)'+
@@ -325,7 +338,7 @@
       case 'steps': return '<ol class="wa-steps">'+b.items.map(function(i){ return '<li><b>'+i[0]+'</b>'+i[1]+'</li>'; }).join('')+'</ol>';
       case 'cards': return '<div class="wa-cards">'+b.items.map(function(i){ return '<div class="wa-card"><b>'+i[0]+'</b><span>'+i[1]+'</span></div>'; }).join('')+'</div>';
       case 'ex': return '<div class="wa-ex"><div class="wa-ex-h"><i>EXERCISE</i>'+(b.k||'动手练一练')+'</div><ol>'+b.items.map(function(i){ return '<li>'+i+'</li>'; }).join('')+'</ol></div>';
-      case 'faq': return '<details class="wa-faq"><summary>'+esc(b.q)+'</summary><div class="faq-a">'+b.a+'</div></details>';
+      case 'faq': return '<details class="wa-faq"><summary>'+rich(b.q)+'</summary><div class="faq-a">'+b.a+'</div></details>';
       case 'quote': return '<div class="wa-quote">'+b.x+'</div>';
       case 'note': return '<div class="wa-note '+(b.kind||'')+'"><b>'+(b.k||'要点')+'</b>'+b.x+'</div>';
       case 'code':
@@ -339,21 +352,21 @@
     }
   }
   function head(o,kicker,chips,stat){
-    var h='<div class="wa-head"><span class="wa-kicker">'+esc(kicker)+'</span>';
+    var h='<div class="wa-head"><span class="wa-kicker">'+rich(kicker)+'</span>';
     if(o.num) h+='<span class="wa-num">'+esc(o.num)+'</span>';
-    h+='<h1 class="wa-title">'+esc(o.title)+'</h1>';
-    if(o.lead) h+='<p class="wa-lead">'+esc(o.lead)+'</p>';
-    if(chips&&chips.length) h+='<div class="wa-meta">'+chips.map(function(c){ return '<span class="wa-chip">'+esc(c)+'</span>'; }).join('')+'</div>';
+    h+='<h1 class="wa-title">'+rich(o.title)+'</h1>';
+    if(o.lead) h+='<p class="wa-lead">'+rich(o.lead)+'</p>';
+    if(chips&&chips.length) h+='<div class="wa-meta">'+chips.map(function(c){ return '<span class="wa-chip">'+rich(c)+'</span>'; }).join('')+'</div>';
     if(stat) h+='<div class="wa-stat">'+stat+'</div>';
     return h+'</div>';
   }
   function cover(kick,title,desc,stats){
-    return '<div class="wa-cover"><span class="wa-cover-kick">'+esc(kick)+'</span><h1>'+esc(title)+'</h1><p>'+esc(desc)+'</p>'
+    return '<div class="wa-cover"><span class="wa-cover-kick">'+esc(kick)+'</span><h1>'+rich(title)+'</h1><p>'+rich(desc)+'</p>'
       +'<div class="cover-stat">'+stats.map(function(s){ return '<span>'+esc(s)+'</span>'; }).join('')+'</div></div>';
   }
   function crumbs(parts){
     crumb.innerHTML='<a href="#index">百科全书</a>'+parts.map(function(p){
-      return '<s>›</s>'+(p.id?'<a href="#'+p.id+'">'+esc(p.t)+'</a>':'<b>'+esc(p.t)+'</b>');
+      return '<s>›</s>'+(p.id?'<a href="#'+p.id+'">'+rich(p.t)+'</a>':'<b>'+rich(p.t)+'</b>');
     }).join('');
   }
   function setPager(id,volId){
@@ -363,13 +376,13 @@
     function a(j,cls,lab){
       if(j<0||j>=list.length) return '<div class="wa-pg '+cls+' empty"><span>'+lab+'</span><b>没有了</b></div>';
       var s=INDEX[list[j]].data;
-      return '<a class="wa-pg '+cls+'" href="#'+s.id+'"><span>'+lab+'</span><b>'+esc(s.num+' '+s.title)+'</b></a>';
+      return '<a class="wa-pg '+cls+'" href="#'+s.id+'"><span>'+lab+'</span><b>'+rich(s.num+' '+s.title)+'</b></a>';
     }
     pager.innerHTML=a(i-1,'prev','← 上一节')+a(i+1,'next','下一节 →');
   }
   function courseCard(c){
     var s=statsOf({courses:[c]});
-    return '<a class="wa-cl-card" href="#'+c.id+'"><i>'+esc(c.num)+'</i><b>'+esc(c.title)+'</b><span>'
+    return '<a class="wa-cl-card" href="#'+c.id+'"><i>'+esc(c.num)+'</i><b>'+rich(c.title)+'</b><span>'
       +(c.chapters||[]).length+' 章 · '+s.secs+' 节 · '+s.codes+' '+(c.codeUnit||'个示例')+'</span></a>';
   }
   function readList(items){
@@ -379,7 +392,7 @@
   }
   function moreList(more){
     return '<div class="wa-chapter-list">'+more.map(function(m){
-      return '<div class="wa-cl-card" style="opacity:.62;cursor:default"><i>'+esc(m.state)+'</i><b>'+esc(m.title)+'</b><span>'+esc(m.desc)+'</span></div>';
+      return '<div class="wa-cl-card" style="opacity:.62;cursor:default"><i>'+esc(m.state)+'</i><b>'+rich(m.title)+'</b><span>'+rich(m.desc)+'</span></div>';
     }).join('')+'</div>';
   }
 
@@ -391,7 +404,7 @@
     h+='<div class="wa-body"><h3>全书分卷</h3><div class="wa-chapter-list wa-vol-list">';
     VOLUMES.forEach(function(v){
       var s=v.stat;
-      h+='<a class="wa-cl-card wa-vol-card" href="#'+v.id+'"><i>'+esc(v.num)+'</i><b>'+esc(v.short)+'</b>'
+      h+='<a class="wa-cl-card wa-vol-card" href="#'+v.id+'"><i>'+esc(v.num)+'</i><b>'+rich(v.short)+'</b>'
         +'<span>'+s.courses+' 门课程 · '+s.chapters+' 章 · '+s.secs+' 节 · 约 '+wan(s.chars)+' 万字</span>'
         +'<em>'+esc((v.courses||[]).map(function(c){return c.title;}).join(' / '))+'</em></a>';
     });
@@ -427,7 +440,7 @@
     var h=cover(c.en||'COURSE',c.title,c.lead,[(c.chapters||[]).length+' 章',n+' 节'].concat(c.chips||[]));
     h+='<div class="wa-body"><h3>章节目录</h3><div class="wa-chapter-list">';
     (c.chapters||[]).forEach(function(ch){
-      h+='<a class="wa-cl-card" href="#'+ch.id+'"><i>'+esc(ch.num)+'</i><b>'+esc(ch.title)+'</b><span>'+esc((ch.sections||[]).length+' 节 · '+ch.lead.slice(0,28)+'…')+'</span></a>';
+      h+='<a class="wa-cl-card" href="#'+ch.id+'"><i>'+esc(ch.num)+'</i><b>'+rich(ch.title)+'</b><span>'+esc((ch.sections||[]).length+' 节 · '+plain(ch.lead).slice(0,28)+'…')+'</span></a>';
     });
     h+='</div></div>';
     article.innerHTML=h; setPager('','');
@@ -438,7 +451,7 @@
     var h=head(ch,'CHAPTER '+ch.num+' · '+c.title,c.chips||[]);
     h+='<div class="wa-body"><h3>本章小节</h3><div class="wa-sec-list">';
     (ch.sections||[]).forEach(function(s){
-      h+='<button class="wa-sec-item" data-goto="'+s.id+'"><em>'+esc(s.num)+'</em><b>'+esc(s.title)+'</b><span>阅读 →</span></button>';
+      h+='<button class="wa-sec-item" data-goto="'+s.id+'"><em>'+esc(s.num)+'</em><b>'+rich(s.title)+'</b><span>阅读 →</span></button>';
     });
     h+='</div></div>';
     article.innerHTML=h; setPager('','');
